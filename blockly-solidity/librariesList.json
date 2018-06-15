@@ -1,0 +1,5 @@
+{
+  "libA": ["funcA1", "funcA2", "funcA3"],
+  "libB": ["funcB1", "funcB2", "funcB3"],
+  "libC": ["funcC1", "funcC2", "funcC3"]
+}

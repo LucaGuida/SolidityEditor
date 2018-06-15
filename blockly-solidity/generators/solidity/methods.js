@@ -168,5 +168,3 @@ Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
 
   return [/*libraryName + '.' + */ functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
-
-

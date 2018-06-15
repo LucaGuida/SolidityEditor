@@ -122,9 +122,7 @@ Blockly.Solidity['event_argument'] = function(block) {
 
 
 Blockly.Solidity['event_emission'] = function(block) {
-  var variableId = block.getFieldValue('EVENT_NAME');
-  var variable = block.workspace.getVariableById(variableId);
-
+  var eventName = block.getFieldValue('EVENT_NAME');
   var argsArray = []; 
   var argsString;
   var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
@@ -135,11 +133,7 @@ Blockly.Solidity['event_emission'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  if (!variable) {
-    return '';
-  }
-
-  return 'emit ' + Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
+  return 'emit ' + eventName + '(' + argsString + ');\n';
 };
 
 
@@ -160,8 +154,7 @@ Blockly.Solidity['modifier_definition'] = function(block) {
 };
 
 Blockly.Solidity['modifier_usage'] = function(block) {
-  var variableId = block.getFieldValue('MODIFIER_NAME');
-  var variable = block.workspace.getVariableById(variableId);
+  var modifierName = block.getFieldValue('MODIFIER_NAME');
 
   var argsArray = []; 
   var argsString;
@@ -173,11 +166,7 @@ Blockly.Solidity['modifier_usage'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  if (!variable) {
-    return '';
-  }
-
-  return Blockly.Solidity.getVariableName(variable).trim() + '(' + argsString + ') ';
+  return modifierName + '(' + argsString + ') ';
 };
 
 Blockly.Solidity['contract_method_call'] = function(block) {

@@ -192,7 +192,6 @@ var librariesList = [
           ];
 
 
-// COMMENT THIS BLOCK IF YOU WANT TO RUN THE SCRIPTS LOCALLY WITHOUT HTTP-SERVER. THE LIBRARIES LIST WILL BE THE DEFAULT ONE.
 // Read JSON libraries list 
 var jsonObj;
 var request = new XMLHttpRequest();
@@ -211,8 +210,6 @@ if (request.status === 200) {
 }
 
 
-
-
 Blockly.Blocks['contract_import'] = {
 
   init: function() {
@@ -223,7 +220,7 @@ Blockly.Blocks['contract_import'] = {
           'LIB_NAME'
         )
         //.appendField(new Blockly.FieldTextInput('libraryName'), 'LIB_NAME'); //text input field instead of dropdown menu
-    this.setColour(65);
+    this.setColour("#1976D2");
     this.setTooltip('Name of an external contract/library to import into the contract.');
 
     this.setPreviousStatement(true, 'contract_import');
@@ -265,7 +262,7 @@ Blockly.Blocks['contract_state'] = {
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'contract_state');
     this.setNextStatement(true, 'contract_state');
-    this.setColour(195);
+    this.setColour("#1976D2");
     this.contextMenu = false;
     this.setTooltip('State variable declaration');
 
@@ -296,7 +293,7 @@ Blockly.Blocks['contract_state_get'] = {
         "STATE_NAME"
       );
     this.setOutput(true, null);
-    this.setColour(195);
+    this.setColour("#757575");
     this.setTooltip('State variable selector');
 
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
@@ -318,7 +315,7 @@ Blockly.Blocks['contract_state_set'] = {
       .appendField("to");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(195);
+    this.setColour("#1976D2");
     this.setTooltip('State variable setter');
 
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
@@ -389,7 +386,7 @@ Blockly.Blocks['contract_method'] = {
       ],
       "previousStatement": "contract_method",
       "nextStatement": "contract_method",
-      "colour": 290,
+      "colour": "#1976D2",
       "tooltip": "Function definition",
       "helpUrl": ""
     });
@@ -482,7 +479,7 @@ Blockly.Blocks['contract_method_with_return'] = {
       ],
       "previousStatement": "contract_method",
       "nextStatement": "contract_method",
-      "colour": 290,
+      "colour": "#1976D2",
       "tooltip": "Function with return value definition",
       "helpUrl": ""
     });
@@ -521,7 +518,7 @@ Blockly.Blocks['contract_method_parameter'] = {
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'contract_method_parameter');
     this.setNextStatement(true, 'contract_method_parameter');
-    this.setColour(320);
+    this.setColour("#1976D2");
     this.contextMenu = false;
     this.setTooltip('Parameter declaration');
 
@@ -552,7 +549,7 @@ Blockly.Blocks['contract_method_parameter_get'] = {
         "PARAM_NAME"
       );
     this.setOutput(true, null);
-    this.setColour(320);
+    this.setColour("#757575");
     this.setTooltip('Parameter selector');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM_NAME'); };
@@ -580,7 +577,7 @@ Blockly.Blocks['contract_method_call'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     // this.setOutput(true, null);
-    this.setColour(320);
+    this.setColour("#FF5252");
     this.setTooltip('Call of a function which does not return a value');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
@@ -631,7 +628,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.appendValueInput('ARG3')
       .appendField("argument 3")
     this.setOutput(true, null);
-    this.setColour(320);
+    this.setColour("#757575");
     this.setTooltip('Call of a function which returns a value');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
@@ -679,12 +676,6 @@ function dynamicLibFunctsList() {
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
-    /*this.appendDummyInput()
-      .appendField('call library')
-      .appendField(
-        new Blockly.FieldDropdown(librariesList),
-        "LIB_NAME"
-      );*/
     this.appendDummyInput()  
       .appendField('call library function')
       .appendField(
@@ -700,7 +691,7 @@ Blockly.Blocks['library_method_call'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     // this.setOutput(true, null);
-    this.setColour(65);
+    this.setColour("#FF5252");
     this.setTooltip('Call of a library function which does not return a value');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
@@ -758,7 +749,7 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
     this.appendValueInput('ARG3')
       .appendField("argument 3")
     this.setOutput(true, null);
-    this.setColour(65);
+    this.setColour("#757575");
     this.setTooltip('Call of a library function which returns a value');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
@@ -816,7 +807,7 @@ Blockly.Blocks['event_definition'] = {
       ],
       "previousStatement": "event_definition",
       "nextStatement": "event_definition",
-      "colour": "#D32F2F",
+      "colour": "#1976D2",
       "tooltip": "Event definition",
       "helpUrl": ""
     });
@@ -831,8 +822,6 @@ Blockly.Blocks['event_definition'] = {
       }
       return scope;
     };
-
-    //console.log(this.workspace.getVariablesOfType('event'));
 
     // The following command registers the current block as a variable of the type defined above in line "this.getVariableType = function() { return"
     Blockly.Extensions.apply('declare_typed_variable', this, false);
@@ -857,7 +846,7 @@ Blockly.Blocks['event_argument'] = {
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'event_argument');
     this.setNextStatement(true, 'event_argument');
-    this.setColour("#D32F2F");
+    this.setColour("#1976D2");
     this.setTooltip('Event argument declaration');
 
     this._stateNameInitialized = false;
@@ -876,7 +865,6 @@ Blockly.Blocks['event_argument'] = {
     //Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
-
 
 
 function dynamicEventsList () {
@@ -911,7 +899,7 @@ Blockly.Blocks['event_emission'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     // this.setOutput(true, null);
-    this.setColour("#D32F2F");
+    this.setColour("#FF5252");
     this.setTooltip('Emit an event');
 
     this.getVariableNameSelectField = function() { return this.getField('EVENT_NAME'); };
@@ -959,7 +947,7 @@ Blockly.Blocks['msg_get'] = {
         'MSG_TYPE'
       );
     this.setOutput(true, null);
-    this.setColour(195);
+    this.setColour("#757575");
     this.setTooltip('Get current call property (calldata, address of the sender of the message call, number of wei sent with the message call)');
 
     this.getVariableNameSelectField = function() { return this.getField('MSG_TYPE'); };
@@ -1006,7 +994,7 @@ Blockly.Blocks['modifier_definition'] = {
       ],
       "previousStatement": "modifier_definition",
       "nextStatement": "modifier_definition",
-      "colour": "#D32F2F",
+      "colour": "#1976D2",
       "tooltip": "Modifier definition",
       "helpUrl": ""
     });
@@ -1059,7 +1047,7 @@ Blockly.Blocks['modifier_usage'] = {
     this.setPreviousStatement(true, 'modifier_usage');
     this.setNextStatement(true, 'modifier_usage');
     // this.setOutput(true, null);
-    this.setColour(320);
+    this.setColour("#FF5252");
     this.setTooltip('Assign a previously defined modifier to the function');
 
     this.getVariableNameSelectField = function() { return this.getField('MODIFIER_NAME'); };
@@ -1094,7 +1082,6 @@ Blockly.Blocks['modifier_usage'] = {
 
 
 
-
 Blockly.defineBlocksWithJsonArray([
   {
     "type": "contract_ctor",
@@ -1117,7 +1104,7 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     "previousStatement": ["contract_ctor"],
-    "colour": 290,
+    "colour": "#1976D2",
     "tooltip": "Constructor function",
     "helpUrl": ""
   }

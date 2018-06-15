@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly: Solidity</title>
+  <script src="../blockly/blockly_uncompressed.js"></script>
+  <script src="../blockly/blocks/variables.js"></script>
+  <script src="../blockly/blocks/math.js"></script>
+  <script src="../blockly/blocks/logic.js"></script>
+  <script src="../blockly/msg/js/en.js"></script>
+
+  <script src="./blocks/contract.js"></script>
+  <script src="./generators/solidity.js"></script>
+  <script src="./generators/solidity/contract.js"></script>
+  <script src="./generators/solidity/methods.js"></script>
+  <script src="./generators/solidity/logic.js"></script>
+  <script src="./generators/solidity/math.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+    .myLabelStyle>.blocklyFlyoutLabelText {
+      font-weight: bold;
+      fill: green;
+    }
+  </style>
+</head>
+<body>
+  <div id="blocklyDiv" style="height: 480px; width: 100%;"></div>
+
+  <!--
+    toolbox xml, build using:
+    https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
+  -->
+  <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
+    <category name="Contracts" colour="#5ba580">
+      <block type="contract_import"></block>
+      <sep gap="40"></sep>
+      <label text="STATE VARIABLES" web-class="myLabelStyle"></label>
+      <block type="contract_state"></block>
+      <block type="contract_state_get"></block>
+      <block type="contract_state_set"></block>
+      <sep gap="40"></sep>
+      <label text="CONSTRUCTORS" web-class="myLabelStyle"></label>
+      <block type="contract_ctor"></block>
+      <sep gap="40"></sep>
+      <label text="FUNCTION DEFINITIONS" web-class="myLabelStyle"></label>
+      <block type="contract_method"></block>
+      <block type="contract_method_with_return"></block>
+      <sep gap="40"></sep>
+      <label text="FUNCTION & MODIFIER PARAMETERS" web-class="myLabelStyle"></label>
+      <block type="contract_method_parameter"></block>
+      <block type="contract_method_parameter_get"></block>
+      <sep gap="40"></sep>
+      <label text="FUNCTION CALLS" web-class="myLabelStyle"></label>
+      <block type="contract_method_call"></block>
+      <block type="contract_method_call_with_return_value"></block>
+      <sep gap="40"></sep>
+      <label text="LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
+      <block type="library_method_call"></block>
+      <block type="library_method_call_with_return_value"></block>
+      <label text="EVENTS" web-class="myLabelStyle"></label>
+      <block type="event_definition"></block>
+      <block type="event_argument"></block>
+      <block type="event_emission"></block>
+      <label text="OTHER ATOMS" web-class="myLabelStyle"></label>
+      <block type="msg_get"></block>
+      <label text="MODIFIERS" web-class="myLabelStyle"></label>
+      <block type="modifier_definition"></block>
+      <block type="modifier_usage"></block>
+    </category>
+    <category name="Logic &amp; Math" colour="#5C81A6">
+      <block type="logic_boolean"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="controls_ifelse"></block>
+      <block type="controls_if"></block>
+      <block type="math_number"></block>
+      <block type="math_arithmetic"></block>
+    </category>
+  </xml>
+
+  <textarea id="textarea" style="width:calc(34% - 10px);height:600px;float:right" readonly></textarea>
+
+  <button id="copyTextarea" style="float:right">Copy code</button>
+
+  <script>
+
+    // workspace & toolbox JSON
+    var workspace = Blockly.inject(
+      'blocklyDiv',
+      {
+        media: '../blockly/media/',
+        toolbox: document.getElementById('toolbox'),
+        scrollbars: true,
+        collapse : true,
+        comments : true,
+        disable : true,
+        maxBlocks : Infinity,
+        trashcan : true,
+        horizontalLayout : false,
+        toolboxPosition : 'start',
+        css : true,
+        media : 'https://blockly-demo.appspot.com/static/media/',
+        rtl : false,
+        sounds : true,
+        oneBasedIndex : true,
+        zoom: {
+          controls: true
+        },
+        grid: {
+          spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true
+        },
+      }
+    );
+
+    // workspace initialization from JSON variable
+    Blockly.Xml.domToWorkspace(
+      Blockly.Xml.textToDom(
+        '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
+      ),
+      workspace
+    );
+    var contractBlock = workspace.getTopBlocks()[0];
+
+    function setDisabledRec(block, disabled) {
+      block.setDisabled(disabled);
+      block.setMovable(true);
+
+      var children = block.getChildren();
+      for (var i = 0; i < children.length; i++) {
+        setDisabledRec(children[i], disabled);
+      }
+    }
+
+    // is called every time the workspace changes
+    function myUpdateFunction(event) {
+      var code = Blockly.Solidity.blockToCode(contractBlock);
+      var topBlocks = workspace.getAllBlocks();
+
+      for (var i = 0; i < topBlocks.length; ++i) {
+        var block = topBlocks[i];
+
+        if (contractBlock == block) {
+          continue;
+        }
+
+        if (!block.getParent()) {
+          setDisabledRec(block, true);
+        } else if (block.getParent() == contractBlock) {
+          setDisabledRec(block, false);
+        }
+      }
+
+      document.getElementById('textarea').value = code;
+     }
+     workspace.addChangeListener(myUpdateFunction);
+
+     // copies the contents of code text area
+     function copyTextArea(event) {
+       document.getElementById('textarea').select();
+       document.execCommand('copy');
+       document.getElementById('copyTextarea').select();
+     }
+     document.getElementById('copyTextarea').addEventListener('click', copyTextArea);
+
+  </script>
+
+</body>
+</html>

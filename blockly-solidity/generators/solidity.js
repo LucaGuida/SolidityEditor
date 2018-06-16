@@ -413,14 +413,17 @@ Blockly.Solidity.getVariableByNameAndScope = function(name, scope, group = null)
 };
 
 Blockly.Solidity.deleteVariableById = function(workspace, id) {
-  Blockly.Solidity.deleteVariableByName(
+  workspace.deleteVariableById(id);
+  /*Blockly.Solidity.deleteVariableByName(
     workspace,
     Blockly.Solidity.getVariableById(workspace, id).name
-  );
+  );*/
 }
 
 Blockly.Solidity.deleteVariableByName = function(workspace, name) {
   return workspace.deleteVariable(name);
+  // as an ALTERNATIVE:
+  //return workspace.deleteVariableById(Blockly.Solidity.getVariableByName(workspace, name).getId());
 };
 
 Blockly.Solidity.variableIsInScope = function(variable, scope) {

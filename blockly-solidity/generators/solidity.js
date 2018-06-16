@@ -313,6 +313,7 @@ Blockly.Solidity.updateWorkspaceNameFields = function(workspace) {
 
       var selectedOption = nameField.getValue();
 
+
       if (options.length != 0) {
         var wasUndefined = nameField.menuGenerator_[0][1]
           == Blockly.Solidity.UNDEFINED_NAME;

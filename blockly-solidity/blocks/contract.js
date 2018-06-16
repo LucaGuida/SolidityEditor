@@ -558,6 +558,21 @@ Blockly.Blocks['contract_method_parameter_get'] = {
 };
 
 
+function dynamicFunctionsList () {
+  var functionsList = [[ "select function...", "select function..." ]];
+
+  var functionVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method');
+  if (typeof functionVariablesArray[0] != 'undefined') {
+    var functionsNamePairsArray = [];
+    for (var i = 0; i < functionVariablesArray.length; i++)
+      functionsNamePairsArray.push([Blockly.Solidity.getVariableName(functionVariablesArray[i]),Blockly.Solidity.getVariableName(functionVariablesArray[i])]);
+    functionsList = functionsNamePairsArray;
+  }
+
+  return functionsList;
+}
+
+
 Blockly.Blocks['contract_method_call'] = {
   init: function() {
     this.appendDummyInput()
@@ -609,6 +624,22 @@ Blockly.Blocks['contract_method_call'] = {
     });
   }
 };
+
+
+function dynamicFunctionsWithReturnList () {
+  var functionsWithReturnList = [[ "select function with return value...", "select function with return value..." ]];
+
+  var functionWithReturnVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method_with_return');
+  if (typeof functionWithReturnVariablesArray[0] != 'undefined') {
+    var functionsWithReturnNamePairsArray = [];
+    for (var i = 0; i < functionWithReturnVariablesArray.length; i++)
+      functionsWithReturnNamePairsArray.push([Blockly.Solidity.getVariableName(functionWithReturnVariablesArray[i]),Blockly.Solidity.getVariableName(functionWithReturnVariablesArray[i])]);
+    functionsWithReturnList = functionsWithReturnNamePairsArray;
+  }
+
+  return functionsWithReturnList;
+}
+
 
 Blockly.Blocks['contract_method_call_with_return_value'] = {
   init: function() {

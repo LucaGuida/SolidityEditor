@@ -169,23 +169,3 @@ Blockly.Solidity['modifier_usage'] = function(block) {
   return modifierName + '(' + argsString + ') ';
 };
 
-Blockly.Solidity['contract_method_call'] = function(block) {
-  var variableId = block.getFieldValue('METHOD_NAME');
-  var variable = block.workspace.getVariableById(variableId);
-
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
-
-  if (!variable) {
-    return '';
-  }
-
-  return Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
-};

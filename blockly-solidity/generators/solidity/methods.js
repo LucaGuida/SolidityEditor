@@ -91,8 +91,10 @@ Blockly.Solidity['contract_intrinsic_sha3'] = function(block) {
 };
 
 Blockly.Solidity['contract_method_call'] = function(block) {
-  var variableId = block.getFieldValue('METHOD_NAME');
-  var variable = block.workspace.getVariableById(variableId);
+  //var variableId = block.getFieldValue('METHOD_NAME');
+  //var variable = block.workspace.getVariableById(variableId);
+
+  var functionName = block.getFieldValue('METHOD_NAME');
 
   var argsArray = []; 
   var argsString;
@@ -104,17 +106,19 @@ Blockly.Solidity['contract_method_call'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  if (!variable) {
+  /*if (!variable) {
     return '';
-  }
+  }*/
 
-  return Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
+  return /*Blockly.Solidity.getVariableName(variable)*/ functionName + '(' + argsString + ');\n';
 };
 
 
 Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
-  var variableId = block.getFieldValue('METHOD_NAME');
-  var variable = block.workspace.getVariableById(variableId);
+  //var variableId = block.getFieldValue('METHOD_NAME');
+  //var variable = block.workspace.getVariableById(variableId);
+
+  var functionName = block.getFieldValue('METHOD_NAME');
 
   var argsArray = []; 
   var argsString;
@@ -126,11 +130,11 @@ Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  if (!variable) {
+/*if (!variable) {
     return '';
-  }
+  }*/
 
-  return [Blockly.Solidity.getVariableName(variable) + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
+  return [/*Blockly.Solidity.getVariableName(variable)*/ functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
 
 

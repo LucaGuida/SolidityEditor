@@ -91,10 +91,10 @@ Blockly.Solidity['contract_intrinsic_sha3'] = function(block) {
 };
 
 Blockly.Solidity['contract_method_call'] = function(block) {
-  //var variableId = block.getFieldValue('METHOD_NAME');
-  //var variable = block.workspace.getVariableById(variableId);
+  var variableId = block.getFieldValue('METHOD_NAME');
+  var variable = block.workspace.getVariableById(variableId);
 
-  var functionName = block.getFieldValue('METHOD_NAME');
+  //var functionName = block.getFieldValue('METHOD_NAME');
 
   var argsArray = []; 
   var argsString;
@@ -110,7 +110,7 @@ Blockly.Solidity['contract_method_call'] = function(block) {
     return '';
   }*/
 
-  return /*Blockly.Solidity.getVariableName(variable)*/ functionName + '(' + argsString + ');\n';
+  return Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
 };
 
 

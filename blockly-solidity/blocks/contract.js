@@ -401,7 +401,7 @@ Blockly.Blocks['contract_method'] = {
     });
 
     this.getVariableNameField = function() { return this.getField('NAME') };
-    this.getVariableType = function() { return 'contract_method' };
+    this.getVariableType = function() { return 'void' }; //contract_method
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
     this.getVariableScope = function() {
       var scope = this.getParent();
@@ -496,7 +496,7 @@ Blockly.Blocks['contract_method_with_return'] = {
 
 
     this.getVariableNameField = function() { return this.getField('NAME') };
-    this.getVariableType = function() { return 'contract_method_with_return' };
+    this.getVariableType = function() { return 'void' }; //contract_method_with_return
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
     this.getVariableScope = function() {
       var scope = this.getParent();
@@ -566,7 +566,7 @@ Blockly.Blocks['contract_method_parameter_get'] = {
 };
 
 
-function dynamicFunctionsList () {
+/* function dynamicFunctionsList () {
   var functionsList = [[ "select function...", "select function..." ]];
 
   var functionVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method');
@@ -578,20 +578,16 @@ function dynamicFunctionsList () {
   }
 
   return functionsList;
-}
+} */
 
 
 Blockly.Blocks['contract_method_call'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('call function')
-      /*.appendField(
-        new Blockly.FieldDropdown([
-          ["select function...", Blockly.Solidity.UNDEFINED_NAME],
-        ]),
-        "METHOD_NAME"*/
       .appendField(
-        new Blockly.FieldDropdown(dynamicFunctionsList),
+        new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
+        /*new Blockly.FieldDropdown(dynamicFunctionsList),*/
         "METHOD_NAME"
       );
     this.appendValueInput('ARG1')
@@ -609,7 +605,7 @@ Blockly.Blocks['contract_method_call'] = {
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
 
-/*
+
     this.setOnChange(function(event) {
       if (event.blockId != this.id) {
         return;
@@ -633,12 +629,13 @@ Blockly.Blocks['contract_method_call'] = {
         //console.log(params);
         // FIXME: add/remove inputs according to the method params
       }
-    }); */
+    }); 
   }
 };
 
 
-function dynamicFunctionsWithReturnList () {
+
+/* function dynamicFunctionsWithReturnList () {
   var functionsWithReturnList = [[ "select function with return value...", "select function with return value..." ]];
 
   var functionWithReturnVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method_with_return');
@@ -650,7 +647,8 @@ function dynamicFunctionsWithReturnList () {
   }
 
   return functionsWithReturnList;
-}
+} */
+
 
 
 Blockly.Blocks['contract_method_call_with_return_value'] = {
@@ -658,13 +656,9 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.appendDummyInput()
       .appendField('call function')
       .appendField(
-        new Blockly.FieldDropdown(dynamicFunctionsWithReturnList),
+        /*new Blockly.FieldDropdown(dynamicFunctionsWithReturnList),*/
+        new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
         "METHOD_NAME"
-      /*.appendField(
-        new Blockly.FieldDropdown([
-          ["select function...", Blockly.Solidity.UNDEFINED_NAME],
-        ]),
-        "METHOD_NAME"*/
       )
       .appendField('with return value');
     this.appendValueInput('ARG1')
@@ -680,7 +674,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
 
-/*
+
     this.setOnChange(function(event) {
       if (event.blockId != this.id) {
         return;
@@ -704,7 +698,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
         //console.log(params);
         // FIXME: add/remove inputs according to the method params
       }
-    }); */
+    });
   }
 };
 

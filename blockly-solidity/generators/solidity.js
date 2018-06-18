@@ -16,13 +16,16 @@ goog.require('Blockly.Generator');
  */
 Blockly.Solidity = new Blockly.Generator('Solidity');
 
-Blockly.Solidity.LABEL_GROUP_IMPORT     = "import";
 Blockly.Solidity.LABEL_GROUP_STATE      = "state";
 Blockly.Solidity.LABEL_GROUP_PARAMETER  = "parameter";
 Blockly.Solidity.LABEL_GROUP_VARIABLE   = "variable";
 Blockly.Solidity.LABEL_GROUP_METHOD     = "method";
 
-
+Blockly.Solidity.LABEL_GROUP_IMPORT     = "import";
+Blockly.Solidity.LABEL_GROUP_MODIFIER   = "modifier";
+Blockly.Solidity.LABEL_GROUP_LIBRARY    = "library";
+Blockly.Solidity.LABEL_GROUP_EVENT      = "event";
+Blockly.Solidity.LABEL_GROUP_ATOM       = "atom";
 
 Blockly.Solidity.UNDEFINED_NAME         = "__UNDEFINED__";
 

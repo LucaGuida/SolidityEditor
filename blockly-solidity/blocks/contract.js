@@ -536,7 +536,7 @@ Blockly.Blocks['contract_method_parameter'] = {
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
     this.getVariableScope = function() {
       var scope = this.getParent();
-      while (!!scope && (scope.type != 'contract_method' && scope.type != 'contract_method_with_return' && scope.type != 'contract_ctor')) {        
+      while (!!scope && (scope.type != 'contract_method' && scope.type != 'contract_method_with_return' && scope.type != 'contract_ctor' && scope.type != 'modifier_definition')) {        
         scope = scope.getParent();
       }
       return scope; // return block representing the scope of the parameter
@@ -1093,30 +1093,6 @@ Blockly.Blocks['modifier_usage'] = {
 
     this.getVariableNameSelectField = function() { return this.getField('MODIFIER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
-
-/*
-    this.setOnChange(function(event) {
-      if (event.blockId != this.id) {
-        return;
-      }
-
-      if (event.element == 'field' && event.name == 'MODIFIER_NAME') {
-        var modifierId = this.getFieldValue('MODIFIER_NAME');
-        var modifierBlock = this.workspace.getBlockById(modifierId);
-        var params = [];
-
-        var block = modifierBlock;
-        do {
-          block = block.getChildren()
-            .filter(function(c) { return c.type == 'modifier_definition' })[0];
-
-          if (block && block.type != 'contract_method') {
-            params.push(block);
-          }
-        } while (block)
-      }
-    });
-*/
 
   }
 };

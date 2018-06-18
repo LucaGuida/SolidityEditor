@@ -175,7 +175,16 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "input_statement",
         "name": "METHODS",
-        //"check": ["contract_method"],
+        "check": ["contract_method"],
+        "align": "RIGHT"
+      }
+    ],
+    "message7": "functions with return definition %1",
+    "args7": [
+      {
+        "type": "input_statement",
+        "name": "METHODS_WITH_RETURN",
+        "check": ["contract_method_with_return"],
         "align": "RIGHT"
       }
     ],
@@ -477,8 +486,8 @@ Blockly.Blocks['contract_method_with_return'] = {
           "name": "RETURN_VALUE"
         }
       ],
-      "previousStatement": "contract_method",
-      "nextStatement": "contract_method",
+      "previousStatement": "contract_method_with_return",
+      "nextStatement": "contract_method_with_return",
       "colour": "#1976D2",
       "tooltip": "Function with return value definition",
       "helpUrl": ""

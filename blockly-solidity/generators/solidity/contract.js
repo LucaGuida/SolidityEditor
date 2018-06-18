@@ -17,6 +17,7 @@ Blockly.Solidity['contract'] = function(block) {
   var events = Blockly.Solidity.statementToCode(block, 'EVENTS');
   var ctor = Blockly.Solidity.statementToCode(block, 'CTOR');
   var methods = Blockly.Solidity.statementToCode(block, 'METHODS');
+  var methodsWithReturn = Blockly.Solidity.statementToCode(block, 'METHODS_WITH_RETURN');
 
 
   // trim newline before ultimate closing curly brace
@@ -34,6 +35,7 @@ Blockly.Solidity['contract'] = function(block) {
     + events
     + ctor
     + methods
+    + methodsWithReturn
     + '}\n';
 
   return code;

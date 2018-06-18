@@ -362,32 +362,29 @@ Blockly.Blocks['contract_method'] = {
           "align": "RIGHT"
         },
       ],
-      "message2": "public %1",
+      "message2": "public %1  payable %2",
       "args2": [
         {
           "type": "field_checkbox",
           "name": "PUBLIC_CHECKBOX",
           "checked": false
-        }
-      ],
-      "message3": "payable %1",
-      "args3": [
+        },
         {
           "type": "field_checkbox",
           "name": "PAYABLE_CHECKBOX",
           "checked": false
         }
       ],
-      "message4": "modifiers %1",
-      "args4": [
+      "message3": "modifiers %1",
+      "args3": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message5": "code %1",
-      "args5": [
+      "message4": "code %1",
+      "args4": [
         {
           "type": "input_statement",
           "name": "STACK"        
@@ -436,32 +433,29 @@ Blockly.Blocks['contract_method_with_return'] = {
           "align": "RIGHT"
         }
       ],
-      "message2": "public %1",
+      "message2": "public %1  payable %2",
       "args2": [
         {
           "type": "field_checkbox",
           "name": "PUBLIC_CHECKBOX",
           "checked": false
-        }
-      ],
-      "message3": "payable %1",
-      "args3": [
+        },
         {
           "type": "field_checkbox",
           "name": "PAYABLE_CHECKBOX",
           "checked": false
         }
       ],
-      "message4": "modifiers %1",
-      "args4": [
+      "message3": "modifiers %1",
+      "args3": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message5": "returning value of type %1",
-      "args5": [
+      "message4": "returning value of type %1",
+      "args4": [
         {
           "type": "field_dropdown",
           "name": "RETURN_TYPE",
@@ -472,15 +466,15 @@ Blockly.Blocks['contract_method_with_return'] = {
           ]
         }
       ],  
-      "message6": "code %1",
-      "args6": [
+      "message5": "code %1",
+      "args5": [
         {
           "type": "input_statement",
           "name": "STACK"
         }
       ],
-      "message7": "return value %1",
-      "args7": [
+      "message6": "return value %1",
+      "args6": [
         {
           "type": "input_value",
           "name": "RETURN_VALUE"

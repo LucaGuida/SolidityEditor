@@ -314,7 +314,7 @@ Blockly.Solidity.updateWorkspaceNameFields = function(workspace) {
       var selectedOption = nameField.getValue();
 
 
-      /*if (options.length != 0) {
+      if (options.length != 0) {
         var wasUndefined = nameField.menuGenerator_[0][1]
           == Blockly.Solidity.UNDEFINED_NAME;
 
@@ -329,7 +329,7 @@ Blockly.Solidity.updateWorkspaceNameFields = function(workspace) {
             options.filter(function(o) {return o[1] == selectedOption})[0][0]
           );
         }
-      } */
+      } 
     }
   }
 };

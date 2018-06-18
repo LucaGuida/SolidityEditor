@@ -527,15 +527,36 @@ Blockly.Blocks['contract_method_parameter'] = {
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
     this.getVariableScope = function() {
       var scope = this.getParent();
-      while (!!scope && (scope.type != 'contract_method' && scope.type != 'contract_method_with_return' && scope.type != 'modifier_definition' && scope.type != 'contract_ctor')) {
+      while (!!scope && (scope.type != 'contract_method' && scope.type != 'contract_method_with_return' && scope.type != 'contract_ctor')) {        
         scope = scope.getParent();
       }
-      return scope;
+      return scope; // return block representing the scope of the parameter
     };
 
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
+
+
+
+function dynamicParametersList () {
+  var parametersList = [[ "select parameter...", "select parameter..." ]];
+
+  if (typeof Blockly.getMainWorkspace().getAllVariables() != 'undefined') {
+    var parameterVariablesArray = Blockly.getMainWorkspace().getAllVariables().filter(function(v) { return v.group == 'parameter' });  // get all parameter variables
+
+    if (typeof parameterVariablesArray[0] != 'undefined') {
+      var parametersNamePairsArray = [];
+      for (var i = 0; i < parameterVariablesArray.length; i++)
+        parametersNamePairsArray.push([Blockly.Solidity.getVariableName(parameterVariablesArray[i]),Blockly.Solidity.getVariableName(parameterVariablesArray[i])]);
+      parametersList = parametersNamePairsArray;
+    }
+  }
+
+  return parametersList;
+}
+
+
 
 
 
@@ -548,12 +569,18 @@ Blockly.Blocks['contract_method_parameter_get'] = {
         ]),
         "PARAM_NAME"
       );
+      /*.appendField(
+        new Blockly.FieldDropdown(dynamicParametersList()),
+        "PARAM_NAME"
+      );*/
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Parameter selector');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
+
+
   }
 };
 

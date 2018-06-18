@@ -106,9 +106,9 @@ Blockly.Solidity['contract_method_call'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  /*if (!variable) {
+  if (!variable) {
     return '';
-  }*/
+  }
 
   return Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
 };
@@ -130,9 +130,9 @@ Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-/*if (!variable) {
+  if (!variable) {
     return '';
-  }*/
+  }
 
   return [Blockly.Solidity.getVariableName(variable) + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
 };

@@ -134,12 +134,12 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message2": "states %1",
+    "message2": "state variables & enums %1",
     "args2": [
       {
         "type": "input_statement",
         "name": "STATES",
-        "check": ["contract_state"],
+        "check": ["contract_state", "enum_definition"],
         "align": "RIGHT"
       }
     ],
@@ -1116,6 +1116,83 @@ Blockly.Blocks['modifier_usage'] = {
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
 
   }
+};
+
+
+Blockly.Blocks['enum_definition'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "enum %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "ENUM_NAME",
+          "text": "enumName"
+        },
+      ],
+      "message1": "members %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "MEMBERS",
+          "check": ["enum_member"],
+          "align": "RIGHT"
+        },
+      ],
+      "previousStatement": "enum_definition",
+      "nextStatement": "enum_definition",
+      "colour": "#1976D2",
+      "tooltip": "Enum definition",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('ENUM_NAME') };
+    this.getVariableType = function() { return 'enum_definition' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
+Blockly.Blocks['enum_member'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "member %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "MEMBER_NAME",
+          "text": "memberName"
+        },
+      ],
+      "previousStatement": "enum_member",
+      "nextStatement": "enum_member",
+      "colour": "#1976D2",
+      "tooltip": "Enum member definition",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('MEMBER_NAME') };
+    this.getVariableType = function() { return 'enum_member' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
 };
 
 

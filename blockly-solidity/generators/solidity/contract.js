@@ -196,3 +196,22 @@ Blockly.Solidity['modifier_usage'] = function(block) {
   return modifierName + '(' + argsString + ') ';
 };
 
+
+Blockly.Solidity['enum_definition'] = function(block) {
+  var name = block.getFieldValue('ENUM_NAME');
+  var members = Blockly.Solidity.statementToCode(block, 'MEMBERS').trim();
+  var code = 'enum ' + name + ' {' + members + '}\n\n';
+
+  return code;
+};
+
+
+Blockly.Solidity['enum_member'] = function(block) {
+  var name = block.getFieldValue('MEMBER_NAME');
+  var nextBlock = block.getNextBlock();
+  var sep = nextBlock && nextBlock.type == block.type ? ', ' : '';
+  var code = name + sep;
+
+  return code;
+};
+

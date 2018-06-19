@@ -26,6 +26,8 @@ Blockly.Solidity.LABEL_GROUP_MODIFIER   = "modifier";
 Blockly.Solidity.LABEL_GROUP_LIBRARY    = "library";
 Blockly.Solidity.LABEL_GROUP_EVENT      = "event";
 Blockly.Solidity.LABEL_GROUP_ATOM       = "atom";
+Blockly.Solidity.LABEL_GROUP_ENUM       = "enum";
+
 
 Blockly.Solidity.UNDEFINED_NAME         = "__UNDEFINED__";
 
@@ -375,7 +377,7 @@ Blockly.Solidity.updateWorkspaceTypes = function(workspace, nameFieldName, value
         case 'TYPE_STRING':
           blocks[i].inputList[0].setCheck("String");
           break;
-
+          
         default:
       }
     }

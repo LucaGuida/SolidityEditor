@@ -106,6 +106,9 @@ Blockly.Solidity['contract_state_set'] = function(block) {
   var argument0 = Blockly.Solidity.valueToCode(block, 'STATE_VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || defaultVal;
 
+  if (varType == 'TYPE_ADDRESS' && argument0.length!=40 && argument0.length!=42) 
+    argument0 = "0x0000000000000000000000000000000000000000";
+
   return Blockly.Solidity.getVariableName(variable) + ' = ' + argument0 + ';\n';
 };
 

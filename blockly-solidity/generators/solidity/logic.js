@@ -127,3 +127,19 @@ Blockly.Solidity['logic_ternary'] = function(block) {
   var code = value_if + ' ? ' + value_then + ' : ' + value_else;
   return [code, Blockly.Solidity.ORDER_CONDITIONAL];
 };
+
+
+Blockly.Solidity['text'] = function(block) {
+  // Text value.
+  var code = block.getFieldValue('TEXT');
+  return ['"' + code + '"', Blockly.Solidity.ORDER_ATOMIC];
+};
+
+/*
+Blockly.Solidity['text_length'] = function(block) {
+  // String or array length.
+  var text = Blockly.Solidity.valueToCode(block, 'VALUE',
+      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
+  return [text + '.length', Blockly.JavaScript.ORDER_MEMBER];
+};*/
+

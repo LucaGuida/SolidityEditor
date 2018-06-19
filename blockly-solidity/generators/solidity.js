@@ -28,6 +28,7 @@ Blockly.Solidity.LABEL_GROUP_EVENT      = "event";
 Blockly.Solidity.LABEL_GROUP_ATOM       = "atom";
 Blockly.Solidity.LABEL_GROUP_ENUM       = "enum";
 Blockly.Solidity.LABEL_GROUP_ENUM_VAR   = "enum_var";
+Blockly.Solidity.LABEL_GROUP_ADDRESS    = "address";
 
 
 

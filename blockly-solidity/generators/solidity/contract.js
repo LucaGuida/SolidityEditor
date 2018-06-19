@@ -112,6 +112,12 @@ Blockly.Solidity['contract_state_set'] = function(block) {
   return Blockly.Solidity.getVariableName(variable) + ' = ' + argument0 + ';\n';
 };
 
+Blockly.Solidity['address_balance_get'] = function(block) {
+  var addressVariable = block.getFieldValue('ADDRESS_VARIABLE_NAME');
+
+  return [addressVariable + '.balance', Blockly.Solidity.ORDER_ATOMIC];
+};
+
 
 Blockly.Solidity['event_definition'] = function(block) {
   var args = Blockly.Solidity.statementToCode(block, 'ARGS');

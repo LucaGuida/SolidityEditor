@@ -355,6 +355,44 @@ Blockly.Blocks['contract_state_set'] = {
   }
 };
 
+
+function dynamicAddresses () {
+  var addressList = [[ "select address variable...", "select address variable..." ]];
+
+  //var addressVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('TYPE_ADDRESS');
+
+  var allAddressBlocks = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract_state' && b.getFieldValue('TYPE') == 'TYPE_ADDRESS' });
+
+  if (typeof allAddressBlocks[0] != 'undefined') {
+    var addressNamePairsArray = [];
+    for (var i = 0; i < allAddressBlocks.length; i++)
+      addressNamePairsArray.push([allAddressBlocks[i].getFieldValue('NAME'),allAddressBlocks[i].getFieldValue('NAME')]);
+    addressList = addressNamePairsArray;
+  }
+
+  return addressList;
+}
+
+
+Blockly.Blocks['address_balance_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldDropdown(dynamicAddresses),
+        "ADDRESS_VARIABLE_NAME"
+      )
+      .appendField(".balance");
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('Balance of an address variable');
+
+    this.getVariableNameSelectField = function() { return this.getField('ADDRESS_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ADDRESS };
+  }
+};
+
+
+
 Blockly.Blocks['contract_method'] = {
   init: function() {
     this.jsonInit({

@@ -139,7 +139,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "input_statement",
         "name": "STATES",
-        "check": ["contract_state", "enum_definition"],
+        "check": ["contract_state", "enum_definition", "enum_variable_create"],
         "align": "RIGHT"
       }
     ],
@@ -1139,8 +1139,8 @@ Blockly.Blocks['enum_definition'] = {
           "align": "RIGHT"
         },
       ],
-      "previousStatement": "enum_definition",
-      "nextStatement": "enum_definition",
+      "previousStatement": null,
+      "nextStatement": null,
       "colour": "#1976D2",
       "tooltip": "Enum definition",
       "helpUrl": ""
@@ -1195,7 +1195,133 @@ Blockly.Blocks['enum_member'] = {
   },
 };
 
+function dynamicEnumsList () {
+  var enumsList = [[ "select enum...", "select enum..." ]];
 
+  var enumVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('enum_definition');
+  if (typeof enumVariablesArray[0] != 'undefined') {
+    var enumsNamePairsArray = [];
+    for (var i = 0; i < enumVariablesArray.length; i++)
+      enumsNamePairsArray.push([Blockly.Solidity.getVariableName(enumVariablesArray[i]),Blockly.Solidity.getVariableName(enumVariablesArray[i])]);
+    enumsList = enumsNamePairsArray;
+  }
+
+  return enumsList;
+}
+
+
+Blockly.Blocks['enum_variable_create'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('Enum variable of type ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicEnumsList),
+        "ENUM_TYPE"
+      )
+      .appendField(new Blockly.FieldTextInput('enumVariableName'), 'ENUM_VAR_NAME');
+    this.setColour("#1976D2");
+    this.setTooltip('Declare an enum variable');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+
+    this.getVariableNameField = function() { return this.getField('ENUM_VAR_NAME') };
+    this.getVariableType = function() { return 'enum_variable' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM_VAR };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+
+  }
+};
+
+function dynamicEnumVariablesList () {
+  var enumVariablesList = [[ "select enum variable...", "select enum variable..." ]];
+
+  var enumVariablesArray2 = Blockly.getMainWorkspace().getVariablesOfType('enum_variable');
+  if (typeof enumVariablesArray2[0] != 'undefined') {
+    var enumsNamePairsArray2 = [];
+    for (var i = 0; i < enumVariablesArray2.length; i++)
+      enumsNamePairsArray2.push([Blockly.Solidity.getVariableName(enumVariablesArray2[i]),Blockly.Solidity.getVariableName(enumVariablesArray2[i])]);
+    enumVariablesList = enumsNamePairsArray2;
+  }
+
+  return enumVariablesList;
+}
+
+Blockly.Blocks['enum_variable_set'] = {
+  init: function() {
+    this.appendValueInput('ENUM_VARIABLE_VALUE')
+      .appendField('set enum variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicEnumVariablesList),
+        "ENUM_VARIABLE_NAME"
+      )
+      .appendField("to");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Enum variable setter');
+
+    this.getVariableNameSelectField = function() { return this.getField('ENUM_VARIABLE_VALUE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+  },
+};
+ 
+
+
+
+function dynamicEnumMembersList(block) {
+  var enumsList = [[ "select enum member...", "select enum member..." ]];
+
+  var enumMembersArray = Blockly.getMainWorkspace().getVariablesOfType('enum_member');
+  if (typeof enumMembersArray[0] != 'undefined') {
+    var enumsMemberPairsArray = [];
+    for (var i = 0; i < enumMembersArray.length; i++)
+      enumsMemberPairsArray.push([Blockly.Solidity.getVariableName(enumMembersArray[i]),Blockly.Solidity.getVariableName(enumMembersArray[i])]);
+    enumsList = enumsMemberPairsArray;
+  }
+
+/*
+  var enumTypesArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'enum_definition' }); // get all enum definition blocks
+
+  if (typeof enumTypesArray[0] != 'undefined') {
+    var enumTypeAndMemberPairsArray = [];
+    for (var i = 0; i < enumTypesArray.length; i++) // for each enum type
+      for (var j = 0; j < enumTypesArray[i].getFieldValue; j++) // go through its members
+
+
+      enumsNamePairsArray2.push([Blockly.Solidity.getVariableName(enumVariablesArray2[i]),Blockly.Solidity.getVariableName(enumVariablesArray2[i])]);
+    enumVariablesList = enumsNamePairsArray2;
+  }
+ */ 
+
+  return enumsList;
+}
+
+
+Blockly.Blocks['enum_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('enum member ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicEnumMembersList(this)),
+        "ENUM_MEMBER_NAME"
+      );
+    this.setOutput(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Use a previously defined enum');
+
+    this.getVariableNameSelectField = function() { return this.getField('ENUM_MEMBER_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+
+  }
+};
 
 
 Blockly.defineBlocksWithJsonArray([

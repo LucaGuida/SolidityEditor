@@ -215,3 +215,25 @@ Blockly.Solidity['enum_member'] = function(block) {
   return code;
 };
 
+Blockly.Solidity['enum_variable_create'] = function(block) {
+  var enumType = block.getFieldValue('ENUM_TYPE');
+  var varName = block.getFieldValue('ENUM_VAR_NAME');
+
+  return enumType + ' ' + varName + ';\n';
+};
+
+Blockly.Solidity['enum_variable_set'] = function(block) {
+  // Enum variable setter
+  var variableName = block.getFieldValue('ENUM_VARIABLE_NAME');
+
+  var value = Blockly.Solidity.valueToCode(block, 'ENUM_VARIABLE_VALUE',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+
+  return variableName + ' = ' + value + ';\n';
+};
+
+
+Blockly.Solidity['enum_get'] = function(block) {
+  var memberName = block.getFieldValue('ENUM_MEMBER_NAME');
+  return [memberName, Blockly.Solidity.ORDER_ATOMIC];
+};

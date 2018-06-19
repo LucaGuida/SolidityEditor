@@ -27,6 +27,8 @@ Blockly.Solidity.LABEL_GROUP_LIBRARY    = "library";
 Blockly.Solidity.LABEL_GROUP_EVENT      = "event";
 Blockly.Solidity.LABEL_GROUP_ATOM       = "atom";
 Blockly.Solidity.LABEL_GROUP_ENUM       = "enum";
+Blockly.Solidity.LABEL_GROUP_ENUM_VAR   = "enum_var";
+
 
 
 Blockly.Solidity.UNDEFINED_NAME         = "__UNDEFINED__";
@@ -319,7 +321,7 @@ Blockly.Solidity.updateWorkspaceNameFields = function(workspace) {
       var selectedOption = nameField.getValue();
 
 
-      if (options.length != 0 && blocks[i].type != "modifier_usage" && blocks[i].type != "event_emission") {
+      if (options.length != 0 && blocks[i].type != "modifier_usage" && blocks[i].type != "event_emission" && blocks[i].type != "enum_variable_create" && blocks[i].type != "enum_get") {
         var wasUndefined = nameField.menuGenerator_[0][1]
           == Blockly.Solidity.UNDEFINED_NAME;
 
@@ -377,7 +379,7 @@ Blockly.Solidity.updateWorkspaceTypes = function(workspace, nameFieldName, value
         case 'TYPE_STRING':
           blocks[i].inputList[0].setCheck("String");
           break;
-          
+
         default:
       }
     }

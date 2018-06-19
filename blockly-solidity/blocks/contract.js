@@ -193,8 +193,15 @@ Blockly.defineBlocksWithJsonArray([
   }
 ]);
 
+// List of types
+var typesList = [
+            [ "bool", "TYPE_BOOL" ],
+            [ "int",  "TYPE_INT" ],
+            [ "uint", "TYPE_UINT" ],
+          ];
 
-// Default library list
+
+// List of default libraries TEMP
 var librariesList = [
             [ "demo-lib1", "lib1" ],
             [ "demo-lib2",  "lib2" ]
@@ -261,11 +268,7 @@ Blockly.Blocks['contract_state'] = {
     var nameField = new Blockly.FieldTextInput('variableName');
     this.appendDummyInput()
         .appendField('State variable type')
-        .appendField(new Blockly.FieldDropdown([
-            [ "bool", "TYPE_BOOL" ],
-            [ "int",  "TYPE_INT" ],
-            [ "uint", "TYPE_UINT" ],
-          ]),
+        .appendField(new Blockly.FieldDropdown(typesList),
           'TYPE'
         )
         .appendField(nameField, 'NAME');
@@ -459,11 +462,7 @@ Blockly.Blocks['contract_method_with_return'] = {
         {
           "type": "field_dropdown",
           "name": "RETURN_TYPE",
-          "options": [
-            [ "bool", "TYPE_BOOL" ],
-            [ "int",  "TYPE_INT" ],
-            [ "uint", "TYPE_UINT" ],
-          ]
+          "options": typesList
         }
       ],  
       "message5": "code %1",
@@ -511,11 +510,7 @@ Blockly.Blocks['contract_method_parameter'] = {
     var nameField = new Blockly.FieldTextInput('parameterName');
     this.appendDummyInput()
         .appendField('Parameter type')
-        .appendField(new Blockly.FieldDropdown([
-            [ "bool", "TYPE_BOOL" ],
-            [ "int",  "TYPE_INT" ],
-            [ "uint", "TYPE_UINT" ],
-          ]),
+        .appendField(new Blockly.FieldDropdown(typesList),
           'TYPE'
         )
         .appendField(nameField, 'NAME');
@@ -868,11 +863,7 @@ Blockly.Blocks['event_argument'] = {
     var nameField = new Blockly.FieldTextInput('argumentName');
     this.appendDummyInput()
         .appendField('event type')
-        .appendField(new Blockly.FieldDropdown([
-            [ "bool", "TYPE_BOOL" ],
-            [ "int",  "TYPE_INT" ],
-            [ "uint", "TYPE_UINT" ],
-          ]),
+        .appendField(new Blockly.FieldDropdown(typesList),
           'TYPE'
         )
         .appendField('indexed')

@@ -40,13 +40,15 @@
     https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
   -->
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
-    <category name="Variables" colour="#5ba580">
+    <category name="State variables" colour="#5ba580">
       <label text="STATE VARIABLES" web-class="myLabelStyle"></label>
       <block type="contract_state"></block>
       <block type="contract_state_set"></block>
       <block type="contract_state_get"></block>
       <block type="address_balance_get"></block>
-      <sep gap="40"></sep>
+    </category>
+
+    <category name="Enums" colour="#5ba580">
       <label text="ENUM VARIABLES" web-class="myLabelStyle"></label>
       <block type="enum_definition"></block>
       <block type="enum_member"></block>
@@ -54,10 +56,23 @@
       <block type="enum_variable_set"></block>
       <block type="enum_member_get"></block>
       <block type="enum_get"></block>
+    </category>
+
+    <category name="Structs & others" colour="#5ba580">
+      <label text="STRUCT VARIABLES" web-class="myLabelStyle"></label>
+      <block type="struct_definition"></block>
+      <block type="struct_member"></block>
+      <block type="struct_variable_create"></block>
+      <block type="struct_variable_set"></block>
+      <block type="struct_variable_get"></block>
+      <block type="struct_member_set"></block>
+      <block type="struct_member_get"></block>
       <sep gap="40"></sep>
       <label text="OTHER ATOMS" web-class="myLabelStyle"></label>
       <block type="msg_get"></block>
     </category>
+
+
     <category name="Functions and constructors" colour="#5ba580">
       <label text="CONSTRUCTORS" web-class="myLabelStyle"></label>
       <block type="contract_ctor"></block>

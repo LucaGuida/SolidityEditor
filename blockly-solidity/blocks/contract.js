@@ -134,7 +134,7 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message2": "state variables & enums %1",
+    "message2": "state variables, enums & structs %1",
     "args2": [
       {
         "type": "input_statement",
@@ -1231,7 +1231,7 @@ Blockly.Blocks['enum_member'] = {
 };
 
 function dynamicEnumsList () {
-  var enumsList = [[ "select enum...", "select enum..." ]];
+  var enumsList = [[ "select enum type...", "select enum type..." ]];
 
   var enumVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('enum_definition');
   if (typeof enumVariablesArray[0] != 'undefined') {
@@ -1373,6 +1373,274 @@ Blockly.Blocks['enum_get'] = {
 
   }
 };
+
+
+
+Blockly.Blocks['struct_definition'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "struct %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "STRUCT_NAME",
+          "text": "structName"
+        },
+      ],
+      "message1": "members %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "MEMBERS",
+          "check": ["struct_member"],
+          "align": "RIGHT"
+        },
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#1976D2",
+      "tooltip": "Struct definition",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('STRUCT_NAME') };
+    this.getVariableType = function() { return 'struct_definition' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+Blockly.Blocks['struct_member'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "member of type %1 %2",
+      "args0": [
+        { 
+          "type": "field_dropdown",
+          "name": "TYPE",
+          "options": typesList
+        },
+        {
+          "type": "field_input",
+          "name": "MEMBER_NAME",
+          "text": "memberName"
+        },
+      ],
+      "previousStatement": "struct_member",
+      "nextStatement": "struct_member",
+      "colour": "#1976D2",
+      "tooltip": "Struct member definition",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('MEMBER_NAME') };
+    this.getVariableType = function() { return 'struct_member' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+function dynamicStructTypesList () {
+  var structsList = [[ "select struct type...", "select struct type..." ]];
+
+  var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_definition');
+  if (typeof structVariablesArray[0] != 'undefined') {
+    var structsNamePairsArray = [];
+    for (var i = 0; i < structVariablesArray.length; i++)
+      structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
+    structsList = structsNamePairsArray;
+  }
+
+  return structsList;
+}
+
+
+Blockly.Blocks['struct_variable_create'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('struct variable of type ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructTypesList),
+        "STRUCT_TYPE"
+      )
+      .appendField(new Blockly.FieldTextInput('structVariableName'), 'STRUCT_VAR_NAME');
+    this.setColour("#1976D2");
+    this.setTooltip('Declare a struct variable');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+
+    this.getVariableNameField = function() { return this.getField('STRUCT_VAR_NAME') };
+    this.getVariableType = function() { return 'struct_variable' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT_VAR };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+
+  }
+};
+
+
+function dynamicStructVariablesList () {
+  var structsList = [[ "select struct variable...", "select struct variable..." ]];
+
+  var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_variable');
+  if (typeof structVariablesArray[0] != 'undefined') {
+    var structsNamePairsArray = [];
+    for (var i = 0; i < structVariablesArray.length; i++)
+      structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
+    structsList = structsNamePairsArray;
+  }
+
+  return structsList;
+}
+
+
+Blockly.Blocks['struct_variable_set'] = {
+  init: function() {
+    this.appendValueInput('STRUCT_VARIABLE_VALUE')
+      .appendField('set struct variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        "STRUCT_VARIABLE_NAME"
+      )
+      .appendField("to");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Struct variable setter');
+
+    this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+  },
+};
+
+
+Blockly.Blocks['struct_variable_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('struct variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        "STRUCT_VARIABLE_NAME"
+      );
+    this.setOutput(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Use a previously defined struct variable');
+
+    this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+
+  }
+};
+
+function dynamicStructMembersList (blockName) {
+  var structMembersList = [[ "select struct member...", "select struct member..." ]];
+
+  if (typeof blockName != 'undefined' && blockName != null) {
+    var structVariableBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.getFieldValue('STRUCT_VAR_NAME') == blockName })[0];
+    
+    if (typeof structVariableBlock != 'undefined' && structVariableBlock != null) {
+      var structDefinitionBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.getFieldValue('STRUCT_NAME') == structVariableBlock.getFieldValue('STRUCT_TYPE') })[0];
+      var membersOfGivenBlock = [];
+      //var membersOfGivenBlock = structDefinitionBlock.getChildren().filter(function(b) { return b.type == 'struct_member' });
+
+
+      do {
+        structDefinitionBlock = structDefinitionBlock.getChildren().filter(function(b) { return b.type == 'struct_member' })[0];
+
+        if (structDefinitionBlock) {
+          membersOfGivenBlock.push(structDefinitionBlock);
+        }
+      } while (structDefinitionBlock)
+
+
+      if (typeof membersOfGivenBlock[0] != 'undefined') {
+        console.log(membersOfGivenBlock);
+        var membersOfGivenBlockPairs = [];
+        for (var i = 0; i < membersOfGivenBlock.length; i++)
+          membersOfGivenBlockPairs.push([membersOfGivenBlock[i].getFieldValue('MEMBER_NAME'),membersOfGivenBlock[i].getFieldValue('MEMBER_NAME')]);
+        structMembersList = membersOfGivenBlockPairs;
+      }
+    }
+  }
+
+  return structMembersList;
+}
+
+
+Blockly.Blocks['struct_member_set'] = {
+  init: function() {
+    this.appendValueInput('STRUCT_VARIABLE_VALUE')
+      .appendField('set struct variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        "STRUCT_VARIABLE_NAME"
+      )
+      .appendField(' member  ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructMembersList(this.getFieldValue('STRUCT_VARIABLE_NAME'))),
+        "STRUCT_MEMBER_NAME"
+      )
+      .appendField("to");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Struct variable member setter');
+
+    this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'+'STRUCT_MEMBER_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+  },
+};
+
+
+Blockly.Blocks['struct_member_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('struct variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        "STRUCT_VARIABLE_NAME"
+      )
+      .appendField(' member  ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicStructMembersList(this.getFieldValue('STRUCT_VARIABLE_NAME'))),
+        "STRUCT_MEMBER_NAME"
+      );
+    this.setOutput(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Use a previously defined struct variable member');
+
+    this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME' + 'STRUCT_MEMBER_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+
+  }
+};
+
+
+
+
 
 Blockly.defineBlocksWithJsonArray([
   {

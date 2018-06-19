@@ -211,7 +211,6 @@ Blockly.Solidity['enum_definition'] = function(block) {
   return code;
 };
 
-
 Blockly.Solidity['enum_member'] = function(block) {
   var name = block.getFieldValue('MEMBER_NAME');
   var nextBlock = block.getNextBlock();
@@ -249,4 +248,61 @@ Blockly.Solidity['enum_get'] = function(block) {
   var varName = block.getFieldValue('ENUM_VARIABLE_NAME');
   return [varName, Blockly.Solidity.ORDER_ATOMIC];
 };
+
+
+
+
+Blockly.Solidity['struct_definition'] = function(block) {
+  var name = block.getFieldValue('STRUCT_NAME');
+  var members = Blockly.Solidity.statementToCode(block, 'MEMBERS').trim();
+  var code = 'struct ' + name + ' {\n' + members + '\n}\n\n';
+
+  return code;
+};
+
+Blockly.Solidity['struct_member'] = function(block) {
+  var type = block.getFieldValue('TYPE');
+  var name = block.getFieldValue('MEMBER_NAME');
+  var code = '\t' + types[type] + ' ' + name + ';\n';
+
+  return code;
+};
+
+Blockly.Solidity['struct_variable_create'] = function(block) {
+  var structType = block.getFieldValue('STRUCT_TYPE');
+  var varName = block.getFieldValue('STRUCT_VAR_NAME');
+
+  return structType + ' ' + varName + ';\n';
+};
+
+Blockly.Solidity['struct_variable_set'] = function(block) {
+  var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
+  var value = Blockly.Solidity.valueToCode(block, 'STRUCT_VARIABLE_VALUE',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+
+  return variableName + ' = ' + value + ';\n';
+};
+
+Blockly.Solidity['struct_variable_get'] = function(block) {
+  var varName = block.getFieldValue('STRUCT_VARIABLE_NAME');
+  return [varName, Blockly.Solidity.ORDER_ATOMIC];
+};
+
+Blockly.Solidity['struct_member_set'] = function(block) {
+  var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
+  var memberName = block.getFieldValue('STRUCT_MEMBER_NAME');
+  var value = Blockly.Solidity.valueToCode(block, 'STRUCT_VARIABLE_VALUE',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+
+  return variableName + '.' + memberName + ' = ' + value + ';\n';
+};
+
+Blockly.Solidity['struct_member_get'] = function(block) {
+  var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
+  var memberName = block.getFieldValue('STRUCT_MEMBER_NAME');
+  return [variableName + '.' + memberName, Blockly.Solidity.ORDER_ATOMIC];
+};
+
+
+
 

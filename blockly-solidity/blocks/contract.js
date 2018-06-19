@@ -203,6 +203,13 @@ var typesList = [
             [ "string", "TYPE_STRING" ],
           ];
 
+var functionTypesList = [
+            [ "none", "" ],
+            [ "pure",  " pure " ],
+            [ "view", " view " ],
+            [ "payable", " payable " ],
+          ];
+
 
 // List of default libraries TEMP
 var librariesList = [
@@ -368,18 +375,13 @@ Blockly.Blocks['contract_method'] = {
           "align": "RIGHT"
         },
       ],
-      "message2": "public %1  payable %2",
+      "message2": "function type %1",
       "args2": [
         {
-          "type": "field_checkbox",
-          "name": "PUBLIC_CHECKBOX",
-          "checked": false
-        },
-        {
-          "type": "field_checkbox",
-          "name": "PAYABLE_CHECKBOX",
-          "checked": false
-        }
+          "type": "field_dropdown",
+          "name": "FUNCTION_TYPE",
+          "options": functionTypesList
+        }      
       ],
       "message3": "modifiers %1",
       "args3": [
@@ -439,18 +441,13 @@ Blockly.Blocks['contract_method_with_return'] = {
           "align": "RIGHT"
         }
       ],
-      "message2": "public %1  payable %2",
+      "message2": "function type %1",
       "args2": [
         {
-          "type": "field_checkbox",
-          "name": "PUBLIC_CHECKBOX",
-          "checked": false
-        },
-        {
-          "type": "field_checkbox",
-          "name": "PAYABLE_CHECKBOX",
-          "checked": false
-        }
+          "type": "field_dropdown",
+          "name": "FUNCTION_TYPE",
+          "options": functionTypesList
+        }      
       ],
       "message3": "modifiers %1",
       "args3": [

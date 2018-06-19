@@ -9,27 +9,17 @@ goog.require('Blockly.Solidity');
 
 Blockly.Solidity['contract_method'] = function(block) {
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
-  var publicCheckbox;
-  if (block.getFieldValue('PUBLIC_CHECKBOX')=="TRUE") {publicCheckbox = " public";}
-    else {publicCheckbox = "";}
-  var payableCheckbox;
-  if (block.getFieldValue('PAYABLE_CHECKBOX')=="TRUE") {payableCheckbox = " payable";}
-    else {payableCheckbox = "";}
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
-  var code = 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + publicCheckbox + payableCheckbox + modifiers + '{\n' + branch + '}\n\n';
+  var code = 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + functionType + modifiers + '{\n' + branch + '}\n\n';
 
   return code;
 };
 
 Blockly.Solidity['contract_method_with_return'] = function(block) {
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
-  var publicCheckbox;
-  if (block.getFieldValue('PUBLIC_CHECKBOX')=="TRUE") {publicCheckbox = " public";}
-    else {publicCheckbox = "";}
-  var payableCheckbox;
-  if (block.getFieldValue('PAYABLE_CHECKBOX')=="TRUE") {payableCheckbox = " payable";}
-    else {payableCheckbox = "";}
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
   var returnValue = Blockly.Solidity.valueToCode(block, 'RETURN_VALUE',Blockly.Solidity.ORDER_ASSIGNMENT);
@@ -40,7 +30,7 @@ Blockly.Solidity['contract_method_with_return'] = function(block) {
     'TYPE_UINT': 'uint',
   };
 
-  var code = 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + publicCheckbox + payableCheckbox + modifiers + 'returns (' + types[block.getFieldValue('RETURN_TYPE')] + ') {\n' + branch + '\n return ' + returnValue + ';\n}\n\n';
+  var code = 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + functionType + modifiers + ' returns (' + types[block.getFieldValue('RETURN_TYPE')] + ') {\n' + branch + '\n return ' + returnValue + ';\n}\n\n';
 
   return code;
 };

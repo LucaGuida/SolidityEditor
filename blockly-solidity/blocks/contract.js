@@ -1050,6 +1050,39 @@ Blockly.Blocks['modifier_definition'] = {
 };
 
 
+Blockly.Blocks['modifier_onlyOwner'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "modifier %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "MODIFIER_NAME",
+          "text": "onlyOwner"
+        },
+      ],
+      "previousStatement": "modifier_definition",
+      "nextStatement": "modifier_definition",
+      "colour": "#1976D2",
+      "tooltip": "onlyOwner modifier (only the contract owner can call the function featuring this modifier: if the owner calls this function, the function is executed; otherwise, an exception is thrown)",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
+    this.getVariableType = function() { return 'modifier' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
 function dynamicModifiersList () {
   var modifiersList = [[ "select modifier...", "select modifier..." ]];
 
@@ -1090,6 +1123,7 @@ Blockly.Blocks['modifier_usage'] = {
 
   }
 };
+
 
 
 

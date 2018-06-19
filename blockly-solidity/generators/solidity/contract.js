@@ -155,6 +155,14 @@ Blockly.Solidity['modifier_definition'] = function(block) {
   return code;
 };
 
+
+Blockly.Solidity['modifier_onlyOwner'] = function(block) {
+  var name = block.getFieldValue('MODIFIER_NAME');
+  var code = 'modifier ' + name + '\n{\n\trequire(\n\t\tmsg.sender == owner,\n\t\t"Only owner can call this function."\n\t);\n\t _;\n}\n\n';
+  return code;
+};
+
+
 Blockly.Solidity['modifier_usage'] = function(block) {
   var modifierName = block.getFieldValue('MODIFIER_NAME');
 

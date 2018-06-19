@@ -135,11 +135,3 @@ Blockly.Solidity['text'] = function(block) {
   return ['"' + code + '"', Blockly.Solidity.ORDER_ATOMIC];
 };
 
-/*
-Blockly.Solidity['text_length'] = function(block) {
-  // String or array length.
-  var text = Blockly.Solidity.valueToCode(block, 'VALUE',
-      Blockly.JavaScript.ORDER_FUNCTION_CALL) || '\'\'';
-  return [text + '.length', Blockly.JavaScript.ORDER_MEMBER];
-};*/
-

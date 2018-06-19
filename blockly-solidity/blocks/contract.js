@@ -198,6 +198,9 @@ var typesList = [
             [ "bool", "TYPE_BOOL" ],
             [ "int",  "TYPE_INT" ],
             [ "uint", "TYPE_UINT" ],
+            [ "address", "TYPE_ADDRESS" ],
+            [ "bytes", "TYPE_BYTES_ARRAY" ],
+            [ "string", "TYPE_STRING" ],
           ];
 
 

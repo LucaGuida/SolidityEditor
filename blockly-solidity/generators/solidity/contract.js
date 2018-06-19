@@ -233,7 +233,14 @@ Blockly.Solidity['enum_variable_set'] = function(block) {
 };
 
 
-Blockly.Solidity['enum_get'] = function(block) {
+Blockly.Solidity['enum_member_get'] = function(block) {
   var memberName = block.getFieldValue('ENUM_MEMBER_NAME');
   return [memberName, Blockly.Solidity.ORDER_ATOMIC];
 };
+
+
+Blockly.Solidity['enum_get'] = function(block) {
+  var varName = block.getFieldValue('ENUM_VARIABLE_NAME');
+  return [varName, Blockly.Solidity.ORDER_ATOMIC];
+};
+

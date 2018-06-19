@@ -1274,9 +1274,7 @@ Blockly.Blocks['enum_variable_set'] = {
 };
  
 
-
-
-function dynamicEnumMembersList(block) {
+function dynamicEnumMembersList() {
   var enumsList = [[ "select enum member...", "select enum member..." ]];
 
   var enumMembersArray = Blockly.getMainWorkspace().getVariablesOfType('enum_member');
@@ -1305,17 +1303,17 @@ function dynamicEnumMembersList(block) {
 }
 
 
-Blockly.Blocks['enum_get'] = {
+Blockly.Blocks['enum_member_get'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('enum member ')
       .appendField(
-        new Blockly.FieldDropdown(dynamicEnumMembersList(this)),
+        new Blockly.FieldDropdown(dynamicEnumMembersList()),
         "ENUM_MEMBER_NAME"
       );
     this.setOutput(true, null);
     this.setColour("#FF5252");
-    this.setTooltip('Use a previously defined enum');
+    this.setTooltip('Use a previously defined enum member in an enum variable assignment statement');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_MEMBER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
@@ -1323,6 +1321,23 @@ Blockly.Blocks['enum_get'] = {
   }
 };
 
+Blockly.Blocks['enum_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('enum variable ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicEnumVariablesList()),
+        "ENUM_VARIABLE_NAME"
+      );
+    this.setOutput(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Use a previously defined enum variable');
+
+    this.getVariableNameSelectField = function() { return this.getField('ENUM_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
+
+  }
+};
 
 Blockly.defineBlocksWithJsonArray([
   {

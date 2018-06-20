@@ -163,8 +163,8 @@ Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
   if (argument3!=null) {argsArray.push(argument3);}
   if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  /*if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
-    return '';*/
+  if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
+    return '';
 
-  return [/*libraryName + '.' + */ functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
+  return [libraryName + '.' + functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
 };

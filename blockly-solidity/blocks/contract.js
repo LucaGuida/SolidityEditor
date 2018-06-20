@@ -846,7 +846,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL BLOCK ********************** */
+/* ********************** LIBRARY_METHOD_CALL & LIBRARY_METHOD_CALL_WITH_RETURN_VALUE BLOCKS ********************** */
 
 function dynamicLibsList() {
   var options = [[ "select library...", "select library..." ]];
@@ -929,31 +929,42 @@ Blockly.Blocks['library_method_call'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL_WITH_RETURN_VALUE BLOCK ********************** */
-
 Blockly.Blocks['library_method_call_with_return_value'] = {
   init: function() {
-    this.appendDummyInput()  
-      .appendField('call library function')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicLibFunctsList),
-        "LIB_FUNCT_NAME"
-      )
-      .appendField('with return value');
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
-    this.setOutput(true, null);
-    this.setColour("#757575");
-    this.setTooltip('Call of a library function which returns a value');
+    this.jsonInit({
+      "message0": "call library %1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "LIB_NAME",
+          "options": dynamicLibsList
+        },
+      ],
+      "colour": "#757575",
+      "mutator": "library_function_mutator",
+      "tooltip": "Call of a library function which returns a value",
+      "helpUrl": "",
+      "output": null
+    });
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_LIBRARY };
 
-  }
+
+    this.setOnChange(function(event) {
+      if (this.getFieldValue('LIB_NAME')!='select library...') {
+        this.setWarningText('If you want to change library, first select "select library..." from the list, then select the new library');
+        this.updateShape_(true, this.getFieldValue('LIB_NAME'));
+
+      } else {
+        this.setWarningText('Select a library from the list');
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
+      }
+    });
+
+
+
+  },
 };
 
 

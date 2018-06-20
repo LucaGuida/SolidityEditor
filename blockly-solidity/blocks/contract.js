@@ -116,7 +116,53 @@ Blockly.Extensions.register(
 
 
 
-/* ********************** MUTATORS ********************** */
+// List of types
+var typesList = [
+            [ "bool", "TYPE_BOOL" ],
+            [ "int",  "TYPE_INT" ],
+            [ "uint", "TYPE_UINT" ],
+            [ "address", "TYPE_ADDRESS" ],
+            [ "bytes", "TYPE_BYTES_ARRAY" ],
+            [ "string", "TYPE_STRING" ],
+          ];
+
+var functionTypesList = [
+            [ "none", "" ],
+            [ "pure",  " pure " ],
+            [ "view", " view " ],
+            [ "payable", " payable " ],
+          ];
+
+
+// List of default libraries TEMP
+var librariesList = [
+            [ "demo-lib1", "lib1" ],
+            [ "demo-lib2",  "lib2" ]
+          ];
+
+
+// Read JSON libraries list 
+var jsonObj;
+var request = new XMLHttpRequest();
+request.open('GET', 'librariesList.json', false);  // `false` makes the request synchronous
+request.send(null);
+if (request.status === 200) {
+  jsonObj = JSON.parse(request.responseText);
+  var librariesArray = [];
+  for(var lib in jsonObj) librariesArray.push(lib);
+
+  librariesList = [];
+  librariesArray.forEach(function(entry) {
+    librariesList.push([entry,entry]);
+  });
+  //console.log(librariesList);
+}
+
+
+
+
+
+/* ********************** LIBRARY_FUNCTION_MUTATOR ********************** */
 
 /**
  * Mixin for mutator functions in the 'library_function_mutator'
@@ -286,48 +332,8 @@ Blockly.defineBlocksWithJsonArray([
   }
 ]);
 
-// List of types
-var typesList = [
-            [ "bool", "TYPE_BOOL" ],
-            [ "int",  "TYPE_INT" ],
-            [ "uint", "TYPE_UINT" ],
-            [ "address", "TYPE_ADDRESS" ],
-            [ "bytes", "TYPE_BYTES_ARRAY" ],
-            [ "string", "TYPE_STRING" ],
-          ];
 
-var functionTypesList = [
-            [ "none", "" ],
-            [ "pure",  " pure " ],
-            [ "view", " view " ],
-            [ "payable", " payable " ],
-          ];
-
-
-// List of default libraries TEMP
-var librariesList = [
-            [ "demo-lib1", "lib1" ],
-            [ "demo-lib2",  "lib2" ]
-          ];
-
-
-// Read JSON libraries list 
-var jsonObj;
-var request = new XMLHttpRequest();
-request.open('GET', 'librariesList.json', false);  // `false` makes the request synchronous
-request.send(null);
-if (request.status === 200) {
-  jsonObj = JSON.parse(request.responseText);
-  var librariesArray = [];
-  for(var lib in jsonObj) librariesArray.push(lib);
-
-  librariesList = [];
-  librariesArray.forEach(function(entry) {
-    librariesList.push([entry,entry]);
-  });
-  //console.log(librariesList);
-}
-
+/* ********************** CONTRACT_IMPORT BLOCK ********************** */
 
 Blockly.Blocks['contract_import'] = {
 
@@ -366,6 +372,8 @@ Blockly.Blocks['contract_import'] = {
 };
 
 
+/* ********************** CONTRACT_STATE BLOCK ********************** */
+
 Blockly.Blocks['contract_state'] = {
   init: function() {
     var nameField = new Blockly.FieldTextInput('variableName');
@@ -398,6 +406,9 @@ Blockly.Blocks['contract_state'] = {
   },
 };
 
+
+/* ********************** CONTRACT_STATE_GET BLOCK ********************** */
+
 Blockly.Blocks['contract_state_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -415,6 +426,9 @@ Blockly.Blocks['contract_state_get'] = {
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
   }
 };
+
+
+/* ********************** CONTRACT_STATE_SET BLOCK ********************** */
 
 Blockly.Blocks['contract_state_set'] = {
   init: function() {
@@ -448,6 +462,8 @@ Blockly.Blocks['contract_state_set'] = {
   }
 };
 
+
+/* ********************** ADDRESS_BALANCE_GET BLOCK ********************** */
 
 function dynamicAddresses () {
   var addressList = [[ "select address variable...", "select address variable..." ]];
@@ -485,6 +501,7 @@ Blockly.Blocks['address_balance_get'] = {
 };
 
 
+/* ********************** CONTRACT_METHOD BLOCK ********************** */
 
 Blockly.Blocks['contract_method'] = {
   init: function() {
@@ -552,6 +569,8 @@ Blockly.Blocks['contract_method'] = {
 };
 
 
+/* ********************** CONTRACT_METHOD_WITH_RETURN BLOCK ********************** */
+
 Blockly.Blocks['contract_method_with_return'] = {
   init: function() {
     this.jsonInit({
@@ -617,8 +636,6 @@ Blockly.Blocks['contract_method_with_return'] = {
       "helpUrl": ""
     });
 
-
-
     this.getVariableNameField = function() { return this.getField('NAME') };
     this.getVariableType = function() { return 'void' }; //contract_method_with_return
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
@@ -635,6 +652,8 @@ Blockly.Blocks['contract_method_with_return'] = {
   },
 };
 
+
+/* ********************** CONTRACT_METHOD_PARAMETER BLOCK ********************** */
 
 Blockly.Blocks['contract_method_parameter'] = {
   init: function() {
@@ -667,6 +686,8 @@ Blockly.Blocks['contract_method_parameter'] = {
 };
 
 
+/* ********************** CONTRACT_METHOD_PARAMETER_GET BLOCK ********************** */
+
 Blockly.Blocks['contract_method_parameter_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -685,6 +706,8 @@ Blockly.Blocks['contract_method_parameter_get'] = {
   }
 };
 
+
+/* ********************** CONTRACT_METHOD_CALL BLOCK ********************** */
 
 /* function dynamicFunctionsList () {
   var functionsList = [[ "select function...", "select function..." ]];
@@ -754,6 +777,7 @@ Blockly.Blocks['contract_method_call'] = {
 };
 
 
+/* ********************** CONTRACT_METHOD_CALL_WITH_RETURN_VALUE BLOCK ********************** */
 
 /* function dynamicFunctionsWithReturnList () {
   var functionsWithReturnList = [[ "select function with return value...", "select function with return value..." ]];
@@ -768,7 +792,6 @@ Blockly.Blocks['contract_method_call'] = {
 
   return functionsWithReturnList;
 } */
-
 
 
 Blockly.Blocks['contract_method_call_with_return_value'] = {
@@ -822,6 +845,8 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
   }
 };
 
+
+/* ********************** LIBRARY_METHOD_CALL BLOCK ********************** */
 
 function dynamicLibsList() {
   var options = [[ "select library...", "select library..." ]];
@@ -904,6 +929,8 @@ Blockly.Blocks['library_method_call'] = {
 };
 
 
+/* ********************** LIBRARY_METHOD_CALL_WITH_RETURN_VALUE BLOCK ********************** */
+
 Blockly.Blocks['library_method_call_with_return_value'] = {
   init: function() {
     this.appendDummyInput()  
@@ -930,8 +957,7 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
 };
 
 
-
-
+/* ********************** EVENT_DEFINITION BLOCK ********************** */
 
 Blockly.Blocks['event_definition'] = {
   init: function() {
@@ -976,6 +1002,9 @@ Blockly.Blocks['event_definition'] = {
   },
 };
 
+
+/* ********************** EVENT_ARGUMENT BLOCK ********************** */
+
 Blockly.Blocks['event_argument'] = {
   init: function() {
     var nameField = new Blockly.FieldTextInput('argumentName');
@@ -1010,6 +1039,8 @@ Blockly.Blocks['event_argument'] = {
   },
 };
 
+
+/* ********************** EVENT_EMISSION BLOCK ********************** */
 
 function dynamicEventsList () {
   var eventsList = [[ "select event...", "select event..." ]];
@@ -1053,6 +1084,8 @@ Blockly.Blocks['event_emission'] = {
 };
 
 
+/* ********************** MSG_GET BLOCK ********************** */
+
 Blockly.Blocks['msg_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -1072,6 +1105,9 @@ Blockly.Blocks['msg_get'] = {
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ATOM };
   }
 };
+
+
+/* ********************** MODIFIER_DEFINITION BLOCK ********************** */
 
 Blockly.Blocks['modifier_definition'] = {
   init: function() {
@@ -1133,6 +1169,8 @@ Blockly.Blocks['modifier_definition'] = {
 };
 
 
+/* ********************** MODIFIER_ONLYOWNER BLOCK ********************** */
+
 Blockly.Blocks['modifier_onlyOwner'] = {
   init: function() {
     this.jsonInit({
@@ -1165,6 +1203,9 @@ Blockly.Blocks['modifier_onlyOwner'] = {
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
+
+
+/* ********************** MODIFIER_USAGE BLOCK ********************** */
 
 function dynamicModifiersList () {
   var modifiersList = [[ "select modifier...", "select modifier..." ]];
@@ -1207,6 +1248,8 @@ Blockly.Blocks['modifier_usage'] = {
   }
 };
 
+
+/* ********************** ENUM_DEFINITION BLOCK ********************** */
 
 Blockly.Blocks['enum_definition'] = {
   init: function() {
@@ -1251,6 +1294,8 @@ Blockly.Blocks['enum_definition'] = {
 };
 
 
+/* ********************** ENUM_MEMBER BLOCK ********************** */
+
 Blockly.Blocks['enum_member'] = {
   init: function() {
     this.jsonInit({
@@ -1283,6 +1328,9 @@ Blockly.Blocks['enum_member'] = {
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
+
+
+/* ********************** ENUM_VARIABLE_CREATE BLOCK ********************** */
 
 function dynamicEnumsList () {
   var enumsList = [[ "select enum type...", "select enum type..." ]];
@@ -1329,6 +1377,9 @@ Blockly.Blocks['enum_variable_create'] = {
   }
 };
 
+
+/* ********************** ENUM_VARIABLE_SET BLOCK ********************** */
+
 function dynamicEnumVariablesList () {
   var enumVariablesList = [[ "select enum variable...", "select enum variable..." ]];
 
@@ -1362,6 +1413,8 @@ Blockly.Blocks['enum_variable_set'] = {
   },
 };
  
+
+/* ********************** ENUM_MEMBER_GET BLOCK ********************** */
 
 function dynamicEnumMembersList() {
   var enumsList = [[ "select enum member...", "select enum member..." ]];
@@ -1410,6 +1463,9 @@ Blockly.Blocks['enum_member_get'] = {
   }
 };
 
+
+/* ********************** ENUM_GET BLOCK ********************** */
+
 Blockly.Blocks['enum_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -1429,6 +1485,7 @@ Blockly.Blocks['enum_get'] = {
 };
 
 
+/* ********************** STRUCT_DEFINITION BLOCK ********************** */
 
 Blockly.Blocks['struct_definition'] = {
   init: function() {
@@ -1472,6 +1529,9 @@ Blockly.Blocks['struct_definition'] = {
   },
 };
 
+
+/* ********************** STRUCT_MEMBER BLOCK ********************** */
+
 Blockly.Blocks['struct_member'] = {
   init: function() {
     this.jsonInit({
@@ -1509,6 +1569,9 @@ Blockly.Blocks['struct_member'] = {
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
+
+
+/* ********************** STRUCT_VARIABLE_CREATE BLOCK ********************** */
 
 function dynamicStructTypesList () {
   var structsList = [[ "select struct type...", "select struct type..." ]];
@@ -1556,6 +1619,8 @@ Blockly.Blocks['struct_variable_create'] = {
 };
 
 
+/* ********************** STRUCT_VARIABLE_SET BLOCK ********************** */
+
 function dynamicStructVariablesList () {
   var structsList = [[ "select struct variable...", "select struct variable..." ]];
 
@@ -1591,6 +1656,8 @@ Blockly.Blocks['struct_variable_set'] = {
 };
 
 
+/* ********************** STRUCT_VARIABLE_GET BLOCK ********************** */
+
 Blockly.Blocks['struct_variable_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -1608,6 +1675,9 @@ Blockly.Blocks['struct_variable_get'] = {
 
   }
 };
+
+
+/* ********************** STRUCT_MEMBER_SET BLOCK ********************** */
 
 function dynamicStructMembersList (blockName) {
   var structMembersList = [[ "select struct member...", "select struct member..." ]];
@@ -1668,6 +1738,8 @@ Blockly.Blocks['struct_member_set'] = {
 };
 
 
+/* ********************** STRUCT_MEMBER_GET BLOCK ********************** */
+
 Blockly.Blocks['struct_member_get'] = {
   init: function() {
     this.appendDummyInput()
@@ -1692,8 +1764,7 @@ Blockly.Blocks['struct_member_get'] = {
 };
 
 
-
-
+/* ********************** CONTRACT_CTOR BLOCK ********************** */
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -1722,6 +1793,7 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": ""
   }
 ]);
+
 
 Blockly.defineBlocksWithJsonArray([
   {

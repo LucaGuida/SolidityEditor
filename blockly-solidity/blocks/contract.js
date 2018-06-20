@@ -730,6 +730,18 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 };
 
 
+function dynamicLibsList() {
+  var options = [[ "select library...", "select library..." ]];
+
+  if (typeof jsonObj != 'undefined') {
+    //options = [];
+    for(var lib in jsonObj) 
+      options.push([lib, lib]);
+  }
+  return options;
+}
+
+/*
 function dynamicLibFunctsList() {
   var options = [['demo-func1', 'Func1'],['demo-func2', 'Func2'],['demo-func3', 'Func3']];
 
@@ -741,13 +753,35 @@ function dynamicLibFunctsList() {
   }
   return options;
 }
+*/
+
+
+function dynamicLibFunctsList (libName) {
+  var libFunctsList = [[ "select library function...", "select library function..." ]];
+  console.log('libName: ' + libName);
+  if (typeof libName != 'undefined' && libName != null) {
+    if (typeof jsonObj != 'undefined' && typeof jsonObj[libName] != 'undefined' && typeof jsonObj[libName][0] != 'undefined') {
+      libFunctsList = [];
+      for (var i = 0; i < jsonObj[libName].length; i++)
+        libFunctsList.push([jsonObj[libName][i], jsonObj[libName][i]]);
+    }
+  }
+
+  return libFunctsList;
+}
+
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
     this.appendDummyInput()  
-      .appendField('call library function')
+      .appendField('call library ')
       .appendField(
-        new Blockly.FieldDropdown(dynamicLibFunctsList),
+        new Blockly.FieldDropdown(dynamicLibsList),
+        "LIB_NAME"
+      )
+      .appendField(' function')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicLibFunctsList(this.getFieldValue('LIB_NAME'))),
         "LIB_FUNCT_NAME"
       );
     this.appendValueInput('ARG1')
@@ -1577,7 +1611,6 @@ function dynamicStructMembersList (blockName) {
 
 
       if (typeof membersOfGivenBlock[0] != 'undefined') {
-        console.log(membersOfGivenBlock);
         var membersOfGivenBlockPairs = [];
         for (var i = 0; i < membersOfGivenBlock.length; i++)
           membersOfGivenBlockPairs.push([membersOfGivenBlock[i].getFieldValue('MEMBER_NAME'),membersOfGivenBlock[i].getFieldValue('MEMBER_NAME')]);

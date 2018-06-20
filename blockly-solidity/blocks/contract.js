@@ -114,8 +114,6 @@ Blockly.Extensions.register(
 );
 
 
-
-
 // List of types
 var typesList = [
             [ "bool", "TYPE_BOOL" ],
@@ -157,7 +155,6 @@ if (request.status === 200) {
   });
   //console.log(librariesList);
 }
-
 
 
 
@@ -246,6 +243,89 @@ Blockly.Extensions.registerMutator('library_function_mutator',
     Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_EXTENSION);
 
 
+
+/* ********************** STRUCT_MEMBER_MUTATOR ********************** */
+
+/**
+ * Mixin for mutator functions in the 'struct_member_mutator'
+ * extension.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ */
+Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
+  /**
+   * Create XML to represent whether the struct variable member selector should be present.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    var selectedStructVariable = (this.getFieldValue('STRUCT_VARIABLE_NAME') != 'select struct variable...');
+    container.setAttribute('selected_struct_variable', selectedStructVariable);
+    return container;
+  },
+  /**
+   * Parse XML to restore the 'selected_struct_variable'.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    var selectedStructVariable = (xmlElement.getAttribute('selected_struct_variable') == 'true');
+    this.updateShape_(selectedStructVariable, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+  },
+  /**
+   * Modify this block to have (or not have) an input for struct variable member selection.
+   * @param {boolean} selectedStructVariable True if this block has a selected struct variable, thus requiring the selection of a struct variable member
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function(selectedStructVariable, varName) {
+    var memberSelectorBeingDisplayed = this.getFieldValue('STRUCT_MEMBER_NAME');
+    if (selectedStructVariable) {
+      if (!memberSelectorBeingDisplayed) {
+        this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
+          .appendField(' member  ')
+          .appendField(
+          new Blockly.FieldDropdown(dynamicStructMembersList(varName)),
+          "STRUCT_MEMBER_NAME"
+          );
+
+          if (this.type == "struct_member_set") {
+            this.appendValueInput('STRUCT_VARIABLE_VALUE')
+              .appendField("to");
+          }
+      }
+    } else if (memberSelectorBeingDisplayed) {
+      this.removeInput('STRUCT_MEMBER_SELECTOR');
+
+      if (this.type == "struct_member_set") {
+        this.removeInput('STRUCT_VARIABLE_VALUE');
+      }
+
+    }
+  }
+};
+
+/**
+ * 'struct_member_mutator' extension to the 'struct_member_set/get' block that
+ * can update the block shape (add/remove function selector) based on whether a struct variable has been selected
+ * @this Blockly.Block
+ * @package
+ */
+Blockly.Solidity.STRUCT_MEMBER_MUTATOR_EXTENSION = function() {
+  if (this.getField('STRUCT_VARIABLE_NAME') != null) {
+    this.getField('STRUCT_VARIABLE_NAME').setValidator(function(option) {
+    var selectedStructVariable = (option != 'select struct variable...');
+    //this.sourceBlock_.updateShape_(selectedStructVariable, 'TEMP_Struct_Variable_Name');
+  });
+
+  }
+};
+
+Blockly.Extensions.registerMutator('struct_member_mutator',
+    Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN,
+    Blockly.Solidity.STRUCT_MEMBER_MUTATOR_EXTENSION);
 
 
 
@@ -892,7 +972,7 @@ function dynamicLibFunctsList (libName) {
 Blockly.Blocks['library_method_call'] = {
   init: function() {
     this.jsonInit({
-      "message0": "call library %1",
+      "message0": "call library function %1",
       "args0": [
         {
           "type": "field_dropdown",
@@ -932,7 +1012,7 @@ Blockly.Blocks['library_method_call'] = {
 Blockly.Blocks['library_method_call_with_return_value'] = {
   init: function() {
     this.jsonInit({
-      "message0": "call library %1",
+      "message0": "call library function %1",
       "args0": [
         {
           "type": "field_dropdown",
@@ -961,8 +1041,6 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
         this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });
-
-
 
   },
 };
@@ -1602,7 +1680,7 @@ function dynamicStructTypesList () {
 Blockly.Blocks['struct_variable_create'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField('struct variable of type ')
+      .appendField('create struct variable of type ')
       .appendField(
         new Blockly.FieldDropdown(dynamicStructTypesList),
         "STRUCT_TYPE"
@@ -1637,7 +1715,7 @@ function dynamicStructVariablesList () {
 
   var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_variable');
   if (typeof structVariablesArray[0] != 'undefined') {
-    var structsNamePairsArray = [];
+    var structsNamePairsArray = structsList;
     for (var i = 0; i < structVariablesArray.length; i++)
       structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
     structsList = structsNamePairsArray;
@@ -1678,7 +1756,7 @@ Blockly.Blocks['struct_variable_get'] = {
         "STRUCT_VARIABLE_NAME"
       );
     this.setOutput(true, null);
-    this.setColour("#FF5252");
+    this.setColour("#757575");
     this.setTooltip('Use a previously defined struct variable');
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'); };
@@ -1688,7 +1766,7 @@ Blockly.Blocks['struct_variable_get'] = {
 };
 
 
-/* ********************** STRUCT_MEMBER_SET BLOCK ********************** */
+/* ********************** STRUCT_MEMBER_SET & STRUCT_MEMBER_GET BLOCKS ********************** */
 
 function dynamicStructMembersList (blockName) {
   var structMembersList = [[ "select struct member...", "select struct member..." ]];
@@ -1726,52 +1804,76 @@ function dynamicStructMembersList (blockName) {
 
 Blockly.Blocks['struct_member_set'] = {
   init: function() {
-    this.appendValueInput('STRUCT_VARIABLE_VALUE')
-      .appendField('set struct variable ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicStructVariablesList),
-        "STRUCT_VARIABLE_NAME"
-      )
-      .appendField(' member  ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicStructMembersList(this.getFieldValue('STRUCT_VARIABLE_NAME'))),
-        "STRUCT_MEMBER_NAME"
-      )
-      .appendField("to");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour("#1976D2");
-    this.setTooltip('Struct variable member setter');
+    this.jsonInit({
+      "message0": "set struct variable member %1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "STRUCT_VARIABLE_NAME",
+          "options": dynamicStructVariablesList
+        },
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#1976D2",
+      "mutator": "struct_member_mutator",
+      "tooltip": "Set struct variable member",
+      "helpUrl": ""
+    });
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'+'STRUCT_MEMBER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
+
+
+    this.setOnChange(function(event) {
+      if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
+        this.setWarningText('If you want to change variable, first select "select struct variable..." from the list, then select the new variable');
+        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+
+      } else {
+        this.setWarningText('Select a variable from the list');
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+      }
+    });
+
   },
 };
 
 
-/* ********************** STRUCT_MEMBER_GET BLOCK ********************** */
-
 Blockly.Blocks['struct_member_get'] = {
   init: function() {
-    this.appendDummyInput()
-      .appendField('struct variable ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicStructVariablesList),
-        "STRUCT_VARIABLE_NAME"
-      )
-      .appendField(' member  ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicStructMembersList(this.getFieldValue('STRUCT_VARIABLE_NAME'))),
-        "STRUCT_MEMBER_NAME"
-      );
-    this.setOutput(true, null);
-    this.setColour("#FF5252");
-    this.setTooltip('Use a previously defined struct variable member');
+    this.jsonInit({
+      "message0": "struct variable member %1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "STRUCT_VARIABLE_NAME",
+          "options": dynamicStructVariablesList
+        },
+      ],
+      "colour": "#757575",
+      "mutator": "struct_member_mutator",
+      "tooltip": "Use a previously defined struct variable member",
+      "helpUrl": "",
+      "output": null
+    });
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME' + 'STRUCT_MEMBER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
 
-  }
+
+    this.setOnChange(function(event) {
+      if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
+        this.setWarningText('If you want to change variable, first select "select struct variable..." from the list, then select the new variable');
+        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+
+      } else {
+        this.setWarningText('Select a variable from the list');
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+      }
+    });
+
+  },
 };
 
 

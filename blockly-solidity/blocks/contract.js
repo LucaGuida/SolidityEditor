@@ -162,16 +162,25 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
           new Blockly.FieldDropdown(dynamicLibFunctsList(libName)),
           "LIB_FUNCT_NAME"
           );
+        this.appendValueInput('ARG1')
+          .appendField("argument 1");
+        this.appendValueInput('ARG2')
+          .appendField("argument 2");
+        this.appendValueInput('ARG3')
+          .appendField("argument 3");
 
       }
     } else if (functionSelectorBeingDisplayed) {
       this.removeInput('LIBRARY_FUNCTION_SELECTOR');
+      this.removeInput('ARG1');
+      this.removeInput('ARG2');
+      this.removeInput('ARG3');
     }
   }
 };
 
 /**
- * 'library_function_mutator' extension to the 'library_function_call' block that
+ * 'library_function_mutator' extension to the 'library_method_call' block that
  * can update the block shape (add/remove function selector) based on whether a library has been selected
  * @this Blockly.Block
  * @package
@@ -866,22 +875,6 @@ Blockly.Blocks['library_method_call'] = {
           "options": dynamicLibsList
         },
       ],
-      "message1": "arguments %1 %2 %3",
-      "args1": [
-      {
-          "type": "input_value",
-          "name": "ARG1"
-      },
-      {
-          "type": "input_value",
-          "name": "ARG2"
-      },
-      {
-          "type": "input_value",
-          "name": "ARG3"
-      },
-      ],
-
       "previousStatement": null,
       "nextStatement": null,
       "colour": "#FF5252",

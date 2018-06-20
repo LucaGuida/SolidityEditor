@@ -113,6 +113,90 @@ Blockly.Extensions.register(
   }
 );
 
+
+
+
+/* ********************** MUTATORS ********************** */
+
+/**
+ * Mixin for mutator functions in the 'library_function_mutator'
+ * extension.
+ * @mixin
+ * @augments Blockly.Block
+ * @package
+ */
+Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
+  /**
+   * Create XML to represent whether the library function selector should be present.
+   * @return {Element} XML storage element.
+   * @this Blockly.Block
+   */
+  mutationToDom: function() {
+    var container = document.createElement('mutation');
+    var selectedLibrary = (this.getFieldValue('LIB_NAME') != 'select library...');
+    container.setAttribute('selected_library', selectedLibrary);
+    return container;
+  },
+  /**
+   * Parse XML to restore the 'selected_library'.
+   * @param {!Element} xmlElement XML storage element.
+   * @this Blockly.Block
+   */
+  domToMutation: function(xmlElement) {
+    var selectedLibrary = (xmlElement.getAttribute('selected_library') == 'true');
+    this.updateShape_(selectedLibrary, this.getFieldValue('LIB_NAME'));
+  },
+  /**
+   * Modify this block to have (or not have) an input for library function selection.
+   * @param {boolean} selectedLibrary True if this block has a selected library, thus requiring the selection of a library function
+   * @private
+   * @this Blockly.Block
+   */
+  updateShape_: function(selectedLibrary, libName) {
+    var functionSelectorBeingDisplayed = this.getFieldValue('LIB_FUNCT_NAME');
+    if (selectedLibrary) {
+      if (!functionSelectorBeingDisplayed) {
+        this.appendDummyInput('LIBRARY_FUNCTION_SELECTOR')  
+          .appendField(' function')
+          .appendField(
+          new Blockly.FieldDropdown(dynamicLibFunctsList(libName)),
+          "LIB_FUNCT_NAME"
+          );
+
+      }
+    } else if (functionSelectorBeingDisplayed) {
+      this.removeInput('LIBRARY_FUNCTION_SELECTOR');
+    }
+  }
+};
+
+/**
+ * 'library_function_mutator' extension to the 'library_function_call' block that
+ * can update the block shape (add/remove function selector) based on whether a library has been selected
+ * @this Blockly.Block
+ * @package
+ */
+Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_EXTENSION = function() {
+  if (this.getField('LIB_NAME') != null) {
+    this.getField('LIB_NAME').setValidator(function(option) {
+    var selectedLibrary = (option != 'select library...');
+    //this.sourceBlock_.updateShape_(selectedLibrary, 'TEMP_Library_Name');
+  });
+
+  }
+};
+
+Blockly.Extensions.registerMutator('library_function_mutator',
+    Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN,
+    Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_EXTENSION);
+
+
+
+
+
+/* ********************** CONTRACT BLOCK ********************** */
+
+
 Blockly.defineBlocksWithJsonArray([
   {
     "type": "contract",
@@ -758,7 +842,7 @@ function dynamicLibFunctsList() {
 
 function dynamicLibFunctsList (libName) {
   var libFunctsList = [[ "select library function...", "select library function..." ]];
-  console.log('libName: ' + libName);
+  //console.log('libName: ' + libName);
   if (typeof libName != 'undefined' && libName != null) {
     if (typeof jsonObj != 'undefined' && typeof jsonObj[libName] != 'undefined' && typeof jsonObj[libName][0] != 'undefined') {
       libFunctsList = [];
@@ -773,70 +857,62 @@ function dynamicLibFunctsList (libName) {
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
-    this.appendDummyInput()  
-      .appendField('call library ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicLibsList),
-        "LIB_NAME"
-      )
-      .appendField(' function')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicLibFunctsList(this.getFieldValue('LIB_NAME'))),
-        "LIB_FUNCT_NAME"
-      );
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    // this.setOutput(true, null);
-    this.setColour("#FF5252");
-    this.setTooltip('Call of a library function which does not return a value');
+    this.jsonInit({
+      "message0": "call library %1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "LIB_NAME",
+          "options": dynamicLibsList
+        },
+      ],
+      "message1": "arguments %1 %2 %3",
+      "args1": [
+      {
+          "type": "input_value",
+          "name": "ARG1"
+      },
+      {
+          "type": "input_value",
+          "name": "ARG2"
+      },
+      {
+          "type": "input_value",
+          "name": "ARG3"
+      },
+      ],
+
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#FF5252",
+      "mutator": "library_function_mutator",
+      "tooltip": "Call of a library function which does not return a value",
+      "helpUrl": ""
+    });
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_LIBRARY };
 
-/*
+
     this.setOnChange(function(event) {
-      if (event.blockId != this.id) {
-        return;
-      }
+      if (this.getFieldValue('LIB_NAME')!='select library...') {
+        this.setWarningText('If you want to change library, first select "select library..." from the list, then select the new library');
+        this.updateShape_(true, this.getFieldValue('LIB_NAME'));
 
-      if (event.element == 'field' && event.name == 'METHOD_NAME') {
-        var methodId = this.getFieldValue('METHOD_NAME');
-        var methodBlock = this.workspace.getBlockById(methodId);
-        var params = [];
-
-        var block = methodBlock;
-        do {
-          block = block.getChildren()
-            .filter(function(c) { return c.type == 'contract_method_parameter' })[0];
-
-          if (block) {
-            params.push(block);
-          }
-        } while (block)
-
-        //console.log(params);
-        // FIXME: add/remove inputs according to the method params
+      } else {
+        this.setWarningText('Select a library from the list');
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });
 
-*/    
-  }
+
+
+  },
 };
+
 
 Blockly.Blocks['library_method_call_with_return_value'] = {
   init: function() {
-    /*this.appendDummyInput()
-      .appendField('call library')
-      .appendField(
-        new Blockly.FieldDropdown(librariesList),
-        "LIB_NAME"
-      );*/
     this.appendDummyInput()  
       .appendField('call library function')
       .appendField(
@@ -857,34 +933,11 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_LIBRARY };
 
-/*
-    this.setOnChange(function(event) {
-      if (event.blockId != this.id) {
-        return;
-      }
-
-      if (event.element == 'field' && event.name == 'METHOD_NAME') {
-        var methodId = this.getFieldValue('METHOD_NAME');
-        var methodBlock = this.workspace.getBlockById(methodId);
-        var params = [];
-
-        var block = methodBlock;
-        do {
-          block = block.getChildren()
-            .filter(function(c) { return c.type == 'contract_method_parameter' })[0];
-
-          if (block) {
-            params.push(block);
-          }
-        } while (block)
-
-        //console.log(params);
-        // FIXME: add/remove inputs according to the method params
-      }
-    });
-*/
   }
 };
+
+
+
 
 
 Blockly.Blocks['event_definition'] = {
@@ -1003,32 +1056,6 @@ Blockly.Blocks['event_emission'] = {
     this.getVariableNameSelectField = function() { return this.getField('EVENT_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_EVENT };
 
-/*
-    this.setOnChange(function(event) {
-      if (event.blockId != this.id) {
-        return;
-      }
-
-      if (event.element == 'field' && event.name == 'EVENT_NAME') {
-        var eventId = this.getFieldValue('EVENT_NAME');
-        var eventBlock = this.workspace.getBlockById(eventId);
-        var args = [];
-
-        var block = eventBlock;
-        do {
-          block = block.getChildren()
-            .filter(function(c) { return c.type == 'event_argument' })[0];
-
-          if (block) {
-            args.push(block);
-          }
-        } while (block)
-
-        //console.log(args);
-        // FIXME: add/remove inputs according to the method params
-      }
-    });
-*/    
   }
 };
 

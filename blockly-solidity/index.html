@@ -17,6 +17,7 @@
   <script src="./generators/solidity/methods.js"></script>
   <script src="./generators/solidity/logic.js"></script>
   <script src="./generators/solidity/math.js"></script>
+
   <style>
     body {
       background-color: #fff;
@@ -30,6 +31,10 @@
       font-weight: bold;
       fill: green;
     }
+    .myButtonStyle>.blocklyFlyoutButton {
+      background: #eb94d0;
+    }
+
   </style>
 </head>
 <body>
@@ -126,11 +131,17 @@
       <block type="math_arithmetic"></block>
       <block type="text"> <field name="TEXT"></field></block>
     </category>
+    <category name="Export and import blocks" colour="#5C81A6">
+      <button text="EXPORT to XML file" web-class="myButtonStyle" callbackKey="exportButtonPressed"></button>
+      <button text="IMPORT from XML file" callbackKey="importButtonPressed"></button>
+    </category>
   </xml>
 
   <textarea id="textarea" style="width:calc(34% - 10px);height:600px;float:right" readonly></textarea>
 
   <button id="copyTextarea" style="float:right">Copy code</button>
+
+  <script src='./FileSaver.js'></script>
 
   <script>
 
@@ -165,6 +176,7 @@
         },
       }
     );
+
 
     // workspace initialization from JSON variable
     Blockly.Xml.domToWorkspace(
@@ -205,6 +217,24 @@
       }
 
       document.getElementById('textarea').value = code;
+
+
+      var xml = Blockly.Xml.workspaceToDom(workspace);
+      var xml_text = Blockly.Xml.domToPrettyText(xml);
+      
+      workspace.registerButtonCallback('exportButtonPressed', function() {
+        var content = xml_text;
+        var filename = "Blockly"
+        var blob = new Blob([content], {type: "text/xml;charset=utf-8"});
+        saveAs(blob, filename+".xml");
+      });
+
+      workspace.registerButtonCallback('importButtonPressed', function(button) {
+        alert("foo");
+      });
+
+
+
      }
      workspace.addChangeListener(myUpdateFunction);
 
@@ -215,6 +245,9 @@
        document.getElementById('copyTextarea').select();
      }
      document.getElementById('copyTextarea').addEventListener('click', copyTextArea);
+
+
+
 
   </script>
 

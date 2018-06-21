@@ -183,6 +183,7 @@
     Blockly.Xml.domToWorkspace(
       Blockly.Xml.textToDom(
         '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
+        //'<xml><block type="contract" ></block></xml>'
       ),
       workspace
     );
@@ -228,10 +229,17 @@
         saveAs(blob, filename+".xml");
       });
 
-      workspace.registerButtonCallback('importButtonPressed', function(button) {
-        alert("foo");
-      });
 
+      workspace.registerButtonCallback('importButtonPressed', function(button) {
+        var request = new XMLHttpRequest();
+        request.open('GET', 'Blockly_workspace.xml', false);  // `false` makes the request synchronous
+        request.send(null);
+        if (request.status === 200) {
+          var xml_text = request.responseText;
+          var xml = Blockly.Xml.textToDom(xml_text);
+          Blockly.Xml.domToWorkspace(xml, workspace);
+        }
+      });
 
 
      }

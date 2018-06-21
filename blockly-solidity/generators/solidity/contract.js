@@ -303,6 +303,33 @@ Blockly.Solidity['struct_member_get'] = function(block) {
   return [variableName + '.' + memberName, Blockly.Solidity.ORDER_ATOMIC];
 };
 
+Blockly.Solidity['mapping_definition'] = function(block) {
+  var type1 = types[block.getFieldValue('TYPE1')];
+  var type2 = types[block.getFieldValue('TYPE2')];
+  var publicCheckbox = '';
+  if (block.getFieldValue('PUBLIC_CHECKBOX') == 'TRUE') 
+    publicCheckbox = 'public ';
+  var varName = block.getFieldValue('NAME');
+
+  return 'mapping(' + type1 + ' => ' + type2 + ') ' + publicCheckbox + varName + ';\n';
+};
+
+Blockly.Solidity['mapping_set'] = function(block) {
+  var variableName = block.getFieldValue('MAPPING_VARIABLE_NAME');
+  var arg = Blockly.Solidity.valueToCode(block, 'ARG',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+  var value = Blockly.Solidity.valueToCode(block, 'VALUE',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+
+  return variableName + '[' + arg + '] = ' + value + ';\n';
+};
+
+Blockly.Solidity['mapping_get'] = function(block) {
+  var variableName = block.getFieldValue('MAPPING_VARIABLE_NAME');
+  var arg = Blockly.Solidity.valueToCode(block, 'ARG',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+  return [variableName + '[' + arg + ']', Blockly.Solidity.ORDER_ATOMIC];
+};
 
 
 

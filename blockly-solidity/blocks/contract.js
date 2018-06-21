@@ -153,7 +153,6 @@ if (request.status === 200) {
   librariesArray.forEach(function(entry) {
     librariesList.push([entry,entry]);
   });
-  //console.log(librariesList);
 }
 
 
@@ -500,7 +499,7 @@ Blockly.Blocks['contract_state_get'] = {
       );
     this.setOutput(true, null);
     this.setColour("#757575");
-    this.setTooltip('State variable selector');
+    this.setTooltip('State variable getter');
 
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -779,7 +778,7 @@ Blockly.Blocks['contract_method_parameter_get'] = {
       );
     this.setOutput(true, null);
     this.setColour("#757575");
-    this.setTooltip('Parameter selector');
+    this.setTooltip('Parameter getter');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
@@ -1874,6 +1873,116 @@ Blockly.Blocks['struct_member_get'] = {
     });
 
   },
+};
+
+
+/* ********************** MAPPING_DEFINITION BLOCK ********************** */
+
+Blockly.Blocks['mapping_definition'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "declare mapping variable %1 => %2 public %3 %4",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "TYPE1",
+          "options": typesList
+        },
+        {
+          "type": "field_dropdown",
+          "name": "TYPE2",
+          "options": typesList
+        },
+        {
+          "type": "field_checkbox",
+          "name": "PUBLIC_CHECKBOX",
+          "checked": false
+        },
+        {
+          "type": "field_input",
+          "name": "NAME",
+          "text": "variableName"
+        },
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#1976D2",
+      "tooltip": "Mapping variable declaration",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('NAME') };
+    this.getVariableType = function() { return 'mapping_definition' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_MAPPING };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
+/* ********************** MAPPING_SET & MAPPING_GET BLOCKS ********************** */
+
+function dynamicMappingVariablesList () {
+  var mappingVariablesList = [[ "select mapping variable...", "select mapping variable..." ]];
+
+  var mappingVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('mapping_definition');
+  if (typeof mappingVariablesArray[0] != 'undefined') {
+    var mappingNamePairsArray = [];
+    for (var i = 0; i < mappingVariablesArray.length; i++)
+      mappingNamePairsArray.push([Blockly.Solidity.getVariableName(mappingVariablesArray[i]),Blockly.Solidity.getVariableName(mappingVariablesArray[i])]);
+    mappingVariablesList = mappingNamePairsArray;
+  }
+
+  return mappingVariablesList;
+}
+
+Blockly.Blocks['mapping_set'] = {
+  init: function() {
+    this.appendDummyInput()   
+      .appendField("set")
+      .appendField(
+        new Blockly.FieldDropdown(dynamicMappingVariablesList),
+        "MAPPING_VARIABLE_NAME"
+      ); 
+    this.appendValueInput('ARG')
+      .appendField("argument");    
+    this.appendValueInput('VALUE')
+      .appendField("to");    
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Mapping variable setter');
+
+    this.getVariableNameSelectField = function() { return this.getField('MAPPING_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MAPPING };
+  },
+
+};
+
+
+Blockly.Blocks['mapping_get'] = {
+  init: function() {
+    this.appendValueInput('ARG')
+      .appendField("get")
+      .appendField(
+        new Blockly.FieldDropdown(dynamicMappingVariablesList),
+        "MAPPING_VARIABLE_NAME"
+      )
+      .appendField("argument");    
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('Mapping variable getter');
+
+    this.getVariableNameSelectField = function() { return this.getField('MAPPING_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MAPPING };
+  }
 };
 
 

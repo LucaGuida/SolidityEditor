@@ -126,6 +126,15 @@ Blockly.Solidity['address_balance_get'] = function(block) {
 };
 
 
+Blockly.Solidity['address_transfer'] = function(block) {
+  var addressVariable = block.getFieldValue('ADDRESS_VARIABLE_NAME');
+  var defaultVal = '0';
+  var amount = Blockly.Solidity.valueToCode(block, 'AMOUNT',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || defaultVal;
+  return addressVariable + '.transfer(' + amount + ');\n\n';
+};
+
+
 Blockly.Solidity['event_definition'] = function(block) {
   var args = Blockly.Solidity.statementToCode(block, 'ARGS');
   var code = 'event ' + block.getFieldValue('NAME') + '(\n' + args + ');\n\n';

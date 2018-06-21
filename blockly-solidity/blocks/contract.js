@@ -533,6 +533,27 @@ Blockly.Blocks['address_balance_get'] = {
 };
 
 
+Blockly.Blocks['address_transfer'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldDropdown(dynamicAddresses),
+        "ADDRESS_VARIABLE_NAME"
+      )
+      .appendField(".transfer");
+    this.appendValueInput('AMOUNT').setCheck('Number')
+      .appendField('amount');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Transfer ether to an address');
+
+    this.getVariableNameSelectField = function() { return this.getField('ADDRESS_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ADDRESS };
+  }
+};
+
+
 /* ********************** CONTRACT_METHOD BLOCK ********************** */
 
 Blockly.Blocks['contract_method'] = {

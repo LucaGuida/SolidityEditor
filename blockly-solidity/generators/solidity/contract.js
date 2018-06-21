@@ -7,10 +7,40 @@
 
 goog.require('Blockly.Solidity');
 
-Blockly.Solidity['contract'] = function(block) {
-  var imports = Blockly.Solidity.statementToCode(block, 'IMPORTS');
-  if (imports.length > 0) {imports += '\n'};
+  var types = {
+    'TYPE_BOOL': 'bool',
+    'TYPE_INT': 'int',
+    'TYPE_UINT': 'uint',
+    'TYPE_ADDRESS': 'address',
+    'TYPE_BYTES_ARRAY': 'bytes',
+    'TYPE_STRING': 'string',
+  };
 
+  var defaultValue = {
+    'TYPE_BOOL': 'false',
+    'TYPE_INT': '0',
+    'TYPE_UINT': '0',
+    'TYPE_ADDRESS': '0x0000000000000000000000000000000000000000',
+    'TYPE_BYTES_ARRAY': '""',
+    'TYPE_STRING': '""',
+  };
+
+Blockly.Solidity['contract'] = function(block) {
+
+  var imports = '';
+  var importsArray = [];
+  var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' });
+  if (typeof libraryCallBlocksArray[0] != 'undefined') {
+    for (var i = 0; i < libraryCallBlocksArray.length; i++)
+      if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select library...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
+        importsArray.push(libraryCallBlocksArray[i].getFieldValue('LIB_NAME'));
+  }
+  if (importsArray!=null) {
+    for (var i = 0; i < importsArray.length; i++)
+      imports = imports + 'import "../' + importsArray[i] + '.sol";\n';
+    imports += '\n';
+  }
+  
   var states = Blockly.Solidity.statementToCode(block, 'STATES');
   if (states.length > 0) {states += '\n'};
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIFIERS');
@@ -41,29 +71,6 @@ Blockly.Solidity['contract'] = function(block) {
   return code;
 };
 
-
-Blockly.Solidity['contract_import'] = function(block) {
-  var libName = block.getFieldValue('LIB_NAME');
-  return 'import "../' + libName + '.sol";\n';
-};
-
-  var types = {
-    'TYPE_BOOL': 'bool',
-    'TYPE_INT': 'int',
-    'TYPE_UINT': 'uint',
-    'TYPE_ADDRESS': 'address',
-    'TYPE_BYTES_ARRAY': 'bytes',
-    'TYPE_STRING': 'string',
-  };
-
-  var defaultValue = {
-    'TYPE_BOOL': 'false',
-    'TYPE_INT': '0',
-    'TYPE_UINT': '0',
-    'TYPE_ADDRESS': '0x0000000000000000000000000000000000000000',
-    'TYPE_BYTES_ARRAY': '""',
-    'TYPE_STRING': '""',
-  };
 
 Blockly.Solidity['contract_state'] = function(block) {
   var name = block.getFieldValue('NAME');

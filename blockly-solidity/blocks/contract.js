@@ -343,17 +343,8 @@ Blockly.defineBlocksWithJsonArray([
         "text": "MyContract",
       }
     ],
-    "message1": "imports %1",
+    "message1": "state variables, enums & structs %1",
     "args1": [
-      {
-        "type": "input_statement",
-        "name": "IMPORTS",
-        "check": ["contract_import"],
-        "align": "RIGHT"
-      }
-    ],
-    "message2": "state variables, enums & structs %1",
-    "args2": [
       {
         "type": "input_statement",
         "name": "STATES",
@@ -361,8 +352,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message3": "modifiers definition %1",
-    "args3": [
+    "message2": "modifiers definition %1",
+    "args2": [
       {
         "type": "input_statement",
         "name": "MODIFIERS",
@@ -370,8 +361,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message4": "events definition %1",
-    "args4": [
+    "message3": "events definition %1",
+    "args3": [
       {
         "type": "input_statement",
         "name": "EVENTS",
@@ -379,8 +370,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message5": "constructor definition %1",
-    "args5": [
+    "message4": "constructor definition %1",
+    "args4": [
       {
         "type": "input_statement",
         "name": "CTOR",
@@ -388,8 +379,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message6": "functions definition %1",
-    "args6": [
+    "message5": "functions definition %1",
+    "args5": [
       {
         "type": "input_statement",
         "name": "METHODS",
@@ -397,8 +388,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message7": "functions with return definition %1",
-    "args7": [
+    "message6": "functions with return definition %1",
+    "args6": [
       {
         "type": "input_statement",
         "name": "METHODS_WITH_RETURN",
@@ -411,44 +402,6 @@ Blockly.defineBlocksWithJsonArray([
   }
 ]);
 
-
-/* ********************** CONTRACT_IMPORT BLOCK ********************** */
-
-Blockly.Blocks['contract_import'] = {
-
-  init: function() {
-
-    this.appendDummyInput()
-        .appendField("import")
-        .appendField(new Blockly.FieldDropdown(librariesList),
-          'LIB_NAME'
-        )
-        //.appendField(new Blockly.FieldTextInput('libraryName'), 'LIB_NAME'); //text input field instead of dropdown menu
-    this.setColour("#1976D2");
-    this.setTooltip('Name of an external contract/library to import into the contract.');
-
-    this.setPreviousStatement(true, 'contract_import');
-    this.setNextStatement(true, 'contract_import');
-
-    this.setDisabled(false);
-
-
-    this._stateNameInitialized = false;
-
-    this.getVariableNameField = function() { return nameField; }
-    this.getVariableType = function() { return this.getFieldValue('TYPE') };
-    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_IMPORT };
-    this.getVariableScope = function() {
-      var scope = this.getParent();
-      while (!!scope && scope.type != 'contract') {
-        scope = scope.getParent();
-      }
-      return scope;
-    };
-
-    //Blockly.Extensions.apply('declare_typed_variable', this, false);
-  }
-};
 
 
 /* ********************** CONTRACT_STATE BLOCK ********************** */

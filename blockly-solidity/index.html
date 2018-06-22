@@ -27,6 +27,10 @@
       font-weight: normal;
       font-size: 140%;
     }
+    h2 {
+      font-weight: normal;
+      font-size: 100%;
+    }
     .myLabelStyle>.blocklyFlyoutLabelText {
       font-weight: bold;
       fill: green;
@@ -35,10 +39,28 @@
       background: #eb94d0;
     }
 
+    div.card {
+      width: 200px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      text-align: center;
+    }
+
+    div.header {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    div.container {
+        padding: 10px;
+    }
+
+
   </style>
 </head>
 <body>
-  <div id="blocklyDiv" style="height: 480px; width: 100%;"></div>
+  <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
 
   <!--
     toolbox xml, build using:
@@ -132,20 +154,97 @@
       <block type="math_arithmetic"></block>
       <block type="text"> <field name="TEXT"></field></block>
     </category>
-    <category name="Export and import blocks" colour="#5C81A6">
-      <button text="EXPORT to XML file" callbackKey="exportButtonPressed"></button>
-      <button text="IMPORT from XML file" callbackKey="importButtonPressed"></button>
-    </category>
   </xml>
 
-  <textarea id="textarea" style="width:calc(34% - 10px);height:600px;float:right" readonly></textarea>
+  <textarea id="textarea" style="width:calc(40% - 10px);height:600px;float:right" readonly></textarea>
 
-  <button id="copyTextarea" style="float:right">Copy Solidity code to clipboard</button>
-  <button id="saveContractCode" style="float:right">Save Solidity contract file</button>
+  <!--<button id="copyTextarea" style="float:right">Copy Solidity code to clipboard</button>-->
+
+<br>
+  <div class="card">
+    <div class="header">
+      <h2>Export blocks to XML file</h2>
+    </div>
+
+    <div class="container">
+      <p><button type="button" onclick="exportXML()" >EXPORT</button></p>
+    </div>
+  </div>
+
+<br><br>
+
+  <div class="card">
+    <div class="header">
+      <h2>Import blocks from XML</h2>
+    </div>
+
+    <div class="container">
+      <p><input type="file" id="file-input" ></p>
+    </div>
+  </div>
+
+<br><br>
+
+  <div class="card">
+    <div class="header">
+      <h2>Save Solidity contract file</h2>
+    </div>
+
+    <div class="container">
+      <p><button id="saveContractCode" >SAVE</button></p>
+    </div>
+  </div>
+
 
   <script src='./FileSaver.js'></script>
 
   <script>
+
+    function exportXML(e) {
+        var xml = Blockly.Xml.workspaceToDom(workspace);
+        var xml_text = Blockly.Xml.domToPrettyText(xml);
+        var content = xml_text;
+        var filename = "Blockly_workspace"
+        var blob = new Blob([content], {type: "text/xml;charset=utf-8"});
+        saveAs(blob, filename+".xml");
+    }
+
+
+    function readSingleFile(e) {
+      var file = e.target.files[0];
+      if (!file) {
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var contents = e.target.result;
+        restoreWorkspace(contents);
+      };
+      reader.readAsText(file);
+    }
+     
+    function restoreWorkspace(xml_text) {
+          if (typeof xml_text != "string" || xml_text.length < 5) {
+              alert("Invalid input file!");
+              return false;
+              return;
+          }
+
+          try {
+              var xml = Blockly.Xml.textToDom(xml_text);
+              Blockly.mainWorkspace.clear();
+              Blockly.Xml.domToWorkspace(xml, workspace);
+              return true;
+          } catch (e) {
+              alert("Invalid input file!");
+              return false;
+          }
+    }
+     
+    document.getElementById('file-input').addEventListener('change', readSingleFile, false);
+
+
+
 
     // workspace & toolbox JSON
     var workspace = Blockly.inject(
@@ -227,33 +326,10 @@
 
       document.getElementById('textarea').value = code;
       
-      workspace.registerButtonCallback('exportButtonPressed', function() {
-        var xml = Blockly.Xml.workspaceToDom(workspace);
-        var xml_text = Blockly.Xml.domToPrettyText(xml);
-        var content = xml_text;
-        var filename = "Blockly_workspace"
-        var blob = new Blob([content], {type: "text/xml;charset=utf-8"});
-        saveAs(blob, filename+".xml");
-      });
-
-
-      workspace.registerButtonCallback('importButtonPressed', function(button) {
-        var request = new XMLHttpRequest();
-        request.open('GET', 'Blockly_workspace.xml', false);  // `false` makes the request synchronous
-        request.send(null);
-        if (request.status === 200) {
-          var xml_text = request.responseText;
-          var xml = Blockly.Xml.textToDom(xml_text);
-          Blockly.mainWorkspace.clear();
-          Blockly.Xml.domToWorkspace(xml, workspace);
-
-        }
-      });
-
 
      }
      workspace.addChangeListener(myUpdateFunction);
-
+/*
      // copies the contents of code text area
      function copyTextArea(event) {
        document.getElementById('textarea').select();
@@ -261,7 +337,7 @@
        //document.getElementById('copyTextarea').select();
      }
      document.getElementById('copyTextarea').addEventListener('click', copyTextArea);
-
+*/
 
      // save contract to .sol file
      function saveContractCode(event) {

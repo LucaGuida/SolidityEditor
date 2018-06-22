@@ -142,7 +142,7 @@ var librariesList = [
 // Read JSON libraries list 
 var jsonObj;
 var request = new XMLHttpRequest();
-request.open('GET', 'librariesList.json', false);  // `false` makes the request synchronous
+request.open('GET', '../doxity-simpleton/librariesList.json', false);  // `false` makes the request synchronous
 request.send(null);
 if (request.status === 200) {
   jsonObj = JSON.parse(request.responseText);

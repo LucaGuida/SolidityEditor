@@ -183,12 +183,15 @@
     // workspace initialization from JSON variable
     Blockly.Xml.domToWorkspace(
       Blockly.Xml.textToDom(
-        '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
-        //'<xml><block type="contract" ></block></xml>'
+        '<xml><block type="contract" deletable="false" ></block></xml>'
+        //        '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
       ),
       workspace
     );
-    var contractBlock = workspace.getTopBlocks()[0];
+
+
+    var contractBlock = workspace.getAllBlocks().filter(function(b) { return b.type == 'contract' })[0];
+    //var contractBlock = workspace.getTopBlocks()[0];
 
     function setDisabledRec(block, disabled) {
       block.setDisabled(disabled);
@@ -202,6 +205,9 @@
 
     // is called every time the workspace changes
     function myUpdateFunction(event) {
+
+      var contractBlock = workspace.getAllBlocks().filter(function(b) { return b.type == 'contract' })[0];
+
       var code = Blockly.Solidity.blockToCode(contractBlock);
       var topBlocks = workspace.getAllBlocks();
 
@@ -238,7 +244,9 @@
         if (request.status === 200) {
           var xml_text = request.responseText;
           var xml = Blockly.Xml.textToDom(xml_text);
+          Blockly.mainWorkspace.clear();
           Blockly.Xml.domToWorkspace(xml, workspace);
+
         }
       });
 

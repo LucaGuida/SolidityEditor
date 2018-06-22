@@ -397,7 +397,7 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "colour": 160,
+    "colour": "#5EA48C",
     "tooltip": "Declares a new smart contract."
   }
 ]);

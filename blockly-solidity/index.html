@@ -35,18 +35,27 @@
       font-weight: bold;
       fill: green;
     }
-    .myButtonStyle>.blocklyFlyoutButton {
-      background: #eb94d0;
+    .myLabelStyle2>.blocklyFlyoutLabelText {
+      font-weight: bold;
+      fill: #2196F3;
+      text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
     }
+    .myButtonStyle {
+      font-weight: bold;
+      fill: #2196F3;
+    }
+
 
     div.card {
       width: 200px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       text-align: center;
+      float: left;
+      margin-right: 20px;
     }
 
     div.header {
-        background-color: #4CAF50;
+        background-color: #5EA48C;
         color: white;
         padding: 10px;
         font-size: 16px;
@@ -86,7 +95,7 @@
       <block type="enum_get"></block>
     </category>
 
-    <category name="Structs, mappings and other variables" colour="#5ba580">
+    <category name="Structs, mappings & other variables" colour="#5ba580">
       <label text="STRUCT VARIABLES" web-class="myLabelStyle"></label>
       <block type="struct_definition"></block>
       <block type="struct_member"></block>
@@ -105,8 +114,7 @@
       <block type="msg_get"></block>
     </category>
 
-
-    <category name="Functions and constructors" colour="#5ba580">
+    <category name="Functions & constructors" colour="#5ba580">
       <label text="CONSTRUCTORS" web-class="myLabelStyle"></label>
       <block type="contract_ctor"></block>
       <sep gap="40"></sep>
@@ -122,6 +130,7 @@
       <block type="contract_method_call"></block>
       <block type="contract_method_call_with_return_value"></block>
     </category>
+
     <category name="Events & modifiers" colour="#5ba580">
       <label text="EVENTS" web-class="myLabelStyle"></label>
       <block type="event_definition"></block>
@@ -137,15 +146,23 @@
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
     </category>
+
     <category name="Library functions" colour="#5ba580">
+      <sep gap="30"></sep>
+      <label text="Explore the libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
+      <button text="Access the Library Explorer" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
+      <sep gap="100"></sep>
+      <sep gap="100"></sep>
       <label text="LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
       <block type="library_method_call"></block>
       <block type="library_method_call_with_return_value"></block>
     </category>
+
     <category name="Conditional control statements" colour="#5C81A6">
       <block type="controls_ifelse"></block>
       <block type="controls_if"></block>
     </category>
+
     <category name="Logic operators & variable values" colour="#5C81A6">
       <block type="logic_boolean"></block>
       <block type="logic_compare"></block>
@@ -155,6 +172,7 @@
       <block type="text"> <field name="TEXT"></field></block>
     </category>
   </xml>
+
 
   <textarea id="textarea" style="width:calc(40% - 10px);height:600px;float:right" readonly></textarea>
 
@@ -171,8 +189,6 @@
     </div>
   </div>
 
-<br><br>
-
   <div class="card">
     <div class="header">
       <h2>Import blocks from XML</h2>
@@ -182,8 +198,6 @@
       <p><input type="file" id="file-input" ></p>
     </div>
   </div>
-
-<br><br>
 
   <div class="card">
     <div class="header">
@@ -266,7 +280,7 @@
         sounds : true,
         oneBasedIndex : true,
         zoom: {
-          startScale: 0.8,
+          startScale: 0.9,
           controls: true
         },
         grid: {
@@ -282,8 +296,7 @@
     // workspace initialization from JSON variable
     Blockly.Xml.domToWorkspace(
       Blockly.Xml.textToDom(
-        '<xml><block type="contract" deletable="false" ></block></xml>'
-        //        '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
+        '<xml><block type="contract" deletable="false" movable="false"></block></xml>'
       ),
       workspace
     );
@@ -326,6 +339,12 @@
 
       document.getElementById('textarea').value = code;
       
+
+      workspace.registerButtonCallback('libraryExplorerButtonPressed', function() {
+        window.open('https://lucaguida.github.io/SoliditySOA-libExplorer/');
+      });
+
+
 
      }
      workspace.addChangeListener(myUpdateFunction);

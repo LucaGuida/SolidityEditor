@@ -1,0 +1,13 @@
+linkPrefix = "/SoliditySOA"
+name = "tempRepo"
+version = "1.0.0"
+description = "Solidity Documentation"
+buildTime = 2018-06-23T10:45:31.109Z
+target = "doxity"
+src = "contracts/*"
+dir = "pages/docs"
+out = "docs"
+author = "Author Name"
+homepage = "https://github.com/LucaGuida/tempRepo/"
+
+[interaction]

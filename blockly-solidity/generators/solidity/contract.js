@@ -42,6 +42,7 @@ Blockly.Solidity['contract'] = function(block) {
     imports += '\n';
   }
   
+  var contract_docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var states = Blockly.Solidity.statementToCode(block, 'STATES');
   if (states.length > 0) {states += '\n'};
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIFIERS');
@@ -60,13 +61,14 @@ Blockly.Solidity['contract'] = function(block) {
 
   var code = 'pragma solidity ^0.4.24;\n\n'
     + imports
+    + contract_docs.replace(new RegExp('  ///', 'g'), '///')
     + 'contract ' + block.getFieldValue('NAME') + ' {\n\n'
     + states
     + modifiers
     + events
-    + ctor
-    + methods
-    + methodsWithReturn
+    + ctor.replace(new RegExp('    ///', 'g'), '  ///')
+    + methods.replace(new RegExp('    ///', 'g'), '  ///')
+    + methodsWithReturn.replace(new RegExp('    ///', 'g'), '  ///')
     + '}\n';
 
   return code;
@@ -366,5 +368,56 @@ Blockly.Solidity['usingFor'] = function(block) {
   return 'using ' + libraryName + ' for ' + types[attachedType] + ';\n\n';
 };
 
+
+Blockly.Solidity['NatSpec_contract'] = function(block) {
+  var title = block.getFieldValue('TITLE');
+  var author = block.getFieldValue('AUTHOR');
+  var notice = block.getFieldValue('NOTICE');
+  var dev = block.getFieldValue('DEV');
+  var returnString = '';
+
+  if (title!='') 
+    returnString = '/// @title ' + title + '\n';
+  if (author!='') 
+    returnString = returnString + '/// @autor ' + author + '\n';
+  if (notice!='') 
+    returnString = returnString + '/// @notice ' + notice + '\n';
+  if (dev!='') 
+    returnString = returnString + '/// @dev ' + dev + '\n';
+
+  return returnString;
+};
+
+
+Blockly.Solidity['NatSpec_function'] = function(block) {
+  var author = block.getFieldValue('AUTHOR');
+  var notice = block.getFieldValue('NOTICE');
+  var dev = block.getFieldValue('DEV');
+  var parameters = Blockly.Solidity.statementToCode(block, 'PARAMS');
+  var returnValue = block.getFieldValue('RETURN');
+
+  var returnString = '';
+
+  if (author!='') 
+    returnString = returnString + '/// @autor ' + author + '\n';
+  if (notice!='') 
+    returnString = returnString + '/// @notice ' + notice + '\n';
+  if (dev!='') 
+    returnString = returnString + '/// @dev ' + dev + '\n';
+  if (typeof parameters != 'undefined' && parameters!='') 
+    returnString = returnString + parameters;
+  if (returnValue!='') 
+    returnString = returnString + '/// @return ' + returnValue + '\n';
+
+  return returnString.replace(new RegExp('  ///', 'g'), '///');
+};
+
+
+Blockly.Solidity['NatSpec_function_parameter'] = function(block) {
+  var paramName = block.getFieldValue('PARAM');
+  if (paramName!='') 
+    return '/// @param ' + paramName + '\n';
+  else return '';
+};
 
 

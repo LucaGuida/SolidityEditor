@@ -31,7 +31,7 @@ Blockly.Solidity.LABEL_GROUP_ADDRESS    = "address";
 Blockly.Solidity.LABEL_GROUP_STRUCT     = "struct";
 Blockly.Solidity.LABEL_GROUP_STRUCT_VAR = "struct_var";
 Blockly.Solidity.LABEL_GROUP_MAPPING    = "mapping";
-
+Blockly.Solidity.LABEL_GROUP_NATSPEC    = "NatSpec";
 
 Blockly.Solidity.UNDEFINED_NAME         = "__UNDEFINED__";
 

@@ -346,6 +346,14 @@ Blockly.Extensions.registerMutator('struct_member_mutator',
 Blockly.defineBlocksWithJsonArray([
   {
     "type": "contract",
+    "message1": 'documentation %1',
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "DOCS",
+        "check": "NatSpec_contract"
+      }
+    ],
     "message0": 'smart contract %1',
     "args0": [
       {
@@ -355,8 +363,8 @@ Blockly.defineBlocksWithJsonArray([
         "text": "MyContract",
       }
     ],
-    "message1": "state variables, enums & structs %1",
-    "args1": [
+    "message2": "state variables, enums & structs %1",
+    "args2": [
       {
         "type": "input_statement",
         "name": "STATES",
@@ -364,8 +372,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message2": "modifiers definition %1",
-    "args2": [
+    "message3": "modifiers definition %1",
+    "args3": [
       {
         "type": "input_statement",
         "name": "MODIFIERS",
@@ -373,8 +381,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message3": "events definition %1",
-    "args3": [
+    "message4": "events definition %1",
+    "args4": [
       {
         "type": "input_statement",
         "name": "EVENTS",
@@ -382,8 +390,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message4": "constructor definition %1",
-    "args4": [
+    "message5": "constructor definition %1",
+    "args5": [
       {
         "type": "input_statement",
         "name": "CTOR",
@@ -391,8 +399,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message5": "functions definition %1",
-    "args5": [
+    "message6": "functions definition %1",
+    "args6": [
       {
         "type": "input_statement",
         "name": "METHODS",
@@ -400,8 +408,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message6": "functions with return definition %1",
-    "args6": [
+    "message7": "functions with return definition %1",
+    "args7": [
       {
         "type": "input_statement",
         "name": "METHODS_WITH_RETURN",
@@ -579,33 +587,40 @@ Blockly.Blocks['contract_method'] = {
           "text": "myFunction"
         },
       ],
-      "message1": "parameters %1",
+      "message1": "documentation %1",
       "args1": [
         {
           "type": "input_statement",
-          "name": "PARAMS",
-          "check": ["contract_method_parameter"],
-          "align": "RIGHT"
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
         },
       ],
-      "message2": "function type %1",
+      "message2": "parameters %1",
       "args2": [
+        {
+          "type": "input_statement",
+          "name": "PARAMS",
+          "check": ["contract_method_parameter"]
+        },
+      ],
+      "message3": "function type %1",
+      "args3": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
       ],
-      "message3": "modifiers %1",
-      "args3": [
+      "message4": "modifiers %1",
+      "args4": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message4": "code %1",
-      "args4": [
+      "message5": "code %1",
+      "args5": [
         {
           "type": "input_statement",
           "name": "STACK"        
@@ -647,48 +662,55 @@ Blockly.Blocks['contract_method_with_return'] = {
           "text": "myFunction"
         }
       ],
-      "message1": "parameters %1",
+      "message1": "documentation %1",
       "args1": [
         {
           "type": "input_statement",
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
+        },
+      ],
+      "message2": "parameters %1",
+      "args2": [
+        {
+          "type": "input_statement",
           "name": "PARAMS",
-          "check": ["contract_method_parameter"],
-          "align": "RIGHT"
+          "check": ["contract_method_parameter"]
         }
       ],
-      "message2": "function type %1",
-      "args2": [
+      "message3": "function type %1",
+      "args3": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
       ],
-      "message3": "modifiers %1",
-      "args3": [
+      "message4": "modifiers %1",
+      "args4": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message4": "returning value of type %1",
-      "args4": [
+      "message5": "returning value of type %1",
+      "args5": [
         {
           "type": "field_dropdown",
           "name": "RETURN_TYPE",
           "options": typesList
         }
       ],  
-      "message5": "code %1",
-      "args5": [
+      "message6": "code %1",
+      "args6": [
         {
           "type": "input_statement",
           "name": "STACK"
         }
       ],
-      "message6": "return value %1",
-      "args6": [
+      "message7": "return value %1",
+      "args7": [
         {
           "type": "input_value",
           "name": "RETURN_VALUE"
@@ -1079,8 +1101,7 @@ Blockly.Blocks['event_definition'] = {
         {
           "type": "input_statement",
           "name": "ARGS",
-          "check": ["event_argument"],
-          "align": "RIGHT"
+          "check": ["event_argument"]
         },
       ],
       "previousStatement": "event_definition",
@@ -1229,8 +1250,7 @@ Blockly.Blocks['modifier_definition'] = {
         {
           "type": "input_statement",
           "name": "PARAMS",
-          "check": ["contract_method_parameter"],
-          "align": "RIGHT"
+          "check": ["contract_method_parameter"]
         },
       ],
       "message2": "condition %1",
@@ -1238,8 +1258,7 @@ Blockly.Blocks['modifier_definition'] = {
         {
           "type": "input_value",
           "name": "CONDITION",
-          //"check": ["contract_method_parameter"],
-          "align": "RIGHT"
+          //"check": ["contract_method_parameter"]
         },
       ],
       "message3": "error message %1",
@@ -1371,8 +1390,7 @@ Blockly.Blocks['enum_definition'] = {
         {
           "type": "input_statement",
           "name": "MEMBERS",
-          "check": ["enum_member"],
-          "align": "RIGHT"
+          "check": ["enum_member"]
         },
       ],
       "previousStatement": null,
@@ -1607,8 +1625,7 @@ Blockly.Blocks['struct_definition'] = {
         {
           "type": "input_statement",
           "name": "MEMBERS",
-          "check": ["struct_member"],
-          "align": "RIGHT"
+          "check": ["struct_member"]
         },
       ],
       "previousStatement": null,
@@ -2001,6 +2018,110 @@ Blockly.Blocks['mapping_get'] = {
   }
 };
 
+/* ********************** NATSPEC_CONTRACT, NATSPEC_FUNCTION & NATSPEC_FUNCTION_PARAMETER BLOCKS ********************** */
+
+Blockly.Blocks['NatSpec_contract'] = {
+  init: function() {
+    this.appendDummyInput()   
+      .appendField("Contract documentation");
+    this.appendDummyInput()   
+      .appendField("@title")
+      .appendField(new Blockly.FieldTextInput(''), 'TITLE');
+    this.appendDummyInput()   
+      .appendField("@author")
+      .appendField(new Blockly.FieldTextInput(''), 'AUTHOR');
+    this.appendDummyInput()   
+      .appendField("@notice")
+      .appendField(new Blockly.FieldTextInput(''), 'NOTICE');
+    this.appendDummyInput()   
+      .appendField("@dev")
+      .appendField(new Blockly.FieldTextInput(''), 'DEV');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(false, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Contract NatSpec documentation');
+
+    this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_NATSPEC };
+  },
+};
+
+
+Blockly.Blocks['NatSpec_function'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "Function documentation",
+      "message1": "@author %1",
+      "args1": [
+        {
+          "type": "field_input",
+          "name": "AUTHOR",
+          "text": ""
+        },
+      ],
+      "message2": "@notice %1",
+      "args2": [
+        {
+          "type": "field_input",
+          "name": "NOTICE",
+          "text": ""
+        },
+      ],
+      "message3": "@dev %1",
+      "args3": [
+        {
+          "type": "field_input",
+          "name": "DEV",
+          "text": ""
+        },
+      ],
+      "message4": "parameters %1",
+      "args4": [
+        {
+          "type": "input_statement",
+          "name": "PARAMS",
+          "check": ["NatSpec_function_parameter"]
+        },
+      ],
+      "message5": "@return %1",
+      "args5": [
+        {
+          "type": "field_input",
+          "name": "RETURN",
+          "text": ""
+        },
+      ],
+      "previousStatement": ["NatSpec_function", "contract_method", "contract_method_with_return", "contract_ctor"],
+      "nextStatement": "NatSpec_function",
+      "colour": "#1976D2",
+      "tooltip": "Function NatSpec documentation",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_NATSPEC };
+
+  },
+};
+
+
+Blockly.Blocks['NatSpec_function_parameter'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("@parameter")
+      .appendField(new Blockly.FieldTextInput(''), 'PARAM');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setOutput(false, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Function parameter NatSpec documentation');
+
+    this.getVariableNameSelectField = function() { return this.getField('PARAM'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_NATSPEC };
+  },
+};
+
+
 
 /* ********************** CONTRACT_CTOR BLOCK ********************** */
 
@@ -2008,8 +2129,16 @@ Blockly.defineBlocksWithJsonArray([
   {
     "type": "contract_ctor",
     "message0": "constructor",
-    "message1": "parameters %1",
+    "message1": "documentation %1",
     "args1": [
+        {
+          "type": "input_statement",
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
+        },
+      ],
+    "message2": "parameters %1",
+    "args2": [
       {
         "type": "input_statement",
         "name": "PARAMS",
@@ -2017,8 +2146,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       },
     ],
-    "message2": "code %1",
-    "args2": [
+    "message3": "code %1",
+    "args3": [
       {
         "type": "input_statement",
         "name": "STACK",

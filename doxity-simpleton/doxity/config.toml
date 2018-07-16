@@ -1,13 +1,13 @@
-linkPrefix = "/SoliditySOA"
-name = "tempRepo"
+linkPrefix = "/doxity-simpleton"
+name = "SoliditySOA"
 version = "1.0.0"
 description = "Solidity Documentation"
-buildTime = 2018-07-16T12:53:08.070Z
+buildTime = 2018-07-16T13:12:16.346Z
 target = "doxity"
 src = "contracts/*"
 dir = "pages/docs"
 out = "docs"
-author = "Author Name"
-homepage = "https://github.com/LucaGuida/tempRepo/"
+author = "Luca Guida"
+homepage = "https://lucaguida.github.io/SoliditySOA/"
 
 [interaction]

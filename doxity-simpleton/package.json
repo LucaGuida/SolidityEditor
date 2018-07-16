@@ -1,17 +1,17 @@
 {
-  "name": "tempRepo",
+  "name": "SoliditySOA",
   "version": "1.0.0",
   "description": "Solidity Documentation",
-  "author": "Author Name",
+  "author": "Luca Guida",
   "main": "docs/index.html",
   "directories": {
     "doc": "docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LucaGuida/tempRepo.git"
+    "url": "git+https://github.com/LucaGuida/SoliditySOA.git"
   },
-  "homepage": "https://github.com/LucaGuida/tempRepo/", 
+  "homepage": "https://lucaguida.github.io/SoliditySOA/", 
   "scripts": {
     "docs": "doxity build"
   },

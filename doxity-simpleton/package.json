@@ -1,7 +1,7 @@
 {
   "name": "SoliditySOA",
   "version": "1.0.0",
-  "description": "Solidity Documentation",
+  "description": "Library contracts Explorer",
   "author": "Luca Guida",
   "main": "docs/index.html",
   "directories": {

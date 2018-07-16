@@ -1,8 +1,8 @@
-linkPrefix = "/doxity-simpleton"
+linkPrefix = "/SoliditySOA"
 name = "SoliditySOA"
 version = "1.0.0"
-description = "Solidity Documentation"
-buildTime = 2018-07-16T13:12:16.346Z
+description = "Library contracts Explorer"
+buildTime = 2018-07-16T13:44:56.310Z
 target = "doxity"
 src = "contracts/*"
 dir = "pages/docs"

@@ -14,6 +14,7 @@ goog.require('Blockly.Solidity');
     'TYPE_ADDRESS': 'address',
     'TYPE_BYTES_ARRAY': 'bytes',
     'TYPE_STRING': 'string',
+    'TYPE_STAR': '*'
   };
 
   var defaultValue = {
@@ -29,7 +30,7 @@ Blockly.Solidity['contract'] = function(block) {
 
   var imports = '';
   var importsArray = [];
-  var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' });
+  var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' || b.type == 'usingFor'});
   if (typeof libraryCallBlocksArray[0] != 'undefined') {
     for (var i = 0; i < libraryCallBlocksArray.length; i++)
       if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select library...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
@@ -266,8 +267,6 @@ Blockly.Solidity['enum_get'] = function(block) {
 };
 
 
-
-
 Blockly.Solidity['struct_definition'] = function(block) {
   var name = block.getFieldValue('STRUCT_NAME');
   var members = Blockly.Solidity.statementToCode(block, 'MEMBERS').trim();
@@ -275,6 +274,7 @@ Blockly.Solidity['struct_definition'] = function(block) {
 
   return code;
 };
+
 
 Blockly.Solidity['struct_member'] = function(block) {
   var type = block.getFieldValue('TYPE');
@@ -284,12 +284,14 @@ Blockly.Solidity['struct_member'] = function(block) {
   return code;
 };
 
+
 Blockly.Solidity['struct_variable_create'] = function(block) {
   var structType = block.getFieldValue('STRUCT_TYPE');
   var varName = block.getFieldValue('STRUCT_VAR_NAME');
 
   return structType + ' ' + varName + ';\n';
 };
+
 
 Blockly.Solidity['struct_variable_set'] = function(block) {
   var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
@@ -299,10 +301,12 @@ Blockly.Solidity['struct_variable_set'] = function(block) {
   return variableName + ' = ' + value + ';\n';
 };
 
+
 Blockly.Solidity['struct_variable_get'] = function(block) {
   var varName = block.getFieldValue('STRUCT_VARIABLE_NAME');
   return [varName, Blockly.Solidity.ORDER_ATOMIC];
 };
+
 
 Blockly.Solidity['struct_member_set'] = function(block) {
   var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
@@ -313,11 +317,13 @@ Blockly.Solidity['struct_member_set'] = function(block) {
   return variableName + '.' + memberName + ' = ' + value + ';\n';
 };
 
+
 Blockly.Solidity['struct_member_get'] = function(block) {
   var variableName = block.getFieldValue('STRUCT_VARIABLE_NAME');
   var memberName = block.getFieldValue('STRUCT_MEMBER_NAME');
   return [variableName + '.' + memberName, Blockly.Solidity.ORDER_ATOMIC];
 };
+
 
 Blockly.Solidity['mapping_definition'] = function(block) {
   var type1 = types[block.getFieldValue('TYPE1')];
@@ -330,6 +336,7 @@ Blockly.Solidity['mapping_definition'] = function(block) {
   return 'mapping(' + type1 + ' => ' + type2 + ') ' + publicCheckbox + varName + ';\n';
 };
 
+
 Blockly.Solidity['mapping_set'] = function(block) {
   var variableName = block.getFieldValue('MAPPING_VARIABLE_NAME');
   var arg = Blockly.Solidity.valueToCode(block, 'ARG',
@@ -340,11 +347,23 @@ Blockly.Solidity['mapping_set'] = function(block) {
   return variableName + '[' + arg + '] = ' + value + ';\n';
 };
 
+
 Blockly.Solidity['mapping_get'] = function(block) {
   var variableName = block.getFieldValue('MAPPING_VARIABLE_NAME');
   var arg = Blockly.Solidity.valueToCode(block, 'ARG',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
   return [variableName + '[' + arg + ']', Blockly.Solidity.ORDER_ATOMIC];
+};
+
+
+Blockly.Solidity['usingFor'] = function(block) {
+  var libraryName = block.getFieldValue('LIB_NAME');
+  var attachedType = block.getFieldValue('TYPE');
+
+  if (libraryName == "select library...")
+    return '';
+
+  return 'using ' + libraryName + ' for ' + types[attachedType] + ';\n\n';
 };
 
 

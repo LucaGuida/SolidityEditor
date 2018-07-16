@@ -124,6 +124,18 @@ var typesList = [
             [ "string", "TYPE_STRING" ],
           ];
 
+// List of types + '*'
+var typesListWithStar = [
+            [ "bool", "TYPE_BOOL" ],
+            [ "int",  "TYPE_INT" ],
+            [ "uint", "TYPE_UINT" ],
+            [ "address", "TYPE_ADDRESS" ],
+            [ "bytes", "TYPE_BYTES_ARRAY" ],
+            [ "string", "TYPE_STRING" ],
+            [ "*", "TYPE_STAR" ]            
+          ];
+
+
 var functionTypesList = [
             [ "none", "" ],
             [ "pure",  " pure " ],
@@ -899,7 +911,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL & LIBRARY_METHOD_CALL_WITH_RETURN_VALUE BLOCKS ********************** */
+/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE & USING...FOR... BLOCKS ********************** */
 
 function dynamicLibsList() {
   var options = [[ "select library...", "select library..." ]];
@@ -1014,6 +1026,36 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
         this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });
+
+  },
+};
+
+
+Blockly.Blocks['usingFor'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "using library %1 for %2",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "LIB_NAME",
+          "options": dynamicLibsList
+        },
+        {
+          "type": "field_dropdown",
+          "name": "TYPE",
+          "options": typesListWithStar
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#FF5252",
+      "tooltip": "Attach functions from a specified library to a type, or to any type (*)",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameSelectField = function() { return this.getField('LIB_NAME' + 'TYPE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_LIBRARY };
 
   },
 };

@@ -17,6 +17,7 @@ Blockly.Solidity['contract_method'] = function(block) {
   return code;
 };
 
+
 Blockly.Solidity['contract_method_with_return'] = function(block) {
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var functionType = block.getFieldValue('FUNCTION_TYPE');
@@ -35,6 +36,7 @@ Blockly.Solidity['contract_method_with_return'] = function(block) {
   return code;
 };
 
+
 Blockly.Solidity['contract_ctor'] = function(block) {
   var parent = block.getSurroundParent();
 
@@ -49,6 +51,7 @@ Blockly.Solidity['contract_ctor'] = function(block) {
   return code;
 };
 
+
 Blockly.Solidity['contract_method_parameter'] = function(block) {
   var name = block.getFieldValue('NAME');
   var nextBlock = block.getNextBlock();
@@ -62,6 +65,7 @@ Blockly.Solidity['contract_method_parameter'] = function(block) {
   return types[block.getFieldValue('TYPE')] + ' ' + name + sep;
 };
 
+
 Blockly.Solidity['contract_method_parameter_get'] = function(block) {
   var variableId = block.getFieldValue('PARAM_NAME');
   var variable = block.workspace.getVariableById(variableId);
@@ -73,12 +77,14 @@ Blockly.Solidity['contract_method_parameter_get'] = function(block) {
   return [Blockly.Solidity.getVariableName(variable), Blockly.Solidity.ORDER_ATOMIC];
 };
 
+
 Blockly.Solidity['contract_intrinsic_sha3'] = function(block) {
   var argument0 = Blockly.Solidity.valueToCode(block, 'VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || '0';
 
   return ['sha3(' + argument0 + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
+
 
 Blockly.Solidity['contract_method_call'] = function(block) {
   var variableId = block.getFieldValue('METHOD_NAME');
@@ -128,7 +134,6 @@ Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
 };
 
 
-
 Blockly.Solidity['library_method_call'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');
   var functionName = block.getFieldValue('LIB_FUNCT_NAME');
@@ -149,6 +154,7 @@ Blockly.Solidity['library_method_call'] = function(block) {
   return libraryName + '.' + functionName + '(' + argsString + ');\n\n';
 };
 
+
 Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');
   var functionName = block.getFieldValue('LIB_FUNCT_NAME');
@@ -168,3 +174,5 @@ Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
 
   return [libraryName + '.' + functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
+
+

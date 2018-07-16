@@ -2038,7 +2038,7 @@ Blockly.Blocks['NatSpec_contract'] = {
       .appendField(new Blockly.FieldTextInput(''), 'DEV');
     this.setPreviousStatement(true, null);
     this.setNextStatement(false, null);
-    this.setColour("#1976D2");
+    this.setColour("#5C81A6");
     this.setTooltip('Contract NatSpec documentation');
 
     this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
@@ -2093,7 +2093,7 @@ Blockly.Blocks['NatSpec_function'] = {
       ],
       "previousStatement": ["NatSpec_function", "contract_method", "contract_method_with_return", "contract_ctor"],
       "nextStatement": "NatSpec_function",
-      "colour": "#1976D2",
+      "colour": "#5C81A6",
       "tooltip": "Function NatSpec documentation",
       "helpUrl": ""
     });
@@ -2113,7 +2113,7 @@ Blockly.Blocks['NatSpec_function_parameter'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setOutput(false, null);
-    this.setColour("#1976D2");
+    this.setColour("#5C81A6");
     this.setTooltip('Function parameter NatSpec documentation');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM'); };

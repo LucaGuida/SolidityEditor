@@ -1,30 +1,18 @@
 import os
 import json
-from lxml import html
 
 
 def extractMethods (contractName):
 	methods = []
-	file = open('docs/docs/' + contractName + '/index.html', 'r', encoding="utf-8")
-	tree = html.fromstring(file.read())
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[1]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[2]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[3]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[4]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[5]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[6]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[7]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[8]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[9]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[10]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[11]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[12]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[13]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[14]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[15]/h3/code[1]/text()'))
-	methods.append(tree.xpath('//*[@id="react-mount"]/div/div[2]/div/div[2]/div/div[4]/div[16]/h3/code[1]/text()'))
-	flattened_list = [y for x in methods for y in x]
-	return flattened_list
+	file=open('doxity/pages/docs/' + contractName + '.json').read()
+	data = json.loads(file)
+
+	for method in data['abi']:
+		if method['type']=='function': 
+			methods.append(method['name'])
+		if method['type']=='constructor':
+			methods.append(contractName)
+	return methods
 
 def pretty(d, indent=0):
    for key, value in d.items():

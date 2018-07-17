@@ -110,40 +110,48 @@
       <block type="msg_get"></block>
     </category>
 
-    <category name="Constructors & functions" colour="#5ba580">
-      <label text="CONSTRUCTORS" web-class="myLabelStyle"></label>
+    <category name="Constructor definition" colour="#5ba580">
+      <label text="CONSTRUCTOR DEFINITION" web-class="myLabelStyle"></label>
       <block type="contract_ctor"></block>
-      <sep gap="40"></sep>
-      <label text="FUNCTION DEFINITIONS" web-class="myLabelStyle"></label>
-      <block type="contract_method"></block>
-      <block type="contract_method_with_return"></block>
-      <sep gap="40"></sep>
-      <label text="FUNCTION PARAMETERS" web-class="myLabelStyle"></label>
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
-      <sep gap="40"></sep>
-      <label text="FUNCTION CALLS" web-class="myLabelStyle"></label>
+    </category>
+
+    <category name="Function definition" colour="#5ba580">
+      <label text="FUNCTION DEFINITION" web-class="myLabelStyle"></label>
+      <block type="contract_method"></block>
+      <block type="contract_method_with_return"></block>
+      <block type="contract_method_parameter"></block>
+      <block type="contract_method_parameter_get"></block>
+    </category>
+
+    <category name="Function call" colour="#5ba580">
+      <label text="FUNCTION CALL" web-class="myLabelStyle"></label>
       <block type="contract_method_call"></block>
       <block type="contract_method_call_with_return_value"></block>
       <block type="argument_container"></block>
     </category>
 
-    <category name="Events & modifiers" colour="#5ba580">
-      <label text="EVENTS" web-class="myLabelStyle"></label>
+    <category name="Events" colour="#5ba580">
+      <label text="EVENT DEFINITION" web-class="myLabelStyle"></label>
       <block type="event_definition"></block>
       <block type="event_argument"></block>
+      <sep gap="40"></sep>
+      <label text="EVENT EMISSION" web-class="myLabelStyle"></label>
       <block type="event_emission"></block>
       <block type="argument_container"></block>
-      <sep gap="40"></sep>
-      <label text="MODIFIERS" web-class="myLabelStyle"></label>
+    </category>
+
+    <category name="Modifiers" colour="#5ba580">
+      <label text="MODIFIER DEFINITION" web-class="myLabelStyle"></label>
       <block type="modifier_definition"></block>
-      <block type="modifier_onlyOwner"></block>
-      <block type="modifier_usage"></block>
-      <block type="argument_container"></block>
-      <sep gap="40"></sep>
-      <label text="MODIFIER PARAMETERS" web-class="myLabelStyle"></label>
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
+      <block type="modifier_onlyOwner"></block>
+      <sep gap="40"></sep>
+      <label text="MODIFIER USAGE" web-class="myLabelStyle"></label>
+      <block type="modifier_usage"></block>
+      <block type="argument_container"></block>
     </category>
 
     <category name="External functions (library contracts, ...)" colour="#5ba580">

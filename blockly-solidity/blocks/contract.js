@@ -1119,7 +1119,7 @@ Blockly.Blocks['event_argument'] = {
   init: function() {
     var nameField = new Blockly.FieldTextInput('argumentName');
     this.appendDummyInput()
-        .appendField('event type')
+        .appendField('event argument type')
         .appendField(new Blockly.FieldDropdown(typesList),
           'TYPE'
         )
@@ -1175,12 +1175,8 @@ Blockly.Blocks['event_emission'] = {
         new Blockly.FieldDropdown(dynamicEventsList),
         "EVENT_NAME"
       );
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
+    this.appendStatementInput('ARGS')
+      .appendField("arguments").setCheck('argument_container');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     // this.setOutput(true, null);
@@ -1338,12 +1334,8 @@ Blockly.Blocks['modifier_usage'] = {
         new Blockly.FieldDropdown(dynamicModifiersList),
         "MODIFIER_NAME"
       );
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
+    this.appendStatementInput('ARGS')
+      .appendField("arguments").setCheck('argument_container');
     this.setPreviousStatement(true, 'modifier_usage');
     this.setNextStatement(true, 'modifier_usage');
     // this.setOutput(true, null);

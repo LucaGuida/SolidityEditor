@@ -167,17 +167,17 @@ Blockly.Solidity['event_argument'] = function(block) {
 
 Blockly.Solidity['event_emission'] = function(block) {
   var eventName = block.getFieldValue('EVENT_NAME');
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
 
-  return 'emit ' + eventName + '(' + argsString + ');\n';
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
+
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
+
+  return 'emit ' + eventName + '(' + args + ');\n';
 };
 
 
@@ -208,17 +208,16 @@ Blockly.Solidity['modifier_onlyOwner'] = function(block) {
 Blockly.Solidity['modifier_usage'] = function(block) {
   var modifierName = block.getFieldValue('MODIFIER_NAME');
 
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
 
-  return modifierName + '(' + argsString + ') ';
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
+
+  return modifierName + '(' + args + ') ';
 };
 
 

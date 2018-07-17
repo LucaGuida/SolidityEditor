@@ -216,19 +216,12 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
           new Blockly.FieldDropdown(dynamicLibFunctsList(libName)),
           "LIB_FUNCT_NAME"
           );
-        this.appendValueInput('ARG1')
-          .appendField("argument 1");
-        this.appendValueInput('ARG2')
-          .appendField("argument 2");
-        this.appendValueInput('ARG3')
-          .appendField("argument 3");
-
+        this.appendStatementInput('ARGS')
+          .appendField("arguments").setCheck('argument_container');
       }
     } else if (functionSelectorBeingDisplayed) {
       this.removeInput('LIBRARY_FUNCTION_SELECTOR');
-      this.removeInput('ARG1');
-      this.removeInput('ARG2');
-      this.removeInput('ARG3');
+      this.removeInput('ARGS');
     }
   }
 };
@@ -820,12 +813,8 @@ Blockly.Blocks['contract_method_call'] = {
         /*new Blockly.FieldDropdown(dynamicFunctionsList),*/
         "METHOD_NAME"
       );
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
+    this.appendStatementInput('ARGS')
+      .appendField("arguments").setCheck('argument_container');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     // this.setOutput(true, null);
@@ -891,12 +880,8 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
         "METHOD_NAME"
       )
       .appendField('with return value');
-    this.appendValueInput('ARG1')
-      .appendField("argument 1")
-    this.appendValueInput('ARG2')
-      .appendField("argument 2")
-    this.appendValueInput('ARG3')
-      .appendField("argument 3")
+    this.appendStatementInput('ARGS')
+      .appendField("arguments").setCheck('argument_container');
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Call of a function which returns a value');
@@ -2121,6 +2106,22 @@ Blockly.Blocks['NatSpec_function_parameter'] = {
   },
 };
 
+
+/* ********************** ARGUMENT_CONTAINER BLOCK ********************** */
+
+Blockly.Blocks['argument_container'] = {
+  init: function() {
+    this.appendValueInput('ARG')
+          .appendField("argument ");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#5C81A6");
+    this.setTooltip('Argument container');
+
+    this.getVariableNameSelectField = function() { return this.getField('ARG'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+  },
+};
 
 
 /* ********************** CONTRACT_CTOR BLOCK ********************** */

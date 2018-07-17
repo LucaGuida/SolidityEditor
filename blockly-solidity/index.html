@@ -125,6 +125,7 @@
       <label text="FUNCTION CALLS" web-class="myLabelStyle"></label>
       <block type="contract_method_call"></block>
       <block type="contract_method_call_with_return_value"></block>
+      <block type="argument_container"></block>
     </category>
 
     <category name="Events & modifiers" colour="#5ba580">
@@ -132,18 +133,20 @@
       <block type="event_definition"></block>
       <block type="event_argument"></block>
       <block type="event_emission"></block>
+      <block type="argument_container"></block>
       <sep gap="40"></sep>
       <label text="MODIFIERS" web-class="myLabelStyle"></label>
       <block type="modifier_definition"></block>
       <block type="modifier_onlyOwner"></block>
       <block type="modifier_usage"></block>
+      <block type="argument_container"></block>
       <sep gap="40"></sep>
       <label text="MODIFIER PARAMETERS" web-class="myLabelStyle"></label>
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
     </category>
 
-    <category name="Library functions" colour="#5ba580">
+    <category name="External functions (library contracts, ...)" colour="#5ba580">
       <sep gap="30"></sep>
       <label text="Explore the libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
       <button text="Access the Library contracts Explorer" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
@@ -152,6 +155,8 @@
       <label text="LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
       <block type="library_method_call"></block>
       <block type="library_method_call_with_return_value"></block>
+      <block type="argument_container"></block>
+      <sep gap="40"></sep>
       <label text="USING... FOR..." web-class="myLabelStyle"></label>
       <block type="usingFor"></block>
     </category>

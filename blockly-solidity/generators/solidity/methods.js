@@ -89,27 +89,38 @@ Blockly.Solidity['contract_intrinsic_sha3'] = function(block) {
 };
 
 
+Blockly.Solidity['argument_container'] = function(block) {
+  var argument = Blockly.Solidity.valueToCode(block, 'ARG',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
+  
+  if (typeof argument != 'undefined' && argument!='' && argument!='null' && argument!=null)
+  {
+    if (!argument.includes("null"))
+      return argument + ',';
+    else return '';
+  } else return '';
+
+};
+
+
 Blockly.Solidity['contract_method_call'] = function(block) {
   var variableId = block.getFieldValue('METHOD_NAME');
   var variable = block.workspace.getVariableById(variableId);
 
-  //var functionName = block.getFieldValue('METHOD_NAME');
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
 
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
+
 
   if (!variable) {
     return '';
   }
 
-  return Blockly.Solidity.getVariableName(variable) + '(' + argsString + ');\n';
+  return Blockly.Solidity.getVariableName(variable) + '(' + args + ');\n';
 };
 
 
@@ -117,23 +128,20 @@ Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
   var variableId = block.getFieldValue('METHOD_NAME');
   var variable = block.workspace.getVariableById(variableId);
 
-  //var functionName = block.getFieldValue('METHOD_NAME');
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
 
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
 
   if (!variable) {
     return '';
   }
 
-  return [Blockly.Solidity.getVariableName(variable) + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
+  return [Blockly.Solidity.getVariableName(variable) + '(' + args + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
 
 
@@ -141,20 +149,19 @@ Blockly.Solidity['library_method_call'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');
   var functionName = block.getFieldValue('LIB_FUNCT_NAME');
 
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
+
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
 
   if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
     return '';
 
-  return libraryName + '.' + functionName + '(' + argsString + ');\n\n';
+  return libraryName + '.' + functionName + '(' + args + ');\n\n';
 };
 
 
@@ -162,20 +169,19 @@ Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');
   var functionName = block.getFieldValue('LIB_FUNCT_NAME');
 
-  var argsArray = []; 
-  var argsString;
-  var argument1 = Blockly.Solidity.valueToCode(block, 'ARG1',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument2 = Blockly.Solidity.valueToCode(block, 'ARG2',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  var argument3 = Blockly.Solidity.valueToCode(block, 'ARG3',Blockly.Solidity.ORDER_ASSIGNMENT) || null;  
-  if (argument1!=null) {argsArray.push(argument1);}
-  if (argument2!=null) {argsArray.push(argument2);}
-  if (argument3!=null) {argsArray.push(argument3);}
-  if (typeof argsArray !== 'undefined') {argsString = argsArray.join(', ');}
+  var args = Blockly.Solidity.statementToCode(block, 'ARGS');
+
+  if (typeof args == 'undefined' || args=='') 
+    args = '';
+  else {
+    args = args.trim();
+    args = args.substring(0, args.length - 1);
+  }
 
   if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
     return '';
 
-  return [libraryName + '.' + functionName + '(' + argsString + ')', Blockly.Solidity.ORDER_ATOMIC];
+  return [libraryName + '.' + functionName + '(' + args + ')', Blockly.Solidity.ORDER_ATOMIC];
 };
 
 

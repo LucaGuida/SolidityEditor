@@ -47,11 +47,11 @@
 
 
     div.card {
-      width: 200px;
+      width: 280px;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       text-align: center;
       float: left;
-      margin-right: 20px;
+      margin-bottom:30px;
     }
 
     div.header {
@@ -71,10 +71,6 @@
 <body>
   <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
 
-  <!--
-    toolbox xml, build using:
-    https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
-  -->
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
     <category name="State variables" colour="#5ba580">
       <label text="STATE VARIABLES" web-class="myLabelStyle"></label>
@@ -183,7 +179,7 @@
   </xml>
 
 
-  <textarea id="textarea" style="width:calc(40% - 10px);height:600px;float:right" readonly></textarea>
+  <textarea id="textarea" style="width:calc(100% - 296px);height:600px;float:right;font-size: 10pt" readonly></textarea>
 
   <!--<button id="copyTextarea" style="float:right">Copy Solidity code to clipboard</button>-->
 

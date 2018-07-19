@@ -645,6 +645,14 @@ Blockly.Blocks['contract_method'] = {
           "check": ["NatSpec_function"]
         },
       ],
+    "message3": "visibility %1",
+    "args3": [
+      {
+        "type": "field_dropdown",
+        "name": "VISIBILITY",
+        "options": funcVisibilityList
+      },
+    ],
       "message2": "parameters %1",
       "args2": [
         {
@@ -653,24 +661,24 @@ Blockly.Blocks['contract_method'] = {
           "check": ["contract_method_parameter"]
         },
       ],
-      "message3": "function type %1",
-      "args3": [
+      "message4": "function type %1",
+      "args4": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
       ],
-      "message4": "modifiers %1",
-      "args4": [
+      "message5": "modifiers %1",
+      "args5": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message5": "code %1",
-      "args5": [
+      "message6": "code %1",
+      "args6": [
         {
           "type": "input_statement",
           "name": "STACK"        
@@ -680,7 +688,7 @@ Blockly.Blocks['contract_method'] = {
       "nextStatement": "contract_method",
       "colour": "#1976D2",
       "tooltip": "Function definition",
-      "helpUrl": ""
+      "helpUrl": "http://solidity.readthedocs.io/en/v0.4.24/types.html#function-types"
     });
 
     this.getVariableNameField = function() { return this.getField('NAME') };
@@ -728,49 +736,57 @@ Blockly.Blocks['contract_method_with_return'] = {
           "check": ["contract_method_parameter"]
         }
       ],
-      "message3": "function type %1",
+      "message3": "visibility %1",
       "args3": [
+        {
+          "type": "field_dropdown",
+          "name": "VISIBILITY",
+          "options": funcVisibilityList
+        },
+      ],
+      "message4": "function type %1",
+      "args4": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
       ],
-      "message4": "modifiers %1",
-      "args4": [
+      "message5": "modifiers %1",
+      "args5": [
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
         }
       ],
-      "message5": "returning value of type %1",
-      "args5": [
+      "message6": "returning value of type %1",
+      "args6": [
         {
           "type": "field_dropdown",
           "name": "RETURN_TYPE",
           "options": typesList
         }
       ],  
-      "message6": "code %1",
-      "args6": [
+      "message7": "code %1",
+      "args7": [
         {
           "type": "input_statement",
           "name": "STACK"
         }
       ],
-      "message7": "return value %1",
-      "args7": [
+      "message8": "return value %1",
+      "args8": [
         {
           "type": "input_value",
           "name": "RETURN_VALUE"
         }
       ],
-      "previousStatement": "contract_method_with_return",
-      "nextStatement": "contract_method_with_return",
+      "previousStatement": ["contract_method", "contract_method_with_return"],
+      "nextStatement": ["contract_method", "contract_method_with_return"],
       "colour": "#1976D2",
       "tooltip": "Function with return value definition",
-      "helpUrl": ""
+      "helpUrl": "http://solidity.readthedocs.io/en/v0.4.24/types.html#function-types"
     });
 
     this.getVariableNameField = function() { return this.getField('NAME') };
@@ -864,16 +880,16 @@ Blockly.Blocks['changeOwner_method'] = {
           "check": ["NatSpec_function"]
         },
       ],
-      "message2": "function type %1",
+/*      "message2": "function type %1",
       "args2": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
-      ],
-      "message3": "modifiers %1",
-      "args3": [
+      ], */
+      "message2": "modifiers %1",
+      "args2": [
         {
           "type": "input_statement",
           "name": "MODIF",
@@ -887,7 +903,7 @@ Blockly.Blocks['changeOwner_method'] = {
       "helpUrl": ""
     });
     
-    this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function.\nThe usage of function type "public" and modifier "onlyOwner" is recommended.');
+    this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function.\nThe usage of modifier "onlyOwner" is recommended.');
     this.getVariableNameField = function() { return this.getField('NAME') };
     this.getVariableType = function() { return 'void' }; //contract_method
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
@@ -925,16 +941,16 @@ Blockly.Blocks['destroy_method'] = {
           "check": ["NatSpec_function"]
         },
       ],
-      "message2": "function type %1",
+/*      "message2": "function type %1",
       "args2": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
-      ],
-      "message3": "modifiers %1",
-      "args3": [
+      ],*/
+      "message2": "modifiers %1",
+      "args2": [
         {
           "type": "input_statement",
           "name": "MODIF",
@@ -987,16 +1003,16 @@ Blockly.Blocks['destroyAndSend_method'] = {
           "check": ["NatSpec_function"]
         },
       ],
-      "message2": "function type %1",
+/*      "message2": "function type %1",
       "args2": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
-      ],
-      "message3": "modifiers %1",
-      "args3": [
+      ], */
+      "message2": "modifiers %1",
+      "args2": [
         {
           "type": "input_statement",
           "name": "MODIF",
@@ -2452,21 +2468,27 @@ Blockly.defineBlocksWithJsonArray([
           "check": ["NatSpec_function"]
         },
       ],
-    "message2": "parameters %1",
+    "message2": "visibility %1",
     "args2": [
       {
-        "type": "input_statement",
-        "name": "PARAMS",
-        "check": "contract_method_parameter",
-        "align": "RIGHT"
+        "type": "field_dropdown",
+        "name": "VISIBILITY",
+        "options": funcVisibilityList
       },
     ],
-    "message3": "code %1",
+    "message3": "parameters %1",
     "args3": [
       {
         "type": "input_statement",
-        "name": "STACK",
-        "align": "RIGHT"
+        "name": "PARAMS",
+        "check": "contract_method_parameter"
+      },
+    ],
+    "message4": "code %1",
+    "args4": [
+      {
+        "type": "input_statement",
+        "name": "STACK"
       }
     ],
     "previousStatement": ["contract_ctor"],

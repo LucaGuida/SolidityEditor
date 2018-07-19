@@ -9,11 +9,12 @@ goog.require('Blockly.Solidity');
 
 Blockly.Solidity['contract_method'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var visibility = block.getFieldValue('VISIBILITY');
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
-  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + functionType + modifiers + '{\n' + branch + '}\n\n';
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + params + ') ' + visibility + functionType + modifiers + '{\n' + branch + '}\n\n';
 
   return code;
 };
@@ -21,6 +22,7 @@ Blockly.Solidity['contract_method'] = function(block) {
 
 Blockly.Solidity['contract_method_with_return'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var visibility = block.getFieldValue('VISIBILITY');
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
@@ -33,7 +35,7 @@ Blockly.Solidity['contract_method_with_return'] = function(block) {
     'TYPE_UINT': 'uint',
   };
 
-  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + params + ')' + functionType + modifiers + ' returns (' + types[block.getFieldValue('RETURN_TYPE')] + ') {\n' + branch + '\n return ' + returnValue + ';\n}\n\n';
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + params + ') ' + visibility + functionType + modifiers + ' returns (' + types[block.getFieldValue('RETURN_TYPE')] + ') {\n' + branch + '\n return ' + returnValue + ';\n}\n\n';
 
   return code;
 };
@@ -46,10 +48,12 @@ Blockly.Solidity['contract_ctor'] = function(block) {
     return '';
   }
 
+  var visibility = block.getFieldValue('VISIBILITY');
+
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
-  var code = docs + parent.getFieldValue('NAME') + '(' + params + ') public {\n' + branch + '}\n\n';
+  var code = docs + parent.getFieldValue('NAME') + '(' + params + ') ' + visibility + ' {\n' + branch + '}\n\n';
 
   return code;
 };
@@ -83,9 +87,9 @@ Blockly.Solidity['contract_method_parameter_get'] = function(block) {
 
 Blockly.Solidity['changeOwner_method'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
-  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  //var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
-  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _newOwner)' + functionType + modifiers + '{\n' + '\towner = _newOwner;\n' + '}\n\n';
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _newOwner) public ' /*+ functionType*/ + modifiers + '{\n' + '\towner = _newOwner;\n' + '}\n\n';
 
   return code;
 };
@@ -93,9 +97,9 @@ Blockly.Solidity['changeOwner_method'] = function(block) {
 
 Blockly.Solidity['destroy_method'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
-  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  //var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
-  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + ')' + functionType + modifiers + '{\n' + '\tselfdestruct(owner);\n' + '}\n\n';
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + ') public ' /*+ functionType*/ + modifiers + '{\n' + '\tselfdestruct(owner);\n' + '}\n\n';
 
   return code;
 };
@@ -103,9 +107,9 @@ Blockly.Solidity['destroy_method'] = function(block) {
 
 Blockly.Solidity['destroyAndSend_method'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
-  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  //var functionType = block.getFieldValue('FUNCTION_TYPE');
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
-  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _recipient)' + functionType + modifiers + '{\n' + '\tselfdestruct(_recipient);\n' + '}\n\n';
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _recipient) public ' /*+ functionType*/ + modifiers + '{\n' + '\tselfdestruct(_recipient);\n' + '}\n\n';
 
   return code;
 };

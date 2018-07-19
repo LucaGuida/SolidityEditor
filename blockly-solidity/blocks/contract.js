@@ -567,6 +567,39 @@ Blockly.Blocks['address_transfer'] = {
 };
 
 
+/* ********************** OWNER_VAR_DECLARATION BLOCK ********************** */
+
+Blockly.Blocks['owner_var_declaration'] = {
+  init: function() {
+    var nameField = new Blockly.FieldTextInput('owner');
+    this.appendDummyInput()
+        .appendField('address ')
+        .appendField(nameField, 'NAME');
+    this.setPreviousStatement(true, 'contract_state');
+    this.setNextStatement(true, 'contract_state');
+    this.setColour("#1976D2");
+    this.contextMenu = false;
+    this.setTooltip('"Owner" state variable declaration');
+
+    this._stateNameInitialized = false;
+
+    this.getVariableNameField = function() { return nameField; }
+    this.getVariableType = function() { return 'TYPE_ADDRESS' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+
+  },
+};
+
+
 /* ********************** CONTRACT_METHOD BLOCK ********************** */
 
 Blockly.Blocks['contract_method'] = {
@@ -1273,6 +1306,42 @@ Blockly.Blocks['modifier_definition'] = {
 };
 
 
+/* ********************** MODIFIER_ONLYBY BLOCK ********************** */
+
+Blockly.Blocks['modifier_onlyBy'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "modifier %1 (address _account)",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "MODIFIER_NAME",
+          "text": "onlyBy"
+        },
+      ],
+      "previousStatement": "modifier_definition",
+      "nextStatement": "modifier_definition",
+      "colour": "#1976D2",
+      "tooltip": "onlyBy modifier (only the account passed to the modifier can call the function featuring this modifier: if the specified account calls this function, the function is executed; otherwise, an exception is thrown)",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
+    this.getVariableType = function() { return 'modifier' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
 /* ********************** MODIFIER_ONLYOWNER BLOCK ********************** */
 
 Blockly.Blocks['modifier_onlyOwner'] = {
@@ -1290,6 +1359,44 @@ Blockly.Blocks['modifier_onlyOwner'] = {
       "nextStatement": "modifier_definition",
       "colour": "#1976D2",
       "tooltip": "onlyOwner modifier (only the contract owner can call the function featuring this modifier: if the owner calls this function, the function is executed; otherwise, an exception is thrown)",
+      "helpUrl": ""
+    });
+
+    this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function');
+
+    this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
+    this.getVariableType = function() { return 'modifier' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
+/* ********************** MODIFIER_ONLYAFTER BLOCK ********************** */
+
+Blockly.Blocks['modifier_onlyAfter'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "modifier %1 (uint _time)",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "MODIFIER_NAME",
+          "text": "onlyAfter"
+        },
+      ],
+      "previousStatement": "modifier_definition",
+      "nextStatement": "modifier_definition",
+      "colour": "#1976D2",
+      "tooltip": "onlyAfter modifier (the function featuring this modifier can be called only after the specified amount of time has passed, otherwise an exception is thrown)",
       "helpUrl": ""
     });
 
@@ -2153,6 +2260,40 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": ""
   }
 ]);
+
+
+/* ********************** CTOR_OWNER BLOCK ********************** */
+
+Blockly.Blocks['ctor_owner'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("set")
+      .appendField(
+        new Blockly.FieldDropdown(
+          [["select state variable...", Blockly.Solidity.UNDEFINED_NAME]],
+          this.validate
+        ),
+        "STATE_NAME"
+      )
+      .appendField("to msg.sender");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('State variable setter to msg.sender (typically used to set the owner variable)');
+
+    this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+  },
+
+  validate: function(stateNameVariableId) {
+    var workspace = this.sourceBlock_.workspace;
+    setTimeout(
+      function() { Blockly.Solidity.updateWorkspaceStateTypes(workspace) },
+      1
+    );
+    return stateNameVariableId;
+  }
+};
 
 
 Blockly.defineBlocksWithJsonArray([

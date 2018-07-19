@@ -87,6 +87,12 @@ Blockly.Solidity['contract_state'] = function(block) {
   return types[type] + ' ' + name + ' = ' + value + ';\n';
 };
 
+Blockly.Solidity['owner_var_declaration'] = function(block) {
+  var name = block.getFieldValue('NAME');
+  var code = 'address ' + name + ';\n';
+  return code;
+};
+
 Blockly.Solidity['contract_state_get'] = function(block) {
   var variableId = block.getFieldValue('STATE_NAME');
   var variable = block.workspace.getVariableById(variableId);
@@ -198,9 +204,23 @@ Blockly.Solidity['modifier_definition'] = function(block) {
 };
 
 
+Blockly.Solidity['modifier_onlyBy'] = function(block) {
+  var name = block.getFieldValue('MODIFIER_NAME');
+  var code = 'modifier ' + name + '(address _account)' + '\n{\n\trequire(\n\t\tmsg.sender == _account,\n\t\t"Only the specified account can call this function."\n\t);\n\t _;\n}\n\n';
+  return code;
+};
+
+
 Blockly.Solidity['modifier_onlyOwner'] = function(block) {
   var name = block.getFieldValue('MODIFIER_NAME');
   var code = 'modifier ' + name + '\n{\n\trequire(\n\t\tmsg.sender == owner,\n\t\t"Only owner can call this function."\n\t);\n\t _;\n}\n\n';
+  return code;
+};
+
+
+Blockly.Solidity['modifier_onlyAfter'] = function(block) {
+  var name = block.getFieldValue('MODIFIER_NAME');
+  var code = 'modifier ' + name + '(uint _time)' + '\n{\n\trequire(\n\t\tnow >= _time,\n\t\t"Function called too early."\n\t);\n\t _;\n}\n\n';
   return code;
 };
 
@@ -420,3 +440,15 @@ Blockly.Solidity['NatSpec_function_parameter'] = function(block) {
 };
 
 
+Blockly.Solidity['ctor_owner'] = function(block) {
+  // Variable setter.
+
+  var variableId = block.getFieldValue('STATE_NAME');
+  var variable = block.workspace.getVariableById(variableId);
+
+  if (!variable) {
+    return '';
+  }
+
+  return Blockly.Solidity.getVariableName(variable) + ' = msg.sender;\n\n';
+};

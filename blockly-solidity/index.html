@@ -77,8 +77,9 @@
       <block type="contract_state"></block>
       <block type="contract_state_set"></block>
       <block type="contract_state_get"></block>
-      <block type="address_balance_get"></block>
-      <block type="address_transfer"></block>
+      <sep gap="40"></sep>
+      <label text="TYPICAL CONSTRUCTOR STATEMENTS" web-class="myLabelStyle"></label>
+      <block type="owner_var_declaration"></block>
     </category>
 
     <category name="Enums" colour="#5ba580">
@@ -115,6 +116,9 @@
       <block type="contract_ctor"></block>
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
+      <sep gap="40"></sep>
+      <label text="TYPICAL CONSTRUCTOR STATEMENTS" web-class="myLabelStyle"></label>
+      <block type="ctor_owner"></block>
     </category>
 
     <category name="Function definition" colour="#5ba580">
@@ -147,7 +151,11 @@
       <block type="modifier_definition"></block>
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
+      <sep gap="40"></sep>
+      <label text="TYPICAL MODIFIERS" web-class="myLabelStyle"></label>
+      <block type="modifier_onlyBy"></block>
       <block type="modifier_onlyOwner"></block>
+      <block type="modifier_onlyAfter"></block>
       <sep gap="40"></sep>
       <label text="MODIFIER USAGE" web-class="myLabelStyle"></label>
       <block type="modifier_usage"></block>
@@ -167,6 +175,14 @@
       <sep gap="40"></sep>
       <label text="USING... FOR..." web-class="myLabelStyle"></label>
       <block type="usingFor"></block>
+    </category>
+
+    <category name="Account balance and Ether transfer" colour="#5ba580">
+      <label text="ACCOUNT BALANCE" web-class="myLabelStyle"></label>
+      <block type="address_balance_get"></block>
+      <sep gap="40"></sep>
+      <label text="ETHER TRANSFER" web-class="myLabelStyle"></label>
+      <block type="address_transfer"></block>
     </category>
 
     <category name="Conditional control statements" colour="#5ba580">

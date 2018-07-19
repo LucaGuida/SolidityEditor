@@ -1,1 +1,1 @@
-{"My_other_lib": ["convert"], "ConvertLib": ["convert"], "MetaCoin": ["getBalanceInEth", "sendCoin", "getBalance", "MetaCoin"]}
+{"MetaCoin.json": ["getBalanceInEth", "sendCoin", "getBalance", "MetaCoin.json"], "ConvertLib.json": ["convert"], "My_other_lib.json": ["convert"]}

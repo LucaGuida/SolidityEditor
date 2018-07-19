@@ -1,18 +1,13 @@
 import os
 import json
 import shutil
-import os.path
 from distutils.dir_util import copy_tree
 
 
-cwd = os.path.dirname(os.path.realpath(__file__))
-parentCwd = os.path.abspath(os.path.join(cwd, os.pardir))
-parentParentCwd = os.path.abspath(os.path.join(parentCwd, os.pardir)) # GitHub folder
-doxitySimpletonPath = parentParentCwd + '/SolidityExplorer/doxity-simpleton/'
 
 def extractMethods (contractName):
 	methods = []
-	file=open(doxitySimpletonPath + 'doxity/pages/docs/' + contractName + '.json').read()
+	file=open('librariesDescriptors/' + contractName).read()
 	data = json.loads(file)
 
 	for method in data['abi']:
@@ -33,10 +28,10 @@ def pretty(d, indent=0):
 
 librariesMethodsMap = {}
 
-for element in os.listdir(doxitySimpletonPath + 'docs/docs'):
-    #if element.endswith(".txt"):
+for element in os.listdir('librariesDescriptors'):
     if element!=".DS_Store":
-    	librariesMethodsMap[element] = extractMethods(element)
+    	if element!="_template.jsx":
+    		librariesMethodsMap[element] = extractMethods(element)
 
 
 with open('librariesList.json', 'w') as outfile:

@@ -79,17 +79,19 @@ Blockly.Solidity['contract_state'] = function(block) {
   var name = block.getFieldValue('NAME');
   var value = Blockly.Solidity.valueToCode(block, 'VALUE', Blockly.Solidity.ORDER_ASSIGNMENT);
   var type = block.getFieldValue('TYPE');
+  var visibility = block.getFieldValue('VISIBILITY');
 
   if (value === '') {
     value = defaultValue[type];
   }
 
-  return types[type] + ' ' + name + ' = ' + value + ';\n';
+  return types[type] + ' ' + visibility + ' ' + name + ' = ' + value + ';\n';
 };
 
 Blockly.Solidity['owner_var_declaration'] = function(block) {
   var name = block.getFieldValue('NAME');
-  var code = 'address ' + name + ';\n';
+  var visibility = block.getFieldValue('VISIBILITY');
+  var code = 'address ' + visibility + ' ' + name + ';\n';
   return code;
 };
 
@@ -260,9 +262,12 @@ Blockly.Solidity['enum_member'] = function(block) {
 
 Blockly.Solidity['enum_variable_create'] = function(block) {
   var enumType = block.getFieldValue('ENUM_TYPE');
+  var visibility = block.getFieldValue('VISIBILITY');
   var varName = block.getFieldValue('ENUM_VAR_NAME');
+  if (enumType == 'select enum type...') 
+    return '';
 
-  return enumType + ' ' + varName + ';\n';
+  return enumType + ' ' + visibility + ' ' + varName + ';\n';
 };
 
 Blockly.Solidity['enum_variable_set'] = function(block) {
@@ -308,9 +313,12 @@ Blockly.Solidity['struct_member'] = function(block) {
 
 Blockly.Solidity['struct_variable_create'] = function(block) {
   var structType = block.getFieldValue('STRUCT_TYPE');
+  var visibility = block.getFieldValue('VISIBILITY');
   var varName = block.getFieldValue('STRUCT_VAR_NAME');
+  if (structType == 'select struct type...') 
+    return '';
 
-  return structType + ' ' + varName + ';\n';
+  return structType + ' ' + visibility + ' ' + varName + ';\n';
 };
 
 
@@ -349,12 +357,11 @@ Blockly.Solidity['struct_member_get'] = function(block) {
 Blockly.Solidity['mapping_definition'] = function(block) {
   var type1 = types[block.getFieldValue('TYPE1')];
   var type2 = types[block.getFieldValue('TYPE2')];
-  var publicCheckbox = '';
-  if (block.getFieldValue('PUBLIC_CHECKBOX') == 'TRUE') 
-    publicCheckbox = 'public ';
+  var visibility = block.getFieldValue('VISIBILITY');
+
   var varName = block.getFieldValue('NAME');
 
-  return 'mapping(' + type1 + ' => ' + type2 + ') ' + publicCheckbox + varName + ';\n';
+  return 'mapping(' + type1 + ' => ' + type2 + ') ' + visibility + ' ' + varName + ';\n';
 };
 
 

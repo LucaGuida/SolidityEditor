@@ -135,6 +135,20 @@ var typesListWithStar = [
             [ "*", "TYPE_STAR" ]            
           ];
 
+// List of visibility classes for variables
+var varVisibilityList = [
+            [ "internal", "internal" ],
+            [ "private",  "private" ],
+            [ "public", "public" ]
+          ];
+
+// List of visibility classes for functions
+var funcVisibilityList = [
+            [ "public", "public" ],
+            [ "external", "external" ],
+            [ "private",  "private" ],
+            [ "internal", "internal" ]
+          ];
 
 var functionTypesList = [
             [ "none", "" ],
@@ -423,16 +437,20 @@ Blockly.Blocks['contract_state'] = {
   init: function() {
     var nameField = new Blockly.FieldTextInput('variableName');
     this.appendDummyInput()
-        .appendField('State variable type')
+        .appendField('declare state variable of type')
         .appendField(new Blockly.FieldDropdown(typesList),
           'TYPE'
+        )
+        .appendField(' visibility ')
+        .appendField(new Blockly.FieldDropdown(varVisibilityList),
+          'VISIBILITY'
         )
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'contract_state');
     this.setNextStatement(true, 'contract_state');
     this.setColour("#1976D2");
-    this.contextMenu = false;
     this.setTooltip('State variable declaration');
+    this.setHelpUrl('http://solidity.readthedocs.io/en/develop/contracts.html#visibility-and-getters');
 
     this._stateNameInitialized = false;
 
@@ -450,6 +468,8 @@ Blockly.Blocks['contract_state'] = {
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
 };
+
+
 
 
 /* ********************** CONTRACT_STATE_GET BLOCK ********************** */
@@ -573,13 +593,17 @@ Blockly.Blocks['owner_var_declaration'] = {
   init: function() {
     var nameField = new Blockly.FieldTextInput('owner');
     this.appendDummyInput()
-        .appendField('address ')
+        .appendField('address')
+        .appendField('visibility ')
+        .appendField(new Blockly.FieldDropdown(varVisibilityList),
+          'VISIBILITY'
+        )
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'contract_state');
     this.setNextStatement(true, 'contract_state');
     this.setColour("#1976D2");
-    this.contextMenu = false;
     this.setTooltip('"Owner" state variable declaration');
+    this.setHelpUrl('http://solidity.readthedocs.io/en/develop/contracts.html#visibility-and-getters');
 
     this._stateNameInitialized = false;
 
@@ -780,7 +804,6 @@ Blockly.Blocks['contract_method_parameter'] = {
     this.setPreviousStatement(true, 'contract_method_parameter');
     this.setNextStatement(true, 'contract_method_parameter');
     this.setColour("#1976D2");
-    this.contextMenu = false;
     this.setTooltip('Parameter declaration');
 
     this.getVariableNameField = function() { return nameField };
@@ -1740,10 +1763,14 @@ function dynamicEnumsList () {
 Blockly.Blocks['enum_variable_create'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField('Enum variable of type ')
+      .appendField('declare enum variable of type ')
       .appendField(
         new Blockly.FieldDropdown(dynamicEnumsList),
         "ENUM_TYPE"
+      )
+      .appendField('visibility ')
+      .appendField(new Blockly.FieldDropdown(varVisibilityList),
+        'VISIBILITY'
       )
       .appendField(new Blockly.FieldTextInput('enumVariableName'), 'ENUM_VAR_NAME');
     this.setColour("#1976D2");
@@ -1980,10 +2007,14 @@ function dynamicStructTypesList () {
 Blockly.Blocks['struct_variable_create'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField('create struct variable of type ')
+      .appendField('declare struct variable of type ')
       .appendField(
         new Blockly.FieldDropdown(dynamicStructTypesList),
         "STRUCT_TYPE"
+      )
+      .appendField('visibility ')
+      .appendField(new Blockly.FieldDropdown(varVisibilityList),
+        'VISIBILITY'
       )
       .appendField(new Blockly.FieldTextInput('structVariableName'), 'STRUCT_VAR_NAME');
     this.setColour("#1976D2");
@@ -2182,7 +2213,7 @@ Blockly.Blocks['struct_member_get'] = {
 Blockly.Blocks['mapping_definition'] = {
   init: function() {
     this.jsonInit({
-      "message0": "declare mapping variable %1 => %2 public %3 %4",
+      "message0": "declare mapping variable %1 => %2 visibility %3 %4",
       "args0": [
         {
           "type": "field_dropdown",
@@ -2195,9 +2226,9 @@ Blockly.Blocks['mapping_definition'] = {
           "options": typesList
         },
         {
-          "type": "field_checkbox",
-          "name": "PUBLIC_CHECKBOX",
-          "checked": false
+          "type": "field_dropdown",
+          "name": "VISIBILITY",
+          "options": varVisibilityList
         },
         {
           "type": "field_input",

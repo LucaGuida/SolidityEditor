@@ -49,7 +49,7 @@ Blockly.Solidity['contract_ctor'] = function(block) {
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
-  var code = docs + 'function ' + parent.getFieldValue('NAME') + '(' + params + ') {\n' + branch + '}\n\n';
+  var code = docs + parent.getFieldValue('NAME') + '(' + params + ') public {\n' + branch + '}\n\n';
 
   return code;
 };
@@ -78,6 +78,16 @@ Blockly.Solidity['contract_method_parameter_get'] = function(block) {
   }
 
   return [Blockly.Solidity.getVariableName(variable), Blockly.Solidity.ORDER_ATOMIC];
+};
+
+
+Blockly.Solidity['changeOwner_method'] = function(block) {
+  var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _newOwner)' + functionType + modifiers + '{\n' + '\towner = _newOwner;\n' + '}\n\n';
+
+  return code;
 };
 
 

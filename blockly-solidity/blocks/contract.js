@@ -820,6 +820,67 @@ Blockly.Blocks['contract_method_parameter_get'] = {
 };
 
 
+/* ********************** CHANGEOWNER_METHOD BLOCK ********************** */
+
+Blockly.Blocks['changeOwner_method'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "function %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "NAME",
+          "text": "changeOwner"
+        },
+      ],
+      "message1": "documentation %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
+        },
+      ],
+      "message2": "function type %1",
+      "args2": [
+        {
+          "type": "field_dropdown",
+          "name": "FUNCTION_TYPE",
+          "options": functionTypesList
+        }      
+      ],
+      "message3": "modifiers %1",
+      "args3": [
+        {
+          "type": "input_statement",
+          "name": "MODIF",
+          "check": ["modifier_usage"]
+        }
+      ],
+      "previousStatement": "contract_method",
+      "nextStatement": "contract_method",
+      "colour": "#1976D2",
+      "tooltip": "changeOwner function definition (it allows to change the owner of the contract)",
+      "helpUrl": ""
+    });
+    
+    this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function.\nThe usage of function type "public" and modifier "onlyOwner" is recommended.');
+    this.getVariableNameField = function() { return this.getField('NAME') };
+    this.getVariableType = function() { return 'void' }; //contract_method
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
 /* ********************** DESTROY_METHOD BLOCK ********************** */
 
 Blockly.Blocks['destroy_method'] = {

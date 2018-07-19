@@ -81,6 +81,26 @@ Blockly.Solidity['contract_method_parameter_get'] = function(block) {
 };
 
 
+Blockly.Solidity['destroy_method'] = function(block) {
+  var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(' + ')' + functionType + modifiers + '{\n' + '\tselfdestruct(owner);\n' + '}\n\n';
+
+  return code;
+};
+
+
+Blockly.Solidity['destroyAndSend_method'] = function(block) {
+  var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  var modifiers = Blockly.Solidity.statementToCode(block, 'MODIF');
+  var code = docs + 'function ' + block.getFieldValue('NAME') + '(address _recipient)' + functionType + modifiers + '{\n' + '\tselfdestruct(_recipient);\n' + '}\n\n';
+
+  return code;
+};
+
+
 Blockly.Solidity['contract_intrinsic_sha3'] = function(block) {
   var argument0 = Blockly.Solidity.valueToCode(block, 'VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || '0';

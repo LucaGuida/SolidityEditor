@@ -12,9 +12,9 @@ def convertSolidityMetadata2ContractDescriptor (contractMetadataFile):
 
   contract = {}
   contract['name'] = list(data['settings']['compilationTarget'].values())[0]
-  contract['version'] = '1.0'
+  contract['version'] = '1.0' # DEFAULT VALUE
   contract['language'] = data['language']
-  contract['contract_type'] = 'generic_contract'
+  contract['contract_type'] = 'generic_contract'  # DEFAULT VALUE
   contract['abi'] = data['output']['abi']
   contract['devdoc'] = data['output']['devdoc']
   contract['userdoc'] = data['output']['userdoc']
@@ -22,16 +22,16 @@ def convertSolidityMetadata2ContractDescriptor (contractMetadataFile):
   contract['libraries'] = data['settings']['libraries']
 
   deployment_information = {}
-  deployment_information['address'] = '0x314159265dd8dbb310642f98f50c066173c1259b'
-  deployment_information['networkID'] = 1
-  deployment_information['chainID'] = 1
+  deployment_information['address'] = '0x314159265dd8dbb310642f98f50c066173c1259b'  # DEFAULT VALUE
+  deployment_information['networkID'] = 1  # DEFAULT VALUE
+  deployment_information['chainID'] = 1  # DEFAULT VALUE
 
   compiler = {}
   compiler['version'] = data['compiler']['version']
   compiler['evmVersion'] = data['settings']['evmVersion']
 
   descriptor = {}
-  descriptor['version'] = '1.0'
+  descriptor['version'] = '1.0'  # DEFAULT VALUE
 
 
   contractDescriptor = {}

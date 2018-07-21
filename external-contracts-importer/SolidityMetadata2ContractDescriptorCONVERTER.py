@@ -12,6 +12,11 @@ def convertSolidityMetadata2ContractDescriptor (contractMetadataFile):
 
   contract = {}
   contract['name'] = list(data['settings']['compilationTarget'].values())[0]
+
+  contract['author'] = 'Unknown' # DEFAULT VALUE
+  if 'author' in data['output']['devdoc']:
+    contract['author'] = data['output']['devdoc']['author']
+
   contract['version'] = '1.0' # DEFAULT VALUE
   contract['language'] = data['language']
   contract['contract_type'] = 'generic_contract'  # DEFAULT VALUE

@@ -417,18 +417,13 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message0": 'smart contract %1 %2',
+    "message0": 'smart contract %1',
     "args0": [
       {
         "type": "field_input",
         "name": "NAME",
         "check": "String",
         "text": "MyContract",
-      }, 
-      {
-        "type": "input_statement",
-        "name": "INHERITANCE",
-        "check": "is_using_Oraclize"
       }
     ],
     "message2": "state variables, enums & structs %1",
@@ -1106,20 +1101,6 @@ Blockly.Blocks['destroyAndSend_method'] = {
 
 /* ********************** CONTRACT_METHOD_CALL BLOCK ********************** */
 
-/* function dynamicFunctionsList () {
-  var functionsList = [[ "select function...", "select function..." ]];
-
-  var functionVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method');
-  if (typeof functionVariablesArray[0] != 'undefined') {
-    var functionsNamePairsArray = [];
-    for (var i = 0; i < functionVariablesArray.length; i++)
-      functionsNamePairsArray.push([Blockly.Solidity.getVariableName(functionVariablesArray[i]),Blockly.Solidity.getVariableName(functionVariablesArray[i])]);
-    functionsList = functionsNamePairsArray;
-  }
-
-  return functionsList;
-} */
-
 
 Blockly.Blocks['contract_method_call'] = {
   init: function() {
@@ -1127,7 +1108,6 @@ Blockly.Blocks['contract_method_call'] = {
       .appendField('call function')
       .appendField(
         new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
-        /*new Blockly.FieldDropdown(dynamicFunctionsList),*/
         "METHOD_NAME"
       );
     this.appendStatementInput('ARGS')
@@ -1172,27 +1152,12 @@ Blockly.Blocks['contract_method_call'] = {
 
 /* ********************** CONTRACT_METHOD_CALL_WITH_RETURN_VALUE BLOCK ********************** */
 
-/* function dynamicFunctionsWithReturnList () {
-  var functionsWithReturnList = [[ "select function with return value...", "select function with return value..." ]];
-
-  var functionWithReturnVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('contract_method_with_return');
-  if (typeof functionWithReturnVariablesArray[0] != 'undefined') {
-    var functionsWithReturnNamePairsArray = [];
-    for (var i = 0; i < functionWithReturnVariablesArray.length; i++)
-      functionsWithReturnNamePairsArray.push([Blockly.Solidity.getVariableName(functionWithReturnVariablesArray[i]),Blockly.Solidity.getVariableName(functionWithReturnVariablesArray[i])]);
-    functionsWithReturnList = functionsWithReturnNamePairsArray;
-  }
-
-  return functionsWithReturnList;
-} */
-
 
 Blockly.Blocks['contract_method_call_with_return_value'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('call function')
       .appendField(
-        /*new Blockly.FieldDropdown(dynamicFunctionsWithReturnList),*/
         new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
         "METHOD_NAME"
       )
@@ -1235,7 +1200,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE & USING...FOR... BLOCKS ********************** */
+/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE & USING...FOR... BLOCKS, ORACLIZE_QUERY, ORACLIZE_RESULT ********************** */
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
@@ -1341,23 +1306,44 @@ Blockly.Blocks['usingFor'] = {
 };
 
 
-Blockly.Blocks['is_using_Oraclize'] = {
+Blockly.Blocks['oraclize_query'] = {
   init: function() {
     this.jsonInit({
-      "message0": "inheriting from Oraclize",
+      "message0": "Oraclize query %1",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "URL",
+          "text": "URL to query"
+        },
+      ],
+      "message1": "operations to perform after receiving a response from Oraclize %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "CALLBACK"
+        },
+      ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": "#FF5252",
-      "tooltip": "Inherit the 'usingOraclize' contract to use Oraclize oracle services",
-      "helpUrl": "https://docs.oraclize.it/#ethereum-quick-start"
+      "tooltip": "Query via Oraclize a given URL, which may inclued the use of JSON or XML parsing helpers. The result of the query is stored in the 'result' variable",
+      "helpUrl": "http://docs.oraclize.it/#ethereum"
     });
-
-    this.getVariableNameSelectField = function() { return 'is_using_Oraclize'; };
-    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_INHERITANCE };
-
   },
 };
 
+
+Blockly.Blocks['oraclize_result'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('Oraclize query result');
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('Result of the Oraclize query');
+    this.setHelpUrl("http://docs.oraclize.it/#ethereum");
+  }
+};
 
 
 /* ********************** EVENT_DEFINITION BLOCK ********************** */

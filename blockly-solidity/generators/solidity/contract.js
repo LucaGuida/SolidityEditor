@@ -51,14 +51,15 @@ Blockly.Solidity['contract'] = function(block) {
   var methods = Blockly.Solidity.statementToCode(block, 'METHODS');
   var methodsWithReturn = Blockly.Solidity.statementToCode(block, 'METHODS_WITH_RETURN');
 
-  var inheritedContracts = Blockly.Solidity.statementToCode(block, 'INHERITANCE');
-  if (inheritedContracts != '') 
-    inheritedContracts = ' is ' + inheritedContracts.trim() + ' ';
+  var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'oraclize_query'});
+  var inheritedContracts = '';
+  if (typeof OraclizeBlock[0] != 'undefined' && OraclizeBlock[0].getFieldValue('URL')!='URL to query')
+    {
+      events =  events + '  event LogNewOraclizeQuery(string description);\n\n';
+      var inheritedContracts = ' is usingOraclize ';
+      imports = 'import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";\n' + imports;
+    }
 
-  if (inheritedContracts.includes('usingOraclize'))
-  {
-    imports = 'import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";\n' + imports;
-  }
 
 
   // trim newline before ultimate closing curly brace
@@ -404,8 +405,17 @@ Blockly.Solidity['usingFor'] = function(block) {
 };
 
 
-Blockly.Solidity['is_using_Oraclize'] = function(block) {
-  return 'usingOraclize';
+Blockly.Solidity['oraclize_query'] = function(block) {
+  var URL = block.getFieldValue('URL');
+  var callback = Blockly.Solidity.statementToCode(block, 'CALLBACK');
+  if (URL == 'URL to query')
+    return '';
+  return 'function __callback(bytes32 myid, string result) {\n  if (msg.sender != oraclize_cbAddress()) revert();\n' + callback + '}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  oraclize_query("URL", "' + URL + '");\n}' + '\n\n\n';
+};
+
+
+Blockly.Solidity['oraclize_result'] = function(block) {
+  return ['result', Blockly.Solidity.ORDER_ATOMIC];
 };
 
 

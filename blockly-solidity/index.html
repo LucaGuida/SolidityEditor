@@ -72,7 +72,7 @@
   <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
 
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
-    <category name="State variables: bool, int/uint, address, bytes, string" colour="#5ba580">
+    <category name="State variables: basic types" colour="#5ba580">
       <label text="BOOL, INT, UINT, ADDRESS, BYTES AND STRING VARIABLES" web-class="myLabelStyle"></label>
       <block type="contract_state"></block>
       <block type="contract_state_set"></block>
@@ -154,7 +154,8 @@
       <block type="usingFor"></block>
       <sep gap="40"></sep>
       <label text="ORACLES INTEGRATION: Oraclize" web-class="myLabelStyle"></label>
-      <block type="is_using_Oraclize"></block>
+      <block type="oraclize_query"></block>
+      <block type="oraclize_result"></block>
     </category>
 
     <category name="Events" colour="#5ba580">

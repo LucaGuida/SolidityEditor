@@ -159,7 +159,7 @@ var functionTypesList = [
 
 
 
-// Read JSON contracts and libraries list 
+// Read JSON external contracts and libraries list 
 var jsonObjFull;
 var requestFull = new XMLHttpRequest();
 requestFull.open('GET', '/SoliditySOA/external-contracts-importer/LibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
@@ -216,8 +216,8 @@ function dynamicLibsList() {
 }
 
 
-
-// Read JSON contracts list 
+/*
+// Read JSON external contracts list 
 var jsonObjContracts;
 var requestContracts = new XMLHttpRequest();
 requestContracts.open('GET', '/SoliditySOA/external-contracts-importer/ContractsList.json', false);  // `false` makes the requestFull synchronous
@@ -236,7 +236,7 @@ function dynamicContractsList() {
 
   return options;
 }
-
+*/
 
 
 /* ********************** LIBRARY_FUNCTION_MUTATOR ********************** */
@@ -413,16 +413,22 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "input_statement",
         "name": "DOCS",
-        "check": "NatSpec_contract"
+        "check": "NatSpec_contract",
+        "align": "RIGHT"
       }
     ],
-    "message0": 'smart contract %1',
+    "message0": 'smart contract %1 %2',
     "args0": [
       {
         "type": "field_input",
         "name": "NAME",
         "check": "String",
         "text": "MyContract",
+      }, 
+      {
+        "type": "input_statement",
+        "name": "INHERITANCE",
+        "check": "is_using_Oraclize"
       }
     ],
     "message2": "state variables, enums & structs %1",
@@ -1264,9 +1270,6 @@ Blockly.Blocks['library_method_call'] = {
         this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });
-
-
-
   },
 };
 
@@ -1336,6 +1339,25 @@ Blockly.Blocks['usingFor'] = {
 
   },
 };
+
+
+Blockly.Blocks['is_using_Oraclize'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "inheriting from Oraclize",
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#FF5252",
+      "tooltip": "Inherit the 'usingOraclize' contract to use Oraclize oracle services",
+      "helpUrl": "https://docs.oraclize.it/#ethereum-quick-start"
+    });
+
+    this.getVariableNameSelectField = function() { return 'is_using_Oraclize'; };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_INHERITANCE };
+
+  },
+};
+
 
 
 /* ********************** EVENT_DEFINITION BLOCK ********************** */

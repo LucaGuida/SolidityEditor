@@ -41,7 +41,7 @@ Blockly.Solidity['contract'] = function(block) {
       imports = imports + 'import "../' + importsArray[i] + '.sol";\n';
     imports += '\n';
   }
-  
+
   var contract_docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var states = Blockly.Solidity.statementToCode(block, 'STATES');
   if (states.length > 0) {states += '\n'};
@@ -50,6 +50,15 @@ Blockly.Solidity['contract'] = function(block) {
   var ctor = Blockly.Solidity.statementToCode(block, 'CTOR');
   var methods = Blockly.Solidity.statementToCode(block, 'METHODS');
   var methodsWithReturn = Blockly.Solidity.statementToCode(block, 'METHODS_WITH_RETURN');
+
+  var inheritedContracts = Blockly.Solidity.statementToCode(block, 'INHERITANCE');
+  if (inheritedContracts != '') 
+    inheritedContracts = ' is ' + inheritedContracts.trim() + ' ';
+
+  if (inheritedContracts.includes('usingOraclize'))
+  {
+    imports = 'import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";\n' + imports;
+  }
 
 
   // trim newline before ultimate closing curly brace
@@ -62,7 +71,7 @@ Blockly.Solidity['contract'] = function(block) {
   var code = 'pragma solidity ^0.4.24;\n\n'
     + imports
     + contract_docs.replace(new RegExp('  ///', 'g'), '///')
-    + 'contract ' + block.getFieldValue('NAME') + ' {\n\n'
+    + 'contract ' + block.getFieldValue('NAME') + inheritedContracts + ' {\n\n'
     + states
     + modifiers
     + events
@@ -392,6 +401,11 @@ Blockly.Solidity['usingFor'] = function(block) {
     return '';
 
   return 'using ' + libraryName + ' for ' + types[attachedType] + ';\n\n';
+};
+
+
+Blockly.Solidity['is_using_Oraclize'] = function(block) {
+  return 'usingOraclize';
 };
 
 

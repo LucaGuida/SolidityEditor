@@ -72,7 +72,7 @@
   <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
 
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
-    <category name="State variables of types bool, int, uint, address, bytes & string" colour="#5ba580">
+    <category name="State variables: bool, int/uint, address, bytes, string" colour="#5ba580">
       <label text="BOOL, INT, UINT, ADDRESS, BYTES AND STRING VARIABLES" web-class="myLabelStyle"></label>
       <block type="contract_state"></block>
       <block type="contract_state_set"></block>
@@ -83,7 +83,7 @@
       <block type="msg_get"></block>
     </category>
 
-    <category name="State variables of type enum" colour="#5ba580">
+    <category name="State variables: enum" colour="#5ba580">
       <label text="ENUM VARIABLES" web-class="myLabelStyle"></label>
       <block type="enum_definition"></block>
       <block type="enum_member"></block>
@@ -93,7 +93,7 @@
       <block type="enum_get"></block>
     </category>
 
-    <category name="State variables of type struct and mapping" colour="#5ba580">
+    <category name="State variables: struct, mapping" colour="#5ba580">
       <label text="STRUCT VARIABLES" web-class="myLabelStyle"></label>
       <block type="struct_definition"></block>
       <block type="struct_member"></block>
@@ -139,18 +139,18 @@
       <block type="argument_container"></block>
     </category>
 
-    <category name="External function call" colour="#5ba580">
+    <category name="External contracts and libraries" colour="#5ba580">
       <sep gap="30"></sep>
-      <label text="Explore the libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
-      <button text="Access the Library contracts Explorer" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
+      <label text="Explore the external contracts and libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
+      <button text="Access the - Solidity smart contract Registry- " callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
       <sep gap="100"></sep>
       <sep gap="100"></sep>
-      <label text="LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
+      <label text="EXTERNAL CONTRACT OR LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
       <block type="library_method_call"></block>
       <block type="library_method_call_with_return_value"></block>
       <block type="argument_container"></block>
       <sep gap="40"></sep>
-      <label text="USING... FOR..." web-class="myLabelStyle"></label>
+      <label text="USING LIBRARY... FOR..." web-class="myLabelStyle"></label>
       <block type="usingFor"></block>
     </category>
 

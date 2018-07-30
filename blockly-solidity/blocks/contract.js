@@ -158,29 +158,84 @@ var functionTypesList = [
           ];
 
 
-// List of default libraries TEMP
-var librariesList = [
-            [ "demo-lib1", "lib1" ],
-            [ "demo-lib2",  "lib2" ]
-          ];
+
+// Read JSON contracts and libraries list 
+var jsonObjFull;
+var requestFull = new XMLHttpRequest();
+requestFull.open('GET', '/SoliditySOA/external-contracts-importer/LibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
+requestFull.send(null);
+if (requestFull.status === 200) {
+  jsonObjFull = JSON.parse(requestFull.responseText);
+}
+
+
+function dynamicLibsAndContractsList() {
+  var options = [[ "select external contract or library...", "select external contract or library..." ]];
+  if (typeof jsonObjFull != 'undefined') {
+    for(var lib in jsonObjFull) 
+      options.push([lib, lib]);
+  }
+
+  return options;
+}
+
+
+function dynamicLibAndContractFunctsList (libName) {
+  var libFunctsList = [[ "select function...", "select function..." ]];
+  if (typeof libName != 'undefined' && libName != null) {
+    if (typeof jsonObjFull != 'undefined' && typeof jsonObjFull[libName] != 'undefined' && typeof jsonObjFull[libName][0] != 'undefined') {
+      libFunctsList = [];
+      for (var i = 0; i < jsonObjFull[libName].length; i++)
+        libFunctsList.push([jsonObjFull[libName][i], jsonObjFull[libName][i]]);
+    }
+  }
+
+  return libFunctsList;
+}
+
 
 
 // Read JSON libraries list 
-var jsonObj;
-var request = new XMLHttpRequest();
-request.open('GET', '/SoliditySOA/external-contracts-importer/BlocklyLibrariesList.json', false);  // `false` makes the request synchronous
-request.send(null);
-if (request.status === 200) {
-  jsonObj = JSON.parse(request.responseText);
-  var librariesArray = [];
-  for(var lib in jsonObj) librariesArray.push(lib);
-
-  librariesList = [];
-  librariesArray.forEach(function(entry) {
-    librariesList.push([entry,entry]);
-  });
+var jsonObjLibs;
+var requestLibs = new XMLHttpRequest();
+requestLibs.open('GET', '/SoliditySOA/external-contracts-importer/LibsList.json', false);  // `false` makes the requestFull synchronous
+requestLibs.send(null);
+if (requestLibs.status === 200) {
+  jsonObjLibs = JSON.parse(requestLibs.responseText);
 }
 
+
+function dynamicLibsList() {
+  var options = [[ "select library...", "select library..." ]];
+  if (typeof jsonObjLibs != 'undefined') {
+    for(var lib in jsonObjLibs) 
+      options.push([lib, lib]);
+  }
+
+  return options;
+}
+
+
+
+// Read JSON contracts list 
+var jsonObjContracts;
+var requestContracts = new XMLHttpRequest();
+requestContracts.open('GET', '/SoliditySOA/external-contracts-importer/ContractsList.json', false);  // `false` makes the requestFull synchronous
+requestContracts.send(null);
+if (requestContracts.status === 200) {
+  jsonObjContracts = JSON.parse(requestContracts.responseText);
+}
+
+
+function dynamicContractsList() {
+  var options = [[ "select external contract...", "select external contract..." ]];
+  if (typeof jsonObjContracts != 'undefined') {
+    for(var lib in jsonObjContracts) 
+      options.push([lib, lib]);
+  }
+
+  return options;
+}
 
 
 
@@ -201,7 +256,7 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
    */
   mutationToDom: function() {
     var container = document.createElement('mutation');
-    var selectedLibrary = (this.getFieldValue('LIB_NAME') != 'select library...');
+    var selectedLibrary = (this.getFieldValue('LIB_NAME') != 'select external contract or library...');
     container.setAttribute('selected_library', selectedLibrary);
     return container;
   },
@@ -227,7 +282,7 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
         this.appendDummyInput('LIBRARY_FUNCTION_SELECTOR')  
           .appendField(' function')
           .appendField(
-          new Blockly.FieldDropdown(dynamicLibFunctsList(libName)),
+          new Blockly.FieldDropdown(dynamicLibAndContractFunctsList(libName)),
           "LIB_FUNCT_NAME"
           );
         this.appendStatementInput('ARGS')
@@ -249,7 +304,7 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
 Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_EXTENSION = function() {
   if (this.getField('LIB_NAME') != null) {
     this.getField('LIB_NAME').setValidator(function(option) {
-    var selectedLibrary = (option != 'select library...');
+    var selectedLibrary = (option != 'select external contract or library...');
     //this.sourceBlock_.updateShape_(selectedLibrary, 'TEMP_Library_Name');
   });
 
@@ -1176,63 +1231,22 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 
 /* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE & USING...FOR... BLOCKS ********************** */
 
-function dynamicLibsList() {
-  var options = [[ "select library...", "select library..." ]];
-
-  if (typeof jsonObj != 'undefined') {
-    //options = [];
-    for(var lib in jsonObj) 
-      options.push([lib, lib]);
-  }
-  return options;
-}
-
-/*
-function dynamicLibFunctsList() {
-  var options = [['demo-func1', 'Func1'],['demo-func2', 'Func2'],['demo-func3', 'Func3']];
-
-  if (typeof jsonObj != 'undefined') {
-    options = [];
-    for(var lib in jsonObj) 
-      for (var i = 0; i < jsonObj[lib].length; i++)
-        options.push([lib + ' > ' + jsonObj[lib][i], lib + '.' + jsonObj[lib][i]]);
-  }
-  return options;
-}
-*/
-
-
-function dynamicLibFunctsList (libName) {
-  var libFunctsList = [[ "select library function...", "select library function..." ]];
-  //console.log('libName: ' + libName);
-  if (typeof libName != 'undefined' && libName != null) {
-    if (typeof jsonObj != 'undefined' && typeof jsonObj[libName] != 'undefined' && typeof jsonObj[libName][0] != 'undefined') {
-      libFunctsList = [];
-      for (var i = 0; i < jsonObj[libName].length; i++)
-        libFunctsList.push([jsonObj[libName][i], jsonObj[libName][i]]);
-    }
-  }
-
-  return libFunctsList;
-}
-
-
 Blockly.Blocks['library_method_call'] = {
   init: function() {
     this.jsonInit({
-      "message0": "call library function %1",
+      "message0": "call external contract or library function %1",
       "args0": [
         {
           "type": "field_dropdown",
           "name": "LIB_NAME",
-          "options": dynamicLibsList
+          "options": dynamicLibsAndContractsList
         },
       ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": "#FF5252",
       "mutator": "library_function_mutator",
-      "tooltip": "Call of a library function which does not return a value",
+      "tooltip": "Call of an external contract or library function which does not return a value",
       "helpUrl": ""
     });
 
@@ -1241,12 +1255,12 @@ Blockly.Blocks['library_method_call'] = {
 
 
     this.setOnChange(function(event) {
-      if (this.getFieldValue('LIB_NAME')!='select library...') {
-        this.setWarningText('If you want to change library, first select "select library..." from the list, then select the new library');
+      if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
+        this.setWarningText('If you want to change external contract or library, first select "select external contract or library..." from the list, then select the new external contract or library');
         this.updateShape_(true, this.getFieldValue('LIB_NAME'));
 
       } else {
-        this.setWarningText('Select a library from the list');
+        this.setWarningText('Select an external contract or a library from the list');
         this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });
@@ -1260,17 +1274,17 @@ Blockly.Blocks['library_method_call'] = {
 Blockly.Blocks['library_method_call_with_return_value'] = {
   init: function() {
     this.jsonInit({
-      "message0": "call library function %1",
+      "message0": "call external contract or library function %1",
       "args0": [
         {
           "type": "field_dropdown",
           "name": "LIB_NAME",
-          "options": dynamicLibsList
+          "options": dynamicLibsAndContractsList
         },
       ],
       "colour": "#757575",
       "mutator": "library_function_mutator",
-      "tooltip": "Call of a library function which returns a value",
+      "tooltip": "Call of an external contract or a library function which returns a value",
       "helpUrl": "",
       "output": null
     });
@@ -1280,12 +1294,12 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
 
 
     this.setOnChange(function(event) {
-      if (this.getFieldValue('LIB_NAME')!='select library...') {
-        this.setWarningText('If you want to change library, first select "select library..." from the list, then select the new library');
+      if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
+        this.setWarningText('If you want to change external contract or library, first select "select external contract or library..." from the list, then select the new external contract or library');
         this.updateShape_(true, this.getFieldValue('LIB_NAME'));
 
       } else {
-        this.setWarningText('Select a library from the list');
+        this.setWarningText('Select an external contract or a library from the list');
         this.updateShape_(false, this.getFieldValue('LIB_NAME'));
       }
     });

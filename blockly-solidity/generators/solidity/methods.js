@@ -192,7 +192,7 @@ Blockly.Solidity['library_method_call'] = function(block) {
     args = args.substring(0, args.length - 1);
   }
 
-  if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
+  if (typeof functionName == 'undefined' || libraryName == "select external contract or library..." || functionName == null)
     return '';
 
   return libraryName + '.' + functionName + '(' + args + ');\n\n';
@@ -212,7 +212,7 @@ Blockly.Solidity['library_method_call_with_return_value'] = function(block) {
     args = args.substring(0, args.length - 1);
   }
 
-  if (typeof functionName == 'undefined' || libraryName == "select library..." || functionName == null)
+  if (typeof functionName == 'undefined' || libraryName == "select external contract or library..." || functionName == null)
     return '';
 
   return [libraryName + '.' + functionName + '(' + args + ')', Blockly.Solidity.ORDER_ATOMIC];

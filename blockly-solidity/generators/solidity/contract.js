@@ -33,7 +33,7 @@ Blockly.Solidity['contract'] = function(block) {
   var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' || b.type == 'usingFor'});
   if (typeof libraryCallBlocksArray[0] != 'undefined') {
     for (var i = 0; i < libraryCallBlocksArray.length; i++)
-      if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select library...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
+      if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select external contract or library...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
         importsArray.push(libraryCallBlocksArray[i].getFieldValue('LIB_NAME'));
   }
   if (importsArray!=null) {

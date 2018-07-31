@@ -158,139 +158,123 @@ var functionTypesList = [
           ];
 
 
-/*
-// External contracts and libraries list retrieval from local JSON file, instead of Registry API >> no-API-mode
+// If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> no-API-mode
+// If true: external contracts and libraries list retrieval from Registry REST API
+var API_mode = true;
 
-// Read JSON external contracts and libraries list 
-var jsonObjFull;
-var requestFull = new XMLHttpRequest();
-requestFull.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
-requestFull.send(null);
-if (requestFull.status === 200) {
-  jsonObjFull = JSON.parse(requestFull.responseText);
+
+
+if (API_mode == false) {
+  // Read JSON external contracts and libraries list 
+  var jsonObjFull;
+  var requestFull = new XMLHttpRequest();
+  requestFull.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
+  requestFull.send(null);
+  if (requestFull.status === 200) {
+    jsonObjFull = JSON.parse(requestFull.responseText);
+  }
+
+  // Read JSON libraries list 
+  var jsonObjLibs;
+  var requestLibs = new XMLHttpRequest();
+  requestLibs.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsList.json', false);  // `false` makes the requestFull synchronous
+  requestLibs.send(null);
+  if (requestLibs.status === 200) {
+    jsonObjLibs = JSON.parse(requestLibs.responseText);
+  }
 }
+
+
+else { // if (API_mode == true)
+  // Retrieve external contracts and libraries list from Registry API
+  var jsonObjFull;
+  var requestFull = new XMLHttpRequest();
+  requestFull.open('GET', 'http://localhost:3000/contracts', false);  // `false` makes the requestFull synchronous
+  requestFull.send(null);
+  if (requestFull.status === 200) {
+    jsonObjFull = JSON.parse(requestFull.responseText);
+  }
+
+  // Retrieve libraries list from Registry API
+  var jsonObjLibs;
+  var requestLibs = new XMLHttpRequest();
+  requestLibs.open('GET', 'http://localhost:3000/contracts?contract_type=library', false);  // `false` makes the requestFull synchronous
+  requestLibs.send(null);
+  if (requestLibs.status === 200) {
+    jsonObjLibs = JSON.parse(requestLibs.responseText);
+  } 
+}
+
 
 function dynamicLibsAndContractsList() {
-  var options = [[ "select external contract or library...", "select external contract or library..." ]];
-  if (typeof jsonObjFull != 'undefined') {
-    for(var lib in jsonObjFull) 
-      options.push([lib, lib]);
-  }
-
-  return options;
-}
-
-function dynamicLibAndContractFunctsList (libName) {
-  var libFunctsList = [[ "select function...", "select function..." ]];
-  if (typeof libName != 'undefined' && libName != null) {
-    if (typeof jsonObjFull != 'undefined' && typeof jsonObjFull[libName] != 'undefined' && typeof jsonObjFull[libName][0] != 'undefined') {
-      libFunctsList = [];
-      for (var i = 0; i < jsonObjFull[libName].length; i++)
-        libFunctsList.push([jsonObjFull[libName][i], jsonObjFull[libName][i]]);
-    }
-  }
-
-  return libFunctsList;
-}
-
-
-
-// Read JSON libraries list 
-var jsonObjLibs;
-var requestLibs = new XMLHttpRequest();
-requestLibs.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsList.json', false);  // `false` makes the requestFull synchronous
-requestLibs.send(null);
-if (requestLibs.status === 200) {
-  jsonObjLibs = JSON.parse(requestLibs.responseText);
-}
-
-function dynamicLibsList() {
-  var options = [[ "select library...", "select library..." ]];
-  if (typeof jsonObjLibs != 'undefined') {
-    for(var lib in jsonObjLibs) 
-      options.push([lib, lib]);
-  }
-
-  return options;
-}
-
-
-
-// Read JSON external contracts list 
-var jsonObjContracts;
-var requestContracts = new XMLHttpRequest();
-requestContracts.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyContractsList.json', false);  // `false` makes the requestFull synchronous
-requestContracts.send(null);
-if (requestContracts.status === 200) {
-  jsonObjContracts = JSON.parse(requestContracts.responseText);
-}
-
-function dynamicContractsList() {
-  var options = [[ "select external contract...", "select external contract..." ]];
-  if (typeof jsonObjContracts != 'undefined') {
-    for(var lib in jsonObjContracts) 
-      options.push([lib, lib]);
-  }
-
-  return options;
-}
-
-*/
-
-
-
-// Retrieve external contracts and libraries list from Registry API
-var jsonObjFull;
-var requestFull = new XMLHttpRequest();
-requestFull.open('GET', 'http://localhost:3000/contracts', false);  // `false` makes the requestFull synchronous
-requestFull.send(null);
-if (requestFull.status === 200) {
-  jsonObjFull = JSON.parse(requestFull.responseText);
-}
-
-function dynamicLibsAndContractsList() {
-  var options = [[ "select external contract or library...", "select external contract or library..." ]];
-  if (typeof jsonObjFull != 'undefined') {
-    for(var i = 0; i < jsonObjFull.length; i++)
-      options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
-  }
-  return options;
-}
-
-function dynamicLibAndContractFunctsList (libName) {
-  var libFunctsList = [[ "select function...", "select function..." ]];
-  if (typeof libName != 'undefined' && libName != null && libName != 'select external contract or library...') {
+  if (API_mode == false) {
+    var options = [[ "select external contract or library...", "select external contract or library..." ]];
     if (typeof jsonObjFull != 'undefined') {
-      libFunctsList = [];
-      for(var i = 0; i < jsonObjFull.length; i++)
-        if (jsonObjFull[i]['JSON']['contract']['descriptor']['name'] == libName)
-          for (var j = 0; j < jsonObjFull[i]['JSON']['contract']['descriptor']['abi'].length; j++)
-            if (jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['type'] == 'function' || jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['type'] == 'constructor')
-              libFunctsList.push([  jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['name'] ]);
+      for(var lib in jsonObjFull) 
+        options.push([lib, lib]);
     }
+    return options;
   }
-  return libFunctsList;
+
+  else { // if (API_mode == true)
+    var options = [[ "select external contract or library...", "select external contract or library..." ]];
+    if (typeof jsonObjFull != 'undefined') {
+      for(var i = 0; i < jsonObjFull.length; i++)
+        options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
+    }
+    return options;
+  }
 }
 
+function dynamicLibAndContractFunctsList (libName) {
 
-// Retrieve libraries list from Registry API
-var jsonObjLibs;
-var requestLibs = new XMLHttpRequest();
-requestLibs.open('GET', 'http://localhost:3000/contracts?contract_type=library', false);  // `false` makes the requestFull synchronous
-requestLibs.send(null);
-if (requestLibs.status === 200) {
-  jsonObjLibs = JSON.parse(requestLibs.responseText);
+  if (API_mode == false) {
+    var libFunctsList = [[ "select function...", "select function..." ]];
+    if (typeof libName != 'undefined' && libName != null) {
+      if (typeof jsonObjFull != 'undefined' && typeof jsonObjFull[libName] != 'undefined' && typeof jsonObjFull[libName][0] != 'undefined') {
+        libFunctsList = [];
+        for (var i = 0; i < jsonObjFull[libName].length; i++)
+          libFunctsList.push([jsonObjFull[libName][i], jsonObjFull[libName][i]]);
+      }
+    }
+    return libFunctsList;
+  }
+
+  else {
+    var libFunctsList = [[ "select function...", "select function..." ]];
+    if (typeof libName != 'undefined' && libName != null && libName != 'select external contract or library...') {
+      if (typeof jsonObjFull != 'undefined') {
+        libFunctsList = [];
+        for(var i = 0; i < jsonObjFull.length; i++)
+          if (jsonObjFull[i]['JSON']['contract']['descriptor']['name'] == libName)
+            for (var j = 0; j < jsonObjFull[i]['JSON']['contract']['descriptor']['abi'].length; j++)
+              if (jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['type'] == 'function' || jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['type'] == 'constructor')
+                libFunctsList.push([  jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['abi'][j]['name'] ]);
+      }
+    }
+    return libFunctsList;
+  }
 }
 
 function dynamicLibsList() {
-  var options = [[ "select external contract or library...", "select external contract or library..." ]];
-  if (typeof jsonObjLibs != 'undefined') {
-    for(var i = 0; i < jsonObjLibs.length; i++)
-      options.push([ jsonObjLibs[i]['JSON']['contract']['descriptor']['name'],jsonObjLibs[i]['JSON']['contract']['descriptor']['name'] ]);
+  if (API_mode == false) {
+    var options = [[ "select library...", "select library..." ]];
+    if (typeof jsonObjLibs != 'undefined') {
+      for(var lib in jsonObjLibs) 
+        options.push([lib, lib]);
+    }
+    return options;
   }
-  return options;
-}
 
+  else {
+    var options = [[ "select external contract or library...", "select external contract or library..." ]];
+    if (typeof jsonObjLibs != 'undefined') {
+      for(var i = 0; i < jsonObjLibs.length; i++)
+        options.push([ jsonObjLibs[i]['JSON']['contract']['descriptor']['name'],jsonObjLibs[i]['JSON']['contract']['descriptor']['name'] ]);
+    }
+    return options;
+  }
+}
 
 
 /* ********************** LIBRARY_FUNCTION_MUTATOR ********************** */

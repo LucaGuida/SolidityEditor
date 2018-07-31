@@ -10,7 +10,8 @@
 ## Usage instructions
 
 ```cd GitHub/
-python -m http.server```
+python -m http.server
+```
 
 The editor will be available at this link: http://0.0.0.0:8000/SoliditySOA/blockly-solidity/
 
@@ -20,17 +21,20 @@ The editor will be available at this link: http://0.0.0.0:8000/SoliditySOA/block
 
 #### To import contract descriptor from Doxity into the contract-descriptor-files directory:
 ```cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode
-python DoxityContractDescriptorsImporter.py```
+python DoxityContractDescriptorsImporter.py
+```
 
 #### To convert in contract descriptor format generic Solidity metadata files, and import them in the contract-descriptor-files directory:
 ```cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode
-python SolidityMetadata2ContractDescriptorCONVERTER.py```
+python SolidityMetadata2ContractDescriptorCONVERTER.py
+```
 
 #### To update the editor in such a way to use as source for external functions the descriptors stored in the contract-descriptor-files directory:
 ```cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode/parser-scripts
 python LibsAndContractsDescriptorsParser.py
 python ContractsDescriptorsParser.py
-python LibsDescriptorsParser.py```
+python LibsDescriptorsParser.py
+```
 
 
 

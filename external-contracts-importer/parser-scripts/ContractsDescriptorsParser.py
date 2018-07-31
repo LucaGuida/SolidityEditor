@@ -19,7 +19,7 @@ def extractMethods (contractName):
 	file=open('../contract-descriptor-files/' + contractName).read()
 	data = json.loads(file)
 
-	for method in data['contract']['abi']:
+	for method in data['contract']['descriptor']['abi']:
 		if method['type']=='function': 
 			methods.append(method['name'])
 		if method['type']=='constructor':
@@ -33,11 +33,11 @@ librariesMethodsMap = {}
 for element in os.listdir('../contract-descriptor-files'):
     if element!=".DS_Store":
       temp=json.loads(open('../contract-descriptor-files/' + element).read())
-      if temp['contract']['contract_type'] == 'generic_contract':
+      if temp['contract']['descriptor']['contract_type'] == 'generic_contract':
         librariesMethodsMap[element[:-5]] = extractMethods(element)
 
 
-with open('../LibsAndContractsList.json', 'w') as outfile:
+with open('../BlocklyContractsList.json', 'w') as outfile:
     json.dump(librariesMethodsMap, outfile)
 
 print ("\nThe following libraries and functions are ready to be imported into Blockly Solidity!\n")

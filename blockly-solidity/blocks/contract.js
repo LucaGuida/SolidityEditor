@@ -162,7 +162,7 @@ var functionTypesList = [
 // Read JSON external contracts and libraries list 
 var jsonObjFull;
 var requestFull = new XMLHttpRequest();
-requestFull.open('GET', '/SoliditySOA/external-contracts-importer/LibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
+requestFull.open('GET', '/SoliditySOA/external-contracts-importer/BlocklyLibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
 requestFull.send(null);
 if (requestFull.status === 200) {
   jsonObjFull = JSON.parse(requestFull.responseText);
@@ -198,7 +198,7 @@ function dynamicLibAndContractFunctsList (libName) {
 // Read JSON libraries list 
 var jsonObjLibs;
 var requestLibs = new XMLHttpRequest();
-requestLibs.open('GET', '/SoliditySOA/external-contracts-importer/LibsList.json', false);  // `false` makes the requestFull synchronous
+requestLibs.open('GET', '/SoliditySOA/external-contracts-importer/BlocklyLibsList.json', false);  // `false` makes the requestFull synchronous
 requestLibs.send(null);
 if (requestLibs.status === 200) {
   jsonObjLibs = JSON.parse(requestLibs.responseText);
@@ -220,7 +220,7 @@ function dynamicLibsList() {
 // Read JSON external contracts list 
 var jsonObjContracts;
 var requestContracts = new XMLHttpRequest();
-requestContracts.open('GET', '/SoliditySOA/external-contracts-importer/ContractsList.json', false);  // `false` makes the requestFull synchronous
+requestContracts.open('GET', '/SoliditySOA/external-contracts-importer/BlocklyContractsList.json', false);  // `false` makes the requestFull synchronous
 requestContracts.send(null);
 if (requestContracts.status === 200) {
   jsonObjContracts = JSON.parse(requestContracts.responseText);

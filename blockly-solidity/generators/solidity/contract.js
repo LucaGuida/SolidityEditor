@@ -79,7 +79,7 @@ Blockly.Solidity['contract'] = function(block) {
     + ctor.replace(new RegExp('    ///', 'g'), '  ///')
     + methods.replace(new RegExp('    ///', 'g'), '  ///')
     + methodsWithReturn.replace(new RegExp('    ///', 'g'), '  ///')
-    + '}\n';
+    + '\n}\n';
 
   return code;
 };

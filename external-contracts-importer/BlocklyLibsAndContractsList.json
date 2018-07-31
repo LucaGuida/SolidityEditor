@@ -1,0 +1,1 @@
+{"MetaCoin": ["getBalanceInEth", "sendCoin", "getBalance", "MetaCoin"], "Set": ["remove", "contains", "insert"], "Ballot": ["delegate", "winningProposal", "giveRightToVote", "vote", "Ballot"], "ConvertLib": ["convert"], "My_other_lib": ["convert"]}

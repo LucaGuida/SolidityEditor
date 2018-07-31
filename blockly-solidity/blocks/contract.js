@@ -158,7 +158,7 @@ var functionTypesList = [
           ];
 
 
-// If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> no-API-mode
+// If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> standalone-mode
 // If true: external contracts and libraries list retrieval from Registry REST API
 var API_mode = true;
 
@@ -168,7 +168,7 @@ if (API_mode == false) {
   // Read JSON external contracts and libraries list 
   var jsonObjFull;
   var requestFull = new XMLHttpRequest();
-  requestFull.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
+  requestFull.open('GET', '/SoliditySOA/standalone-mode/BlocklyLibsAndContractsList.json', false);  // `false` makes the requestFull synchronous
   requestFull.send(null);
   if (requestFull.status === 200) {
     jsonObjFull = JSON.parse(requestFull.responseText);
@@ -177,7 +177,7 @@ if (API_mode == false) {
   // Read JSON libraries list 
   var jsonObjLibs;
   var requestLibs = new XMLHttpRequest();
-  requestLibs.open('GET', '/SoliditySOA/autonomous(no-API)-mode/BlocklyLibsList.json', false);  // `false` makes the requestFull synchronous
+  requestLibs.open('GET', '/SoliditySOA/standalone-mode/BlocklyLibsList.json', false);  // `false` makes the requestFull synchronous
   requestLibs.send(null);
   if (requestLibs.status === 200) {
     jsonObjLibs = JSON.parse(requestLibs.responseText);

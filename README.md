@@ -30,23 +30,23 @@ json-server --watch metadataDB.json
 
 
 
-### Autonomous (no-API) mode
+### Standalone mode
 
 #### To import contract descriptor from Doxity into the contract-descriptor-files directory:
 ```
-cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode
+cd /Users/Guida/GitHub/SoliditySOA/standalone-mode
 python DoxityContractDescriptorsImporter.py
 ```
 
 #### To convert in contract descriptor format generic Solidity metadata files, and import them in the contract-descriptor-files directory:
 ```
-cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode
+cd /Users/Guida/GitHub/SoliditySOA/standalone-mode
 python SolidityMetadata2ContractDescriptorCONVERTER.py
 ```
 
 #### To update the editor in such a way to use as source for external functions the descriptors stored in the contract-descriptor-files directory:
 ```
-cd /Users/Guida/GitHub/SoliditySOA/autonomous(no-API)-mode/parser-scripts
+cd /Users/Guida/GitHub/SoliditySOA/standalone-mode/parser-scripts
 python LibsAndContractsDescriptorsParser.py
 python ContractsDescriptorsParser.py
 python LibsDescriptorsParser.py

@@ -16,7 +16,7 @@ def convertSolidityMetadata2ContractDescriptor (contractMetadataFile):
   descriptor = {}
   descriptor['name'] = list(data['settings']['compilationTarget'].values())[0]
 
-  descriptor['author'] = 'Unknown' # DEFAULT VALUE
+  descriptor['author'] = '' # DEFAULT VALUE
   if 'author' in data['output']['devdoc']:
     descriptor['author'] = data['output']['devdoc']['author']
 
@@ -31,16 +31,18 @@ def convertSolidityMetadata2ContractDescriptor (contractMetadataFile):
 
   # ENDPOINT
   endpoint = {}
-  endpoint['address'] = '0x314159265dd8dbb310642f98f50c066173c1259b'  # DEFAULT VALUE
-  endpoint['networkID'] = 1  # DEFAULT VALUE
-  endpoint['chainID'] = 1  # DEFAULT VALUE
+  #endpoint['address'] = '0x314159265dd8dbb310642f98f50c066173c1259b'  # DEFAULT VALUE
+  #endpoint['networkID'] = 1  # DEFAULT VALUE
+  #endpoint['chainID'] = 1  # DEFAULT VALUE
 
 
 
   # DEV
   dev = {}
   dev['devdoc'] = data['output']['devdoc']
-  dev['sources'] = data['sources']
+  dev['sources'] = {}
+  dev['sources']['keccak256'] = list(data['sources'].values())[0]['keccak256']
+  dev['sources']['swarm_URL'] = list(data['sources'].values())[0]['urls'][0]
   dev['libraries'] = data['settings']['libraries']
 
   compiler = {}

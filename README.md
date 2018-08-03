@@ -12,6 +12,14 @@
 
 ## Usage instructions
 
+### To start the underlying Registry REST API
+Assuming var API_mode = true in blockly-solidity/blocks/contract.js
+```
+cd /Users/Guida/GitHub/SoliditySmartContractRegistry/REST_API
+json-server --watch smartContractDescriptorsAPI-DB.json
+```
+
+
 ### To use the editor
 ```
 cd GitHub/
@@ -21,36 +29,18 @@ python -m http.server
 The editor will be available at this link: http://0.0.0.0:8000/SoliditySOA/blockly-solidity/
 
 
-### To start the underlying Registry REST API
-Assuming var API_mode = true:
-```
-cd /Users/Guida/GitHub/SolidityExplorer/REST_API
-json-server --watch metadataDB.json
-```
-
-
 
 ### Standalone mode
 
-#### To import contract descriptor from Doxity into the contract-descriptor-files directory:
+Set var API_mode = false in blockly-solidity/blocks/contract.js
+
+#### To update the local smart contract descriptors DB
+
 ```
 cd /Users/Guida/GitHub/SoliditySOA/standalone-mode
-python DoxityContractDescriptorsImporter.py
+python smartContractDescriptorsParser.py
 ```
 
-#### To convert in contract descriptor format generic Solidity metadata files, and import them in the contract-descriptor-files directory:
-```
-cd /Users/Guida/GitHub/SoliditySOA/standalone-mode
-python SolidityMetadata2ContractDescriptorCONVERTER.py
-```
-
-#### To update the editor in such a way to use as source for external functions the descriptors stored in the contract-descriptor-files directory:
-```
-cd /Users/Guida/GitHub/SoliditySOA/standalone-mode/parser-scripts
-python LibsAndContractsDescriptorsParser.py
-python ContractsDescriptorsParser.py
-python LibsDescriptorsParser.py
-```
 
 
 

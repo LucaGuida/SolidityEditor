@@ -1276,7 +1276,7 @@ Blockly.Blocks['library_method_call'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
-        this.setWarningText('If you want to change external contract or library, first select "select external contract or library..." from the list, then select the new external contract or library');
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
         this.updateShape_(true, this.getFieldValue('LIB_NAME'));
 
       } else {
@@ -1312,7 +1312,7 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
-        this.setWarningText('If you want to change external contract or library, first select "select external contract or library..." from the list, then select the new external contract or library');
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
         this.updateShape_(true, this.getFieldValue('LIB_NAME'));
 
       } else {
@@ -2245,7 +2245,7 @@ Blockly.Blocks['struct_member_set'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
-        this.setWarningText('If you want to change variable, first select "select struct variable..." from the list, then select the new variable');
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));        
         this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
 
       } else {
@@ -2282,7 +2282,7 @@ Blockly.Blocks['struct_member_get'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
-        this.setWarningText('If you want to change variable, first select "select struct variable..." from the list, then select the new variable');
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));       
         this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
 
       } else {

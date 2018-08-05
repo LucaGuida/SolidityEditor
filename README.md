@@ -15,14 +15,14 @@
 ### To start the underlying Registry REST API
 Assuming var API_mode = true in blockly-solidity/blocks/contract.js
 ```
-cd /Users/Guida/GitHub/SoliditySmartContractRegistry/REST_API
+cd ~/GitHub/SoliditySmartContractRegistry/REST_API
 json-server --watch smartContractDescriptorsAPI-DB.json
 ```
 
 
 ### To use the editor
 ```
-cd GitHub/
+cd ~/GitHub
 python -m http.server
 ```
 
@@ -37,7 +37,7 @@ Set var API_mode = false in blockly-solidity/blocks/contract.js
 #### To update the local smart contract descriptors DB
 
 ```
-cd /Users/Guida/GitHub/SoliditySOA/standalone-mode
+cd ~/GitHub/SoliditySOA/standalone-mode
 python smartContractDescriptorsParser.py
 ```
 

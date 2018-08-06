@@ -324,10 +324,10 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
    * @private
    * @this Blockly.Block
    */
-  updateShape_: function(selectedLibrary, libName) {
+  updateShape_: function(selectedLibrary, libName, event) {
     var functionSelectorBeingDisplayed = this.getFieldValue('LIB_FUNCT_NAME');
     if (selectedLibrary) {
-      if (!functionSelectorBeingDisplayed) {
+      if (!functionSelectorBeingDisplayed) { // library was set for the first time, or after resetting selector
         this.appendDummyInput('LIBRARY_FUNCTION_SELECTOR')  
           .appendField(' function')
           .appendField(
@@ -337,9 +337,34 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
         this.appendStatementInput('ARGS')
           .appendField("arguments").setCheck('argument_container');
       }
-    } else if (functionSelectorBeingDisplayed) {
-      this.removeInput('LIBRARY_FUNCTION_SELECTOR');
-      this.removeInput('ARGS');
+
+      else { // selectedLibrary, functionSelectorBeingDisplayed + library AND/OR function was changed
+        if (event.name=="LIB_NAME") {// library was changed
+
+          this.removeInput('LIBRARY_FUNCTION_SELECTOR');
+          this.removeInput('ARGS');
+
+          this.appendDummyInput('LIBRARY_FUNCTION_SELECTOR')  
+            .appendField(' function')
+            .appendField(
+            new Blockly.FieldDropdown(dynamicLibAndContractFunctsList(libName)),
+            "LIB_FUNCT_NAME"
+            );
+          this.appendStatementInput('ARGS')
+            .appendField("arguments").setCheck('argument_container');
+
+          // Force UI update
+          Blockly.Events.fire(new Blockly.Events.Ui(this,null, null, null));
+
+        }
+        else if (event.name=="LIB_FUNCT_NAME") { } // function was changed, but library was NOT changed
+      }
+
+    } else {
+      if (functionSelectorBeingDisplayed) { // reset
+        this.removeInput('LIBRARY_FUNCTION_SELECTOR');
+        this.removeInput('ARGS');
+      }
     }
   }
 };
@@ -402,7 +427,7 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
    * @private
    * @this Blockly.Block
    */
-  updateShape_: function(selectedStructVariable, varName) {
+  updateShape_: function(selectedStructVariable, varName, event) {
     var memberSelectorBeingDisplayed = this.getFieldValue('STRUCT_MEMBER_NAME');
     if (selectedStructVariable) {
       if (!memberSelectorBeingDisplayed) {
@@ -418,6 +443,40 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
               .appendField("to");
           }
       }
+
+
+      else { 
+        if (event.name=="STRUCT_VARIABLE_NAME") {
+
+          this.removeInput('STRUCT_MEMBER_SELECTOR');
+
+          if (this.type == "struct_member_set") {
+            this.removeInput('STRUCT_VARIABLE_VALUE');
+          }
+
+          this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
+            .appendField(' member  ')
+            .appendField(
+            new Blockly.FieldDropdown(dynamicStructMembersList(varName)),
+            "STRUCT_MEMBER_NAME"
+            );
+
+          if (this.type == "struct_member_set") {
+            this.appendValueInput('STRUCT_VARIABLE_VALUE')
+              .appendField("to");
+          }
+
+
+          // Force UI update
+          Blockly.Events.fire(new Blockly.Events.Ui(this,null, null, null));
+
+        }
+        else if (event.name=="STRUCT_MEMBER_NAME") { } 
+      }
+
+
+
+
     } else if (memberSelectorBeingDisplayed) {
       this.removeInput('STRUCT_MEMBER_SELECTOR');
 
@@ -1276,12 +1335,13 @@ Blockly.Blocks['library_method_call'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
-        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
-        this.updateShape_(true, this.getFieldValue('LIB_NAME'));
+
+        this.updateShape_(true, this.getFieldValue('LIB_NAME'), event);
+        this.setWarningText(null);
 
       } else {
         this.setWarningText('Select an external contract or a library from the list');
-        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'), event);
       }
     });
   },
@@ -1312,12 +1372,11 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('LIB_NAME')!='select external contract or library...') {
-        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
-        this.updateShape_(true, this.getFieldValue('LIB_NAME'));
-
+        this.updateShape_(true, this.getFieldValue('LIB_NAME'), event);
+        this.setWarningText(null);
       } else {
         this.setWarningText('Select an external contract or a library from the list');
-        this.updateShape_(false, this.getFieldValue('LIB_NAME'));
+        this.updateShape_(false, this.getFieldValue('LIB_NAME'), event);
       }
     });
 
@@ -2245,12 +2304,12 @@ Blockly.Blocks['struct_member_set'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
-        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));        
-        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
 
+        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
+        this.setWarningText(null);
       } else {
         this.setWarningText('Select a variable from the list');
-        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
       }
     });
 
@@ -2282,12 +2341,11 @@ Blockly.Blocks['struct_member_get'] = {
 
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
-        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));       
-        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'));
-
+        this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
+        this.setWarningText(null);
       } else {
         this.setWarningText('Select a variable from the list');
-        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'));
+        this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
       }
     });
 

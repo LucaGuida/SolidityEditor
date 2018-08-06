@@ -159,10 +159,29 @@ var functionTypesList = [
 
 
 
-
 // If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> standalone-mode
 // If true: external contracts and libraries list retrieval from Registry REST API
 var API_mode = false;
+
+
+
+// API availability test
+try {
+	var testRequest = new XMLHttpRequest();
+	testRequest.open('GET', 'http://localhost:3000/contracts', false);  // `false` makes the requestFull synchronous
+	testRequest.send(null);
+	
+	if (testRequest.status === 200) {
+		var tempJSON = JSON.parse(testRequest.responseText)
+		if (tempJSON!='undefined' && tempJSON.length > 0) {
+			API_mode = true;
+			console.log("Successfully connected to the Solidity smart contract registry API!");
+		}
+	}
+}
+catch(err) {
+    console.log("Solidity smart contract registry API not available!");
+}
 
 
 
@@ -256,8 +275,6 @@ function dynamicLibAndContractFunctsList (libName) {
                 libFunctsList.push([  libName,libName ]);
       }
     }
-
-    console.log(libFunctsList);
 
     if (libFunctsList.length == 0)
       libFunctsList = [[ "No functions available", "No functions available" ]];
@@ -1250,7 +1267,6 @@ Blockly.Blocks['contract_method_call'] = {
           }
         } while (block)
 
-        //console.log(params);
         // FIXME: add/remove inputs according to the method params
       }
     }); 
@@ -1300,7 +1316,6 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
           }
         } while (block)
 
-        //console.log(params);
         // FIXME: add/remove inputs according to the method params
       }
     });

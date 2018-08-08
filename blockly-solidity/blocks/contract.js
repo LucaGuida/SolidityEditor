@@ -157,6 +157,48 @@ var functionTypesList = [
           ];
 
 
+//Helper for extracting substrings
+var getFromBetween = {
+    results:[],
+    string:"",
+    getFromBetween:function (sub1,sub2) {
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return false;
+        var SP = this.string.indexOf(sub1)+sub1.length;
+        var string1 = this.string.substr(0,SP);
+        var string2 = this.string.substr(SP);
+        var TP = string1.length + string2.indexOf(sub2);
+        return this.string.substring(SP,TP);
+    },
+    removeFromBetween:function (sub1,sub2) {
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return false;
+        var removal = sub1+this.getFromBetween(sub1,sub2)+sub2;
+        this.string = this.string.replace(removal,"");
+    },
+    getAllResults:function (sub1,sub2) {
+        // first check to see if we do have both substrings
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return;
+
+        // find one result
+        var result = this.getFromBetween(sub1,sub2);
+        // push it to the results array
+        this.results.push(result);
+        // remove the most recently found one from the string
+        this.removeFromBetween(sub1,sub2);
+
+        // if there's more substrings
+        if(this.string.indexOf(sub1) > -1 && this.string.indexOf(sub2) > -1) {
+            this.getAllResults(sub1,sub2);
+        }
+        else return;
+    },
+    get:function (string,sub1,sub2) {
+        this.results = [];
+        this.string = string;
+        this.getAllResults(sub1,sub2);
+        return this.results;
+    }
+};
+
 
 
 // If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> standalone-mode
@@ -1483,15 +1525,19 @@ Blockly.Blocks['inherit'] = {
 
      if (this.getFieldValue('LIB_NAME')!='select external contract...') {
 
-        //Retrieve external contract ABI
+        //Retrieve external contract ABI and source code
         var ABI;
+        var sourceCode;
+
           if (typeof jsonObjContracts != 'undefined') {
             for(var i = 0; i < jsonObjContracts.length; i++) 
-              if (jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) 
+              if (jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) {
                 ABI = jsonObjContracts[i]['JSON']['contract']['descriptor']['abi'];
+                sourceCode = jsonObjContracts[i]['code'];
+              }
           }
 
-     
+        // Events, functions (and constructors)   
         if (typeof ABI != 'undefined')
           for(var i = 0; i < ABI.length; i++) {
 
@@ -1511,6 +1557,18 @@ Blockly.Blocks['inherit'] = {
                 default:
                   break;
             }
+
+            // Modifiers
+            var modifiers = getFromBetween.get(sourceCode,"modifier ","() {");
+
+            if (Array.isArray(modifiers) && modifiers.length) 
+              for(var j=0;j<modifiers.length;j++) 
+                {
+                  var newVariable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, modifiers[j], 'modifier');
+                  newVariable.group = Blockly.Solidity.LABEL_GROUP_MODIFIER;
+                  newVariable.scope = scope;
+                }
+
           }
      }
 

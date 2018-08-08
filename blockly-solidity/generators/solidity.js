@@ -324,7 +324,7 @@ Blockly.Solidity.updateWorkspaceNameFields = function(workspace) {
       var selectedOption = nameField.getValue();
 
 
-      if (options.length != 0 && blocks[i].type != "modifier_usage" && blocks[i].type != "event_emission" && blocks[i].type != "enum_variable_create" && blocks[i].type != "enum_get" && blocks[i].type != "struct_variable_set" && blocks[i].type != "struct_variable_get" && blocks[i].type != "struct_member_set" && blocks[i].type != "struct_member_get" && blocks[i].type != "mapping_set"  && blocks[i].type != "mapping_get") {
+      if (options.length != 0 && blocks[i].type != "modifier_usage" && blocks[i].type != "event_emission" && blocks[i].type != "enum_variable_create" && blocks[i].type != "enum_get" && blocks[i].type != "struct_variable_set" && blocks[i].type != "struct_variable_get" && blocks[i].type != "struct_member_set" && blocks[i].type != "struct_member_get" && blocks[i].type != "mapping_set"  && blocks[i].type != "mapping_get" && blocks[i].type != "contract_method_call" && blocks[i].type != "contract_method_call_with_return_value") {
         var wasUndefined = nameField.menuGenerator_[0][1]
           == Blockly.Solidity.UNDEFINED_NAME;
 

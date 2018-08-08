@@ -1,7 +1,6 @@
 /**
  * @fileoverview Helper functions for generating Solidity for blocks.
- * @author jeanmarc.leroux@google.com (Jean-Marc Le Roux)
- * @author rekmarks@icloud.com  (Erik Marks)
+ * @author Luca Guida
  */
 
 'use strict';
@@ -159,6 +158,7 @@ var functionTypesList = [
 
 
 
+
 // If false: external contracts and libraries list retrieval from local JSON file, instead of Registry REST API >> standalone-mode
 // If true: external contracts and libraries list retrieval from Registry REST API
 var API_mode = false;
@@ -196,7 +196,7 @@ if (API_mode == false) { // standalone mode
   }
 }
 
-else { // API mode
+else { // API mode true
   // Retrieve external contracts and libraries list from Registry API
   var jsonObjFull;
   var requestFull = new XMLHttpRequest();
@@ -206,6 +206,15 @@ else { // API mode
     jsonObjFull = JSON.parse(requestFull.responseText);
   }
 
+  // Retrieve generic_contracts from Registry API
+  var jsonObjContracts;
+  var requestContracts = new XMLHttpRequest();
+  requestContracts.open('GET', 'http://localhost:3000/contracts?contract_type=generic_contract', false);  // `false` makes the requestFull synchronous
+  requestContracts.send(null);
+  if (requestContracts.status === 200) {
+    jsonObjContracts = JSON.parse(requestContracts.responseText);
+  } 
+
   // Retrieve libraries list from Registry API
   var jsonObjLibs;
   var requestLibs = new XMLHttpRequest();
@@ -214,6 +223,7 @@ else { // API mode
   if (requestLibs.status === 200) {
     jsonObjLibs = JSON.parse(requestLibs.responseText);
   } 
+
 }
 
 
@@ -283,6 +293,28 @@ function dynamicLibAndContractFunctsList (libName) {
   }
 }
 
+function dynamicContractsList() {
+  if (API_mode == false) { // standalone mode
+    var options = [[ "select external contract...", "select external contract..." ]];
+    if (typeof jsonObjFull != 'undefined') {
+      for(var i = 0; i < jsonObjFull.length; i++)
+        if (jsonObjFull[i]['contract']['descriptor']['contract_type'] == 'generic_contract') 
+          options.push([ jsonObjFull[i]['contract']['descriptor']['name'], jsonObjFull[i]['contract']['descriptor']['name'] ]);
+    }
+    return options;
+  }
+
+  else { // API mode
+    var options = [[ "select external contract...", "select external contract..." ]];
+    if (typeof jsonObjContracts != 'undefined') {
+      for(var i = 0; i < jsonObjContracts.length; i++)
+        options.push([ jsonObjContracts[i]['JSON']['contract']['descriptor']['name'],jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] ]);
+    }
+    return options;
+  }
+}
+
+
 function dynamicLibsList() {
   if (API_mode == false) { // standalone mode
     var options = [[ "select library...", "select library..." ]];
@@ -295,7 +327,7 @@ function dynamicLibsList() {
   }
 
   else { // API mode
-    var options = [[ "select external contract or library...", "select external contract or library..." ]];
+    var options = [[ "select library...", "select library..." ]];
     if (typeof jsonObjLibs != 'undefined') {
       for(var i = 0; i < jsonObjLibs.length; i++)
         options.push([ jsonObjLibs[i]['JSON']['contract']['descriptor']['name'],jsonObjLibs[i]['JSON']['contract']['descriptor']['name'] ]);
@@ -645,6 +677,7 @@ Blockly.Blocks['contract_state'] = {
       }
       return scope;
     };
+
 
     Blockly.Extensions.apply('declare_typed_variable', this, false);
   },
@@ -1226,27 +1259,41 @@ Blockly.Blocks['destroyAndSend_method'] = {
 
 /* ********************** CONTRACT_METHOD_CALL BLOCK ********************** */
 
+function dynamicMethodsList () {
+  var methodsList = [[ "select function...", "select function..." ]];
+
+  var methodsVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('void');
+  if (typeof methodsVariablesArray[0] != 'undefined') {
+    var methodsNamePairsArray = [];
+    for (var i = 0; i < methodsVariablesArray.length; i++)
+      methodsNamePairsArray.push([Blockly.Solidity.getVariableName(methodsVariablesArray[i]),Blockly.Solidity.getVariableName(methodsVariablesArray[i])]);
+    methodsList = methodsNamePairsArray;
+  }
+
+  return methodsList;
+}
+
 
 Blockly.Blocks['contract_method_call'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('call function')
       .appendField(
-        new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
+        new Blockly.FieldDropdown(dynamicMethodsList),
+        //new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
         "METHOD_NAME"
       );
     this.appendStatementInput('ARGS')
       .appendField("arguments").setCheck('argument_container');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    // this.setOutput(true, null);
     this.setColour("#FF5252");
     this.setTooltip('Call of a function which does not return a value');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
 
-
+/*
     this.setOnChange(function(event) {
       if (event.blockId != this.id) {
         return;
@@ -1266,10 +1313,11 @@ Blockly.Blocks['contract_method_call'] = {
             params.push(block);
           }
         } while (block)
-
-        // FIXME: add/remove inputs according to the method params
       }
     }); 
+*/
+
+
   }
 };
 
@@ -1282,7 +1330,8 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.appendDummyInput()
       .appendField('call function')
       .appendField(
-        new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
+        new Blockly.FieldDropdown(dynamicMethodsList),
+        //new Blockly.FieldDropdown([["select function...", Blockly.Solidity.UNDEFINED_NAME],]),
         "METHOD_NAME"
       )
       .appendField('with return value');
@@ -1296,6 +1345,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
 
 
+/*
     this.setOnChange(function(event) {
       if (event.blockId != this.id) {
         return;
@@ -1319,11 +1369,14 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
         // FIXME: add/remove inputs according to the method params
       }
     });
+
+*/
+
   }
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE & USING...FOR... BLOCKS, ORACLIZE_QUERY, ORACLIZE_RESULT ********************** */
+/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE USING...FOR..., and INHERIT BLOCKS, ORACLIZE_QUERY, ORACLIZE_RESULT ********************** */
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
@@ -1424,6 +1477,80 @@ Blockly.Blocks['usingFor'] = {
 
     this.getVariableNameSelectField = function() { return this.getField('LIB_NAME' + 'TYPE'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_LIBRARY };
+
+  },
+};
+
+
+Blockly.Blocks['inherit'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "inheriting from contract %1",
+      "args0": [
+        {
+          "type": "field_dropdown",
+          "name": "LIB_NAME", 
+          "options": dynamicContractsList
+        }
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#FF5252",
+      "tooltip": "Inherit variables, events, modifiers and function from a specified external contract",
+      "helpUrl": "http://solidity.readthedocs.io/en/v0.4.24/contracts.html#inheritance"
+    });
+
+  this.setDeletable(false);
+  this.setWarningText('Once you have selected an external contract to inherit from, you cannot change it or remove it!');
+
+    this.setOnChange(function(event) {
+
+
+     if (this.getFieldValue('LIB_NAME')!='select external contract...') {
+
+        //Retrieve external contract ABI
+        var ABI;
+        if (API_mode == false) { // standalone mode
+          if (typeof jsonObjFull != 'undefined') {
+            for(var i = 0; i < jsonObjFull.length; i++)
+              if (jsonObjFull[i]['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) 
+                ABI = jsonObjFull[i]['contract']['descriptor']['abi'];
+          }
+        }
+        else { // API mode
+          if (typeof jsonObjContracts != 'undefined') {
+            for(var i = 0; i < jsonObjContracts.length; i++) 
+              if (jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) 
+                ABI = jsonObjContracts[i]['JSON']['contract']['descriptor']['abi'];
+          }
+        }
+     
+        if (typeof ABI != 'undefined')
+          for(var i = 0; i < ABI.length; i++) {
+
+            var scope = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract'})[0];
+
+            switch(ABI[i]['type']) {
+                case 'event':
+                  var newVariable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, ABI[i]['name'], 'event');
+                  newVariable.group = Blockly.Solidity.LABEL_GROUP_EVENT;
+                  newVariable.scope = scope;
+                  break;
+                case 'function':
+                  var newVariable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, ABI[i]['name'], 'void');
+                  newVariable.group = Blockly.Solidity.LABEL_GROUP_METHOD;
+                  newVariable.scope = scope;
+                  break;
+                default:
+                  break;
+            }
+          }
+     }
+
+
+    });
+
+  console.log(Blockly.getMainWorkspace().getAllVariables());
 
   },
 };

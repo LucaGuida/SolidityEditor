@@ -30,10 +30,10 @@ Blockly.Solidity['contract'] = function(block) {
 
   var imports = '';
   var importsArray = [];
-  var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' || b.type == 'usingFor'});
+  var libraryCallBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'library_method_call' || b.type == 'library_method_call_with_return_value' || b.type == 'usingFor' || b.type == 'inherit'});
   if (typeof libraryCallBlocksArray[0] != 'undefined') {
     for (var i = 0; i < libraryCallBlocksArray.length; i++)
-      if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select external contract or library...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
+      if (libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select external contract or library...' && libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select library...' && libraryCallBlocksArray[i].getFieldValue('LIB_NAME')!='select external contract...' && !importsArray.includes(libraryCallBlocksArray[i].getFieldValue('LIB_NAME')))
         importsArray.push(libraryCallBlocksArray[i].getFieldValue('LIB_NAME'));
   }
   if (importsArray!=null) {
@@ -41,6 +41,39 @@ Blockly.Solidity['contract'] = function(block) {
       imports = imports + 'import "../' + importsArray[i] + '.sol";\n';
     imports += '\n';
   }
+
+
+  var inheritedContracts = '';
+  var inheritArray = [];
+
+  var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'oraclize_query'});
+  var inheritedContracts = '';
+  if (typeof OraclizeBlock[0] != 'undefined' && OraclizeBlock[0].getFieldValue('URL')!='URL to query')
+    {
+      events =  events + '  event LogNewOraclizeQuery(string description);\n\n';
+      inheritArray.push('usingOraclize');
+      imports = 'import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";\n' + imports;
+    }
+
+
+  var inheritBlocksArray = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'inherit'});
+  if (typeof inheritBlocksArray[0] != 'undefined') {
+    for (var i = 0; i < inheritBlocksArray.length; i++)
+      if (inheritBlocksArray[i].getFieldValue('LIB_NAME')!='select external contract...' && !inheritArray.includes(inheritBlocksArray[i].getFieldValue('LIB_NAME')))
+        inheritArray.push(inheritBlocksArray[i].getFieldValue('LIB_NAME'));
+  }
+
+  if (inheritArray!=null) {
+    for (var i = 0; i < inheritArray.length; i++)
+      if (i!=inheritArray.length-1)
+        inheritedContracts = inheritedContracts + inheritArray[i] + ', ';
+      else 
+        inheritedContracts = inheritedContracts + inheritArray[i];
+  }
+
+  if (inheritedContracts.length>1)
+    inheritedContracts = ' is ' + inheritedContracts + ' ';
+
 
   var contract_docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var states = Blockly.Solidity.statementToCode(block, 'STATES');
@@ -51,14 +84,7 @@ Blockly.Solidity['contract'] = function(block) {
   var methods = Blockly.Solidity.statementToCode(block, 'METHODS');
   var methodsWithReturn = Blockly.Solidity.statementToCode(block, 'METHODS_WITH_RETURN');
 
-  var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'oraclize_query'});
-  var inheritedContracts = '';
-  if (typeof OraclizeBlock[0] != 'undefined' && OraclizeBlock[0].getFieldValue('URL')!='URL to query')
-    {
-      events =  events + '  event LogNewOraclizeQuery(string description);\n\n';
-      var inheritedContracts = ' is usingOraclize ';
-      imports = 'import "github.com/oraclize/ethereum-api/oraclizeAPI.sol";\n' + imports;
-    }
+
 
 
 
@@ -402,6 +428,11 @@ Blockly.Solidity['usingFor'] = function(block) {
     return '';
 
   return 'using ' + libraryName + ' for ' + types[attachedType] + ';\n\n';
+};
+
+
+Blockly.Solidity['inherit'] = function(block) {
+  return '';
 };
 
 

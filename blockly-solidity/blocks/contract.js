@@ -531,15 +531,6 @@ Blockly.Extensions.registerMutator('struct_member_mutator',
 Blockly.defineBlocksWithJsonArray([
   {
     "type": "contract",
-    "message1": 'documentation %1',
-    "args1": [
-      {
-        "type": "input_statement",
-        "name": "DOCS",
-        "check": "NatSpec_contract",
-        "align": "RIGHT"
-      }
-    ],
     "message0": 'smart contract %1',
     "args0": [
       {
@@ -549,8 +540,26 @@ Blockly.defineBlocksWithJsonArray([
         "text": "MyContract",
       }
     ],
-    "message2": "state variables, enums & structs %1",
+    "message1": 'documentation %1',
+    "args1": [
+      {
+        "type": "input_statement",
+        "name": "DOCS",
+        "check": "NatSpec_contract",
+        "align": "RIGHT"
+      }
+    ],
+    "message2": 'inheriting from %1',
     "args2": [
+      {
+        "type": "input_statement",
+        "name": "INHERIT",
+        "check": "inherit",
+        "align": "RIGHT"
+      }
+    ],
+    "message3": "state variables, enums & structs %1",
+    "args3": [
       {
         "type": "input_statement",
         "name": "STATES",
@@ -558,8 +567,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message3": "modifiers definition %1",
-    "args3": [
+    "message4": "modifiers definition %1",
+    "args4": [
       {
         "type": "input_statement",
         "name": "MODIFIERS",
@@ -567,8 +576,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message4": "events definition %1",
-    "args4": [
+    "message5": "events definition %1",
+    "args5": [
       {
         "type": "input_statement",
         "name": "EVENTS",
@@ -576,8 +585,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message5": "constructor definition %1",
-    "args5": [
+    "message6": "constructor definition %1",
+    "args6": [
       {
         "type": "input_statement",
         "name": "CTOR",
@@ -585,8 +594,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message6": "functions definition %1",
-    "args6": [
+    "message7": "functions definition %1",
+    "args7": [
       {
         "type": "input_statement",
         "name": "METHODS",
@@ -594,8 +603,8 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message7": "functions with return definition %1",
-    "args7": [
+    "message8": "functions with return definition %1",
+    "args8": [
       {
         "type": "input_statement",
         "name": "METHODS_WITH_RETURN",
@@ -1451,7 +1460,7 @@ Blockly.Blocks['usingFor'] = {
 Blockly.Blocks['inherit'] = {
   init: function() {
     this.jsonInit({
-      "message0": "inheriting from contract %1",
+      "message0": "external contract %1",
       "args0": [
         {
           "type": "field_dropdown",

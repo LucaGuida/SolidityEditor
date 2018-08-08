@@ -228,50 +228,16 @@ else { // API mode true
 
 
 function dynamicLibsAndContractsList() {
-  if (API_mode == false) { // standalone mode
-    var options = [[ "select external contract or library...", "select external contract or library..." ]];
-    if (typeof jsonObjFull != 'undefined') {
-      for(var i = 0; i < jsonObjFull.length; i++)
-        options.push([ jsonObjFull[i]['contract']['descriptor']['name'],jsonObjFull[i]['contract']['descriptor']['name'] ]);
-    }
-    return options;
-  }
-
-  else { // API mode
     var options = [[ "select external contract or library...", "select external contract or library..." ]];
     if (typeof jsonObjFull != 'undefined') {
       for(var i = 0; i < jsonObjFull.length; i++)
         options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
     }
     return options;
-  }
 }
 
 function dynamicLibAndContractFunctsList (libName) {
 
-  if (API_mode == false) { // standalone mode
-    var libFunctsList = [[ "select function...", "select function..." ]];
-    if (typeof libName != 'undefined' && libName != null && libName != 'select external contract or library...') {
-      if (typeof jsonObjFull != 'undefined') {
-        libFunctsList = [];
-        for(var i = 0; i < jsonObjFull.length; i++)
-          if (jsonObjFull[i]['contract']['descriptor']['name'] == libName)
-            for (var j = 0; j < jsonObjFull[i]['contract']['descriptor']['abi'].length; j++)
-              if (jsonObjFull[i]['contract']['descriptor']['abi'][j]['type'] == 'function')
-                libFunctsList.push([  jsonObjFull[i]['contract']['descriptor']['abi'][j]['name'],jsonObjFull[i]['contract']['descriptor']['abi'][j]['name'] ]);
-              else if (jsonObjFull[i]['contract']['descriptor']['abi'][j]['type'] == 'constructor')
-                libFunctsList.push([  libName,libName ]);
-
-      }
-    }
-
-    if (libFunctsList.length == 0)
-      libFunctsList = [[ "No functions available", "No functions available" ]];
-
-    return libFunctsList;
-  }
-
-  else { // API mode
     var libFunctsList = [[ "select function...", "select function..." ]];
     if (typeof libName != 'undefined' && libName != null && libName != 'select external contract or library...') {
       if (typeof jsonObjFull != 'undefined') {
@@ -290,7 +256,7 @@ function dynamicLibAndContractFunctsList (libName) {
       libFunctsList = [[ "No functions available", "No functions available" ]];
 
     return libFunctsList;
-  }
+  
 }
 
 function dynamicContractsList() {
@@ -298,8 +264,8 @@ function dynamicContractsList() {
     var options = [[ "select external contract...", "select external contract..." ]];
     if (typeof jsonObjFull != 'undefined') {
       for(var i = 0; i < jsonObjFull.length; i++)
-        if (jsonObjFull[i]['contract']['descriptor']['contract_type'] == 'generic_contract') 
-          options.push([ jsonObjFull[i]['contract']['descriptor']['name'], jsonObjFull[i]['contract']['descriptor']['name'] ]);
+        if (jsonObjFull[i]['JSON']['contract']['descriptor']['contract_type'] == 'generic_contract') 
+          options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
     }
     return options;
   }
@@ -320,8 +286,8 @@ function dynamicLibsList() {
     var options = [[ "select library...", "select library..." ]];
     if (typeof jsonObjFull != 'undefined') {
       for(var i = 0; i < jsonObjFull.length; i++)
-        if (jsonObjFull[i]['contract']['descriptor']['contract_type'] == 'library') 
-          options.push([ jsonObjFull[i]['contract']['descriptor']['name'], jsonObjFull[i]['contract']['descriptor']['name'] ]);
+        if (jsonObjFull[i]['JSON']['contract']['descriptor']['contract_type'] == 'library') 
+          options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
     }
     return options;
   }
@@ -1510,20 +1476,12 @@ Blockly.Blocks['inherit'] = {
 
         //Retrieve external contract ABI
         var ABI;
-        if (API_mode == false) { // standalone mode
-          if (typeof jsonObjFull != 'undefined') {
-            for(var i = 0; i < jsonObjFull.length; i++)
-              if (jsonObjFull[i]['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) 
-                ABI = jsonObjFull[i]['contract']['descriptor']['abi'];
-          }
-        }
-        else { // API mode
           if (typeof jsonObjContracts != 'undefined') {
             for(var i = 0; i < jsonObjContracts.length; i++) 
               if (jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) 
                 ABI = jsonObjContracts[i]['JSON']['contract']['descriptor']['abi'];
           }
-        }
+
      
         if (typeof ABI != 'undefined')
           for(var i = 0; i < ABI.length; i++) {
@@ -1550,7 +1508,7 @@ Blockly.Blocks['inherit'] = {
 
     });
 
-  console.log(Blockly.getMainWorkspace().getAllVariables());
+  //console.log(Blockly.getMainWorkspace().getAllVariables());
 
   },
 };

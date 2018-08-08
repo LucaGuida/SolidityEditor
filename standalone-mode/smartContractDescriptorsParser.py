@@ -6,14 +6,23 @@ from distutils.dir_util import copy_tree
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 parentCwd = os.path.abspath(os.path.join(cwd, os.pardir))
-JSONstandaloneModeArray = []
 
+
+JSONfileForStandaloneMode = {}
+JSONstandaloneModeArray = []
 
 for contractMetadataFile in os.listdir('contract-descriptor-files'): # filenames with extension
   if contractMetadataFile!=".DS_Store":
     file=open('contract-descriptor-files/' + contractMetadataFile).read()
-    descriptor = json.loads(file)
-    JSONstandaloneModeArray.append(descriptor)
+    contractDescriptorJSON = json.loads(file)
+    sourceCode = open('contracts/' + contractMetadataFile.replace('.json','.sol')).read()
+
+    contractDescriptorJSONforStandaloneMode = {}
+    contractDescriptorJSONforStandaloneMode['name'] = contractDescriptorJSON['contract']['descriptor']['name']
+    contractDescriptorJSONforStandaloneMode['contract_type'] = contractDescriptorJSON['contract']['descriptor']['contract_type']
+    contractDescriptorJSONforStandaloneMode['JSON'] = contractDescriptorJSON
+    contractDescriptorJSONforStandaloneMode['code'] = sourceCode
+    JSONstandaloneModeArray.append(contractDescriptorJSONforStandaloneMode)
 
 # Generation of the DB file for the StandaloneMode      
 with open('smartContractDescriptorsDB.json', 'w') as outfile:

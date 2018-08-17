@@ -152,6 +152,7 @@ var funcVisibilityList = [
 var functionTypesList = [
             [ "none", "" ],
             [ "pure",  " pure " ],
+            [ "constant",  " constant " ],
             [ "view", " view " ],
             [ "payable", " payable " ],
           ];

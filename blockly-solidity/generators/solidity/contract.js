@@ -38,7 +38,7 @@ Blockly.Solidity['contract'] = function(block) {
   }
   if (importsArray!=null) {
     for (var i = 0; i < importsArray.length; i++)
-      imports = imports + 'import "../' + importsArray[i] + '.sol";\n';
+      imports = imports + 'import "./' + importsArray[i] + '.sol";\n';
     imports += '\n';
   }
 

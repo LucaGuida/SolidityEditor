@@ -42,18 +42,11 @@ Blockly.Solidity['contract_method_with_return'] = function(block) {
 
 
 Blockly.Solidity['contract_ctor'] = function(block) {
-  var parent = block.getSurroundParent();
-
-  if (!parent) {
-    return '';
-  }
-
   var visibility = block.getFieldValue('VISIBILITY');
-
   var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
   var params = Blockly.Solidity.statementToCode(block, 'PARAMS').trim();
   var branch = Blockly.Solidity.statementToCode(block, 'STACK');
-  var code = docs + parent.getFieldValue('NAME') + '(' + params + ') ' + visibility + ' {\n' + branch + '}\n\n';
+  var code = docs + 'constructor(' + params + ') ' + visibility + ' {\n' + branch + '}\n\n';
 
   return code;
 };
@@ -82,6 +75,17 @@ Blockly.Solidity['contract_method_parameter_get'] = function(block) {
   }
 
   return [Blockly.Solidity.getVariableName(variable), Blockly.Solidity.ORDER_ATOMIC];
+};
+
+
+Blockly.Solidity['fallback'] = function(block) {
+  var docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var visibility = block.getFieldValue('VISIBILITY');
+  var functionType = block.getFieldValue('FUNCTION_TYPE');
+  var branch = Blockly.Solidity.statementToCode(block, 'STACK');
+  var code = docs + 'function() ' + visibility + functionType + '{\n' + branch + '}\n\n';
+
+  return code;
 };
 
 
@@ -183,6 +187,24 @@ Blockly.Solidity['contract_method_call_with_return_value'] = function(block) {
 
 };
 
+
+Blockly.Solidity['assert'] = function(block) {
+  var value = Blockly.Solidity.valueToCode(block, 'VALUE', Blockly.Solidity.ORDER_ASSIGNMENT);
+  var returnString = 'assert(' + value + ');\n\n';
+  return returnString;
+};
+
+
+Blockly.Solidity['require'] = function(block) {
+  var value = Blockly.Solidity.valueToCode(block, 'VALUE', Blockly.Solidity.ORDER_ASSIGNMENT);
+  var returnString = 'require(' + value + ');\n\n';
+  return returnString;
+};
+
+
+Blockly.Solidity['return'] = function(block) {
+  return 'return;\n\n';
+};
 
 Blockly.Solidity['library_method_call'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');

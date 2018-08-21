@@ -138,7 +138,8 @@ var typesListWithStar = [
 var varVisibilityList = [
             [ "internal", "internal" ],
             [ "private",  "private" ],
-            [ "public", "public" ]
+            [ "public", "public" ],
+            [ "memory", "memory" ]
           ];
 
 // List of visibility classes for functions
@@ -768,14 +769,15 @@ function dynamicAddresses () {
   //var addressVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('TYPE_ADDRESS');
 
   var allAddressBlocks = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract_state' && b.getFieldValue('TYPE') == 'TYPE_ADDRESS' });
+  var addressNamePairsArray = [];
+  addressNamePairsArray.push(['address(this)','address(this)']);
 
   if (typeof allAddressBlocks[0] != 'undefined') {
-    var addressNamePairsArray = [];
     for (var i = 0; i < allAddressBlocks.length; i++)
       addressNamePairsArray.push([allAddressBlocks[i].getFieldValue('NAME'),allAddressBlocks[i].getFieldValue('NAME')]);
-    addressList = addressNamePairsArray;
   }
-
+  
+  addressList = addressNamePairsArray;
   return addressList;
 }
 
@@ -853,6 +855,85 @@ Blockly.Blocks['owner_var_declaration'] = {
     Blockly.Extensions.apply('declare_typed_variable', this, false);
 
   },
+};
+
+
+/* ********************** CONTRACT_CTOR BLOCK ********************** */
+
+Blockly.defineBlocksWithJsonArray([
+  {
+    "type": "contract_ctor",
+    "message0": "constructor",
+    "message1": "documentation %1",
+    "args1": [
+        {
+          "type": "input_statement",
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
+        },
+      ],
+    "message3": "visibility %1",
+    "args3": [
+      {
+        "type": "field_dropdown",
+        "name": "VISIBILITY",
+        "options": funcVisibilityList
+      },
+    ],
+    "message2": "parameters %1",
+    "args2": [
+      {
+        "type": "input_statement",
+        "name": "PARAMS",
+        "check": "contract_method_parameter"
+      },
+    ],
+    "message4": "code %1",
+    "args4": [
+      {
+        "type": "input_statement",
+        "name": "STACK"
+      }
+    ],
+    "previousStatement": ["contract_ctor"],
+    "colour": "#1976D2",
+    "tooltip": "Constructor function",
+    "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#creating-contracts"
+  }
+]);
+
+
+/* ********************** CTOR_OWNER BLOCK ********************** */
+
+Blockly.Blocks['ctor_owner'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("set")
+      .appendField(
+        new Blockly.FieldDropdown(
+          [["select state variable...", Blockly.Solidity.UNDEFINED_NAME]],
+          this.validate
+        ),
+        "STATE_NAME"
+      )
+      .appendField("to msg.sender");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('State variable setter to msg.sender (typically used to set the owner variable)');
+
+    this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+  },
+
+  validate: function(stateNameVariableId) {
+    var workspace = this.sourceBlock_.workspace;
+    setTimeout(
+      function() { Blockly.Solidity.updateWorkspaceStateTypes(workspace) },
+      1
+    );
+    return stateNameVariableId;
+  }
 };
 
 
@@ -1088,6 +1169,74 @@ Blockly.Blocks['contract_method_parameter_get'] = {
     this.getVariableNameSelectField = function() { return this.getField('PARAM_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
   }
+};
+
+
+/* ********************** FALLBACK BLOCK ********************** */
+
+
+Blockly.Blocks['fallback'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "%1 function",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "NAME",
+          "text": "fallback"
+        },
+      ],
+      "message1": "documentation %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "DOCS",
+          "check": ["NatSpec_function"]
+        },
+      ],
+    "message2": "visibility %1",
+    "args2": [
+      {
+        "type": "field_dropdown",
+        "name": "VISIBILITY",
+        "options": funcVisibilityList
+      },
+    ],
+      "message3": "function type %1",
+      "args3": [
+        {
+          "type": "field_dropdown",
+          "name": "FUNCTION_TYPE",
+          "options": functionTypesList
+        }      
+      ],
+      "message4": "code %1",
+      "args4": [
+        {
+          "type": "input_statement",
+          "name": "STACK"        
+        }
+      ],
+      "previousStatement": "contract_method",
+      "nextStatement": "contract_method",
+      "colour": "#1976D2",
+      "tooltip": "Function definition",
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#fallback-function"
+    });
+
+    this.getVariableNameField = function() { return this.getField('NAME') };
+    this.getVariableType = function() { return 'void' }; //contract_method
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
 };
 
 
@@ -1394,7 +1543,60 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE USING...FOR..., and INHERIT BLOCKS, ORACLIZE_QUERY, ORACLIZE_RESULT ********************** */
+/* ********************** ASSERT & REQUIRE BLOCKS ********************** */
+
+
+Blockly.Blocks['assert'] = {
+  init: function() {
+    this.appendValueInput('VALUE')
+          .appendField("assert ")
+         ;
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Assert function call');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/control-structures.html#error-handling-assert-require-revert-and-exceptions');
+    this.getVariableNameSelectField = function() { return this.getField('VALUE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+  },
+};
+
+
+Blockly.Blocks['require'] = {
+  init: function() {
+    this.appendValueInput('VALUE')
+          .appendField("require ")
+          .setCheck('Boolean');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#FF5252");
+    this.setTooltip('Require function call');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/control-structures.html#error-handling-assert-require-revert-and-exceptions');
+
+    this.getVariableNameSelectField = function() { return this.getField('VALUE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+  },
+};
+
+
+/* ********************** RETURN BLOCK ********************** */
+
+Blockly.Blocks['return'] = {
+  init: function() {
+    this.appendDummyInput('VALUE')
+      .appendField("return");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#5C81A6");
+    this.setTooltip('Return statement');
+
+    this.getVariableNameSelectField = function() { return this.getField('VALUE'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
+  },
+};
+
+
+/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE USING...FOR..., INHERIT, ORACLIZE_QUERY, ORACLIZE_SCHEDULED_QUERY & ORACLIZE_RESULT BLOCKS ********************** */
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
@@ -1605,6 +1807,40 @@ Blockly.Blocks['oraclize_query'] = {
       "colour": "#FF5252",
       "tooltip": "Query via Oraclize a given URL, which may inclued the use of JSON or XML parsing helpers. The result of the query is stored in the 'result' variable",
       "helpUrl": "http://docs.oraclize.it/#ethereum"
+    });
+  },
+};
+
+
+Blockly.Blocks['oraclize_scheduled_query'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "Oraclize scheduled query %1  %2",
+      "args0": [
+        {
+          "type": "field_input",
+          "name": "URL",
+          "text": "URL to query"
+        },
+        {
+          "type": "field_input",
+          "check": "Number",
+          "name": "TIME",
+          "text": "delay in seconds or UTC timestamp"
+        },
+      ],
+      "message1": "operations to perform after receiving a response from Oraclize %1",
+      "args1": [
+        {
+          "type": "input_statement",
+          "name": "CALLBACK"
+        },
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#FF5252",
+      "tooltip": "Schedule in the future an Oraclize query to a given URL, which may inclued the use of JSON or XML parsing helpers. The second parameter is the delay in seconds from the current time or the timestamp defining the time in the future at which the query should be performed.The result of the query is stored in the 'result' variable",
+      "helpUrl": "https://docs.oraclize.it/#ethereum-quick-start-schedule-a-query-in-the-future"
     });
   },
 };
@@ -2630,6 +2866,146 @@ Blockly.Blocks['mapping_get'] = {
   }
 };
 
+
+/* ********************** ARRAY_VARIABLE_DECLARE, ARRAY_VARIABLE_SET, ARRAY_VARIABLE_PUSH & ARRAY_VARIABLE_GET BLOCKS ********************** */
+
+function dynamicPrimitiveAndStructTypesList () {
+  var structsList = [[ "select type...", "select type..." ]];
+  var structsNamePairsArray = [];
+  for (var j = 0; j < typesList.length; j++)
+    structsNamePairsArray.push(typesList[j]);    
+  var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_definition');
+  if (typeof structVariablesArray[0] != 'undefined') {
+    for (var i = 0; i < structVariablesArray.length; i++)
+      structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
+  }
+  structsList = structsNamePairsArray;
+  return structsList;
+}
+
+Blockly.Blocks['array_variable_declare'] = {
+  init: function() {
+    this.jsonInit({
+      "message0": "declare array of type %1  visibility %2  %3",
+      "args0": [
+        { 
+          "type": "field_dropdown",
+          "name": "TYPE",
+          "options": dynamicPrimitiveAndStructTypesList
+        },
+        { 
+          "type": "field_dropdown",
+          "name": "VISIBILITY",
+          "options": varVisibilityList
+        },
+        {
+          "type": "field_input",
+          "name": "VAR_NAME",
+          "text": "arrayName"
+        },
+      ],
+      "previousStatement": null,
+      "nextStatement": null,
+      "colour": "#1976D2",
+      "tooltip": "Declare an array variable",
+      "helpUrl": ""
+    });
+
+    this.getVariableNameField = function() { return this.getField('VAR_NAME') };
+    this.getVariableType = function() { return 'array_variable' };
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
+
+    Blockly.Extensions.apply('declare_typed_variable', this, false);
+  },
+};
+
+
+function dynamicArrayVariablesList () {
+  var arraysList = [[ "select array variable...", "select array variable..." ]];
+
+  var arrayVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('array_variable');
+  if (typeof arrayVariablesArray[0] != 'undefined') {
+    var arraysNamePairsArray = arraysList;
+    for (var i = 0; i < arrayVariablesArray.length; i++)
+      arraysNamePairsArray.push([Blockly.Solidity.getVariableName(arrayVariablesArray[i]),Blockly.Solidity.getVariableName(arrayVariablesArray[i])]);
+    arraysList = arraysNamePairsArray;
+  }
+
+  return arraysList;
+}
+
+
+Blockly.Blocks['array_variable_set'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('set element at index')
+      .appendField(new Blockly.FieldNumber('0'), 'INDEX');
+    this.appendValueInput('ARRAY_VARIABLE_VALUE')
+      .appendField('of array ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicArrayVariablesList),
+        "ARRAY_VARIABLE_NAME"
+      )
+      .appendField("to");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Set value for array element at specified index');
+
+    this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+  },
+};
+
+
+Blockly.Blocks['array_variable_push'] = {
+  init: function() {
+    this.appendValueInput('NEW_ELEMENT')
+      .appendField('push new element ');
+    this.appendDummyInput()
+      .appendField(" to array ")
+      .appendField(
+        new Blockly.FieldDropdown(dynamicArrayVariablesList),
+        "ARRAY_VARIABLE_NAME"
+      );
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour("#1976D2");
+    this.setTooltip('Push new element to array variable');
+
+    this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+  },
+};
+
+
+Blockly.Blocks['array_variable_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(' element at index ')
+      .appendField(new Blockly.FieldNumber('0'), 'INDEX')
+      .appendField(' of array ')
+      .appendField(
+        new Blockly.FieldDropdown(dynamicArrayVariablesList),
+        "ARRAY_VARIABLE_NAME"
+      );
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('Get an array element given its index');
+
+    this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+
+  }
+};
+
 /* ********************** NATSPEC_CONTRACT, NATSPEC_FUNCTION & NATSPEC_FUNCTION_PARAMETER BLOCKS ********************** */
 
 Blockly.Blocks['NatSpec_contract'] = {
@@ -2751,84 +3127,7 @@ Blockly.Blocks['argument_container'] = {
 };
 
 
-/* ********************** CONTRACT_CTOR BLOCK ********************** */
-
-Blockly.defineBlocksWithJsonArray([
-  {
-    "type": "contract_ctor",
-    "message0": "constructor",
-    "message1": "documentation %1",
-    "args1": [
-        {
-          "type": "input_statement",
-          "name": "DOCS",
-          "check": ["NatSpec_function"]
-        },
-      ],
-    "message2": "visibility %1",
-    "args2": [
-      {
-        "type": "field_dropdown",
-        "name": "VISIBILITY",
-        "options": funcVisibilityList
-      },
-    ],
-    "message3": "parameters %1",
-    "args3": [
-      {
-        "type": "input_statement",
-        "name": "PARAMS",
-        "check": "contract_method_parameter"
-      },
-    ],
-    "message4": "code %1",
-    "args4": [
-      {
-        "type": "input_statement",
-        "name": "STACK"
-      }
-    ],
-    "previousStatement": ["contract_ctor"],
-    "colour": "#1976D2",
-    "tooltip": "Constructor function",
-    "helpUrl": ""
-  }
-]);
-
-
-/* ********************** CTOR_OWNER BLOCK ********************** */
-
-Blockly.Blocks['ctor_owner'] = {
-  init: function() {
-    this.appendDummyInput()
-      .appendField("set")
-      .appendField(
-        new Blockly.FieldDropdown(
-          [["select state variable...", Blockly.Solidity.UNDEFINED_NAME]],
-          this.validate
-        ),
-        "STATE_NAME"
-      )
-      .appendField("to msg.sender");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour("#1976D2");
-    this.setTooltip('State variable setter to msg.sender (typically used to set the owner variable)');
-
-    this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
-    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
-  },
-
-  validate: function(stateNameVariableId) {
-    var workspace = this.sourceBlock_.workspace;
-    setTimeout(
-      function() { Blockly.Solidity.updateWorkspaceStateTypes(workspace) },
-      1
-    );
-    return stateNameVariableId;
-  }
-};
-
+/* **********************  ********************** */
 
 Blockly.defineBlocksWithJsonArray([
   {

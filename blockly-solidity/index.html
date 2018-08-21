@@ -114,6 +114,14 @@
       <block type="mapping_get"></block>
     </category>
 
+    <category name="State variables: arrays" colour="#5ba580">
+      <label text="ARRAY VARIABLES" web-class="myLabelStyle"></label>
+      <block type="array_variable_declare"></block>
+      <block type="array_variable_set"></block>
+      <block type="array_variable_push"></block>
+      <block type="array_variable_get"></block>
+    </category>
+
     <category name="Constructor definition" colour="#5ba580">
       <label text="CONSTRUCTOR DEFINITION" web-class="myLabelStyle"></label>
       <block type="contract_ctor"></block>
@@ -131,6 +139,9 @@
       <block type="contract_method_parameter"></block>
       <block type="contract_method_parameter_get"></block>
       <sep gap="40"></sep>
+      <label text="FALLBACK FUNCTION" web-class="myLabelStyle"></label>
+      <block type="fallback"></block>
+      <sep gap="40"></sep>
       <label text="TYPICAL FUNCTIONS" web-class="myLabelStyle"></label>
       <block type="changeOwner_method"></block>
       <block type="destroy_method"></block>
@@ -141,7 +152,14 @@
       <label text="FUNCTION CALL" web-class="myLabelStyle"></label>
       <block type="contract_method_call"></block>
       <block type="contract_method_call_with_return_value"></block>
-      <block type="argument_container"></block>
+      <block type="argument_container"></block>      
+      <sep gap="40"></sep>
+      <label text="SPECIAL FUNCTIONS: ASSERT & REQUIRE" web-class="myLabelStyle"></label>
+      <block type="assert"></block>
+      <block type="require"></block>
+      <sep gap="40"></sep>
+      <label text="RETURN STATEMENT" web-class="myLabelStyle"></label>
+      <block type="return"></block>
     </category>
 
     <category name="External contracts, libraries and oracles" colour="#5ba580">
@@ -164,6 +182,7 @@
       <sep gap="40"></sep>
       <label text="ORACLES INTEGRATION: Oraclize" web-class="myLabelStyle"></label>
       <block type="oraclize_query"></block>
+      <block type="oraclize_scheduled_query"></block>
       <block type="oraclize_result"></block>
     </category>
 

@@ -139,7 +139,7 @@ var varVisibilityList = [
             [ "internal", "internal" ],
             [ "private",  "private" ],
             [ "public", "public" ],
-            [ "memory", "memory" ]
+            [ "memory (only inside functions)", "memory" ]
           ];
 
 // List of visibility classes for functions
@@ -153,7 +153,6 @@ var funcVisibilityList = [
 var functionTypesList = [
             [ "none", "" ],
             [ "pure",  " pure " ],
-            [ "constant",  " constant " ],
             [ "view", " view " ],
             [ "payable", " payable " ],
           ];

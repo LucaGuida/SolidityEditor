@@ -592,7 +592,7 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message2": 'inheriting from %1',
+    "message2": 'contract inheritance and library usage %1',
     "args2": [
       {
         "type": "input_statement",

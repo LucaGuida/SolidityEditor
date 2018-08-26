@@ -3229,8 +3229,8 @@ Blockly.Blocks['controls_for'] = {
     );
 
     this.getVariableNameField = function() { return this.getField('NAME'); };
-    this.getVariableType = function() { return 'controls_for' };
-    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_VARIABLE };
+    this.getVariableType = function() { return  'TYPE_UINT'};
+    this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
     this.getVariableScope = function() {
       var scope = this.getParent();
       while (!!scope && scope.type != 'contract') {

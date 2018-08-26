@@ -61,7 +61,7 @@ Blockly.Solidity['controls_for'] = function(block) {
       Blockly.Solidity.ORDER_ASSIGNMENT) || 0;
   var code = Blockly.Solidity.statementToCode(block, 'CODE');
 
-  return 'for (' + variable + '=' + from + '; '+ variable + '<' + to + '; '+ variable + '++) {\n  ' + code + '}\n\n\n';
+  return 'for (uint ' + variable + '=' + from + '; '+ variable + '<' + to + '; '+ variable + '++) {\n  ' + code + '\n}\n\n\n';
 };
 
 

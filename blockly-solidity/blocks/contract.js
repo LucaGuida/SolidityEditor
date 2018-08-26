@@ -306,9 +306,17 @@ else { // API mode true
 
 function dynamicLibsAndContractsList() {
     var options = [[ "select external contract or library...", "select external contract or library..." ]];
+    var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return (b.type == 'oraclize_query'||b.type == 'oraclize_scheduled_query')});
     if (typeof jsonObjFull != 'undefined') {
-      for(var i = 0; i < jsonObjFull.length; i++)
-        options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
+      for(var i = 0; i < jsonObjFull.length; i++) {
+        if (typeof OraclizeBlock[0] != 'undefined')
+          options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
+        else if (jsonObjFull[i]['JSON']['contract']['descriptor']['name']=='usingOraclize')
+          console.log();
+        else 
+          options.push([ jsonObjFull[i]['JSON']['contract']['descriptor']['name'],jsonObjFull[i]['JSON']['contract']['descriptor']['name'] ]);
+      }
+
     }
     return options;
 }
@@ -3001,12 +3009,8 @@ Blockly.Blocks['array_variable_push'] = {
   init: function() {
     this.appendValueInput('NEW_ELEMENT')
       .appendField('push new element ');
-    this.appendDummyInput()
-      .appendField(" to array ")
-      .appendField(
-        new Blockly.FieldDropdown(dynamicArrayVariablesList),
-        "ARRAY_VARIABLE_NAME"
-      );
+    this.appendValueInput('ARRAY_VARIABLE_NAME')
+      .appendField(" to array ");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#1976D2");

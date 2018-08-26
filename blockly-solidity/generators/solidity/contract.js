@@ -62,7 +62,7 @@ Blockly.Solidity['contract'] = function(block) {
   var inheritedContracts = '';
   var inheritArray = [];
 
-  var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'oraclize_query'});
+  var OraclizeBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return (b.type == 'oraclize_query'||b.type == 'oraclize_scheduled_query')});
   var inheritedContracts = '';
   if (typeof OraclizeBlock[0] != 'undefined' && OraclizeBlock[0].getFieldValue('URL')!='URL to query')
     {
@@ -455,10 +455,11 @@ Blockly.Solidity['array_variable_set'] = function(block) {
 
 
 Blockly.Solidity['array_variable_push'] = function(block) {
-  var variableName = block.getFieldValue('ARRAY_VARIABLE_NAME');
+  var variableName = Blockly.Solidity.valueToCode(block, 'ARRAY_VARIABLE_NAME',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
   var newElement = Blockly.Solidity.valueToCode(block, 'NEW_ELEMENT',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
-  if (variableName == "select array variable...")
+  if (variableName == ' ')
     return '';
 
   return variableName + '.push(' + newElement + ');\n';

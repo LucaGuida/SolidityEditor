@@ -443,14 +443,14 @@ Blockly.Solidity['array_variable_declare'] = function(block) {
 
 
 Blockly.Solidity['array_variable_set'] = function(block) {
-  var variableName = block.getFieldValue('ARRAY_VARIABLE_NAME');
-  var index = block.getFieldValue('INDEX');
+  var variableName = Blockly.Solidity.valueToCode(block, 'ARRAY_VARIABLE_NAME',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
   var value = Blockly.Solidity.valueToCode(block, 'ARRAY_VARIABLE_VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
-  if (variableName == "select array variable...")
+  if (variableName == " ")
     return '';
 
-  return variableName + '[' + index + '] = ' + value + ';\n';
+  return variableName + ' = ' + value + ';\n';
 };
 
 
@@ -466,15 +466,24 @@ Blockly.Solidity['array_variable_push'] = function(block) {
 };
 
 
-Blockly.Solidity['array_variable_get'] = function(block) {
-  var variableName = block.getFieldValue('ARRAY_VARIABLE_NAME');
-  var index = block.getFieldValue('INDEX');
-  if (variableName == "select array variable...")
+Blockly.Solidity['array_variable_element_get'] = function(block) {
+  var variableName = Blockly.Solidity.valueToCode(block, 'ARRAY_VARIABLE_NAME',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+  var index = Blockly.Solidity.valueToCode(block, 'INDEX',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || 0;
+  if (variableName == " ")
     return '';
 
   return [variableName + '[' + index + ']', Blockly.Solidity.ORDER_ATOMIC];
 };
 
+Blockly.Solidity['array_variable_get'] = function(block) {
+  var variableName = block.getFieldValue('ARRAY_VARIABLE_NAME');
+  if (variableName == "select array variable...")
+    return '';
+
+  return [variableName, Blockly.Solidity.ORDER_ATOMIC];
+};
 
 Blockly.Solidity['usingFor'] = function(block) {
   var libraryName = block.getFieldValue('LIB_NAME');
@@ -497,7 +506,7 @@ Blockly.Solidity['oraclize_query'] = function(block) {
   var callback = Blockly.Solidity.statementToCode(block, 'CALLBACK');
   if (URL == 'URL to query')
     return '';
-  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query("URL", "' + URL + '");\n}' + '\n\n\n';
+  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '\n  emit LogAPIUpdated(usingOraclize.strConcat("Oraclize query response received: ", result, "", "", ""));\n}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query("URL", "' + URL + '");\n}' + '\n\n\n';
 };
 
 
@@ -507,7 +516,7 @@ Blockly.Solidity['oraclize_scheduled_query'] = function(block) {
   var callback = Blockly.Solidity.statementToCode(block, 'CALLBACK');
   if (URL == 'URL to query')
     return '';
-  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query(' + time + ', "URL", "' + URL + '");\n}' + '\n\n\n';
+  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '\n  emit LogAPIUpdated(usingOraclize.strConcat("Oraclize query response received: ", result, "", "", ""));\n}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query(' + time + ', "URL", "' + URL + '");\n}' + '\n\n\n';
 };
 
 

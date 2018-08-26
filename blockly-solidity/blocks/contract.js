@@ -2984,15 +2984,9 @@ function dynamicArrayVariablesList () {
 
 Blockly.Blocks['array_variable_set'] = {
   init: function() {
-    this.appendDummyInput()
-      .appendField('set element at index')
-      .appendField(new Blockly.FieldNumber('0'), 'INDEX');
+    this.appendValueInput('ARRAY_VARIABLE_NAME')
+      .appendField('set ');
     this.appendValueInput('ARRAY_VARIABLE_VALUE')
-      .appendField('of array ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicArrayVariablesList),
-        "ARRAY_VARIABLE_NAME"
-      )
       .appendField("to");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -3022,16 +3016,12 @@ Blockly.Blocks['array_variable_push'] = {
 };
 
 
-Blockly.Blocks['array_variable_get'] = {
+Blockly.Blocks['array_variable_element_get'] = {
   init: function() {
-    this.appendDummyInput()
-      .appendField(' element at index ')
-      .appendField(new Blockly.FieldNumber('0'), 'INDEX')
-      .appendField(' of array ')
-      .appendField(
-        new Blockly.FieldDropdown(dynamicArrayVariablesList),
-        "ARRAY_VARIABLE_NAME"
-      );
+    this.appendValueInput('INDEX').setCheck('Number')
+      .appendField(' element at index');
+    this.appendValueInput('ARRAY_VARIABLE_NAME')
+      .appendField(" of array ");
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Get an array element given its index');
@@ -3041,6 +3031,25 @@ Blockly.Blocks['array_variable_get'] = {
 
   }
 };
+
+
+Blockly.Blocks['array_variable_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(
+        new Blockly.FieldDropdown(dynamicArrayVariablesList),
+        "ARRAY_VARIABLE_NAME"
+      );    
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('Get an array element given its index');
+
+    this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
+    this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
+
+  }
+};
+
 
 /* ********************** NATSPEC_CONTRACT, NATSPEC_FUNCTION & NATSPEC_FUNCTION_PARAMETER BLOCKS ********************** */
 

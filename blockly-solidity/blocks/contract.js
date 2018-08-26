@@ -531,8 +531,13 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
     var memberSelectorBeingDisplayed = this.getFieldValue('STRUCT_MEMBER_NAME');
     if (selectedStructVariable) {
       if (!memberSelectorBeingDisplayed) {
+          if (varName.substring(varName.length-2, varName.length) == "[]" && this.getInput('ARRAY_INDEX')==null) {
+            this.appendValueInput('ARRAY_INDEX')
+              .appendField("at array index ");
+        }
+
         this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
-          .appendField(' member  ')
+          .appendField('member  ')
           .appendField(
           new Blockly.FieldDropdown(dynamicStructMembersList(varName)),
           "STRUCT_MEMBER_NAME"
@@ -544,7 +549,6 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
           }
       }
 
-
       else { 
         if (event.name=="STRUCT_VARIABLE_NAME") {
 
@@ -554,8 +558,20 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
             this.removeInput('STRUCT_VARIABLE_VALUE');
           }
 
+          do {
+            this.removeInput('ARRAY_INDEX', true);
+          } 
+          while (varName.substring(varName.length-2, varName.length) != "[]" && this.getInput('ARRAY_INDEX')!=null);
+
+
+          if (varName.substring(varName.length-2, varName.length) == "[]" && this.getInput('ARRAY_INDEX')==null) {
+              this.appendValueInput('ARRAY_INDEX')
+                .appendField("at array index ");
+          }
+
+
           this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
-            .appendField(' member  ')
+            .appendField('member  ')
             .appendField(
             new Blockly.FieldDropdown(dynamicStructMembersList(varName)),
             "STRUCT_MEMBER_NAME"
@@ -607,7 +623,6 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_EXTENSION = function() {
 Blockly.Extensions.registerMutator('struct_member_mutator',
     Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN,
     Blockly.Solidity.STRUCT_MEMBER_MUTATOR_EXTENSION);
-
 
 
 /* ********************** CONTRACT BLOCK ********************** */
@@ -2699,8 +2714,6 @@ function dynamicStructMembersList (blockName) {
       var structDefinitionBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.getFieldValue('STRUCT_NAME') == structVariableBlock.getFieldValue('STRUCT_TYPE') })[0];
       var membersOfGivenBlock = [];
       //var membersOfGivenBlock = structDefinitionBlock.getChildren().filter(function(b) { return b.type == 'struct_member' });
-
-
       do {
         structDefinitionBlock = structDefinitionBlock.getChildren().filter(function(b) { return b.type == 'struct_member' })[0];
 
@@ -2709,7 +2722,6 @@ function dynamicStructMembersList (blockName) {
         }
       } while (structDefinitionBlock)
 
-
       if (typeof membersOfGivenBlock[0] != 'undefined') {
         var membersOfGivenBlockPairs = [];
         for (var i = 0; i < membersOfGivenBlock.length; i++)
@@ -2717,6 +2729,31 @@ function dynamicStructMembersList (blockName) {
         structMembersList = membersOfGivenBlockPairs;
       }
     }
+
+
+    //Struct-Array blocks
+    var arrayDeclarationBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.getFieldValue('VAR_NAME') == blockName.substring(0, blockName.length - 2) })[0];
+      if (typeof arrayDeclarationBlock != 'undefined' && arrayDeclarationBlock != null) {
+      var structTypeName = arrayDeclarationBlock.getFieldValue('TYPE').substring(0, arrayDeclarationBlock.getFieldValue('TYPE').length - 8);
+      var structDefinitionBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.getFieldValue('STRUCT_NAME') == structTypeName })[0];
+
+        var membersOfGivenBlock = [];
+        do {
+          structDefinitionBlock = structDefinitionBlock.getChildren().filter(function(b) { return b.type == 'struct_member' })[0];
+
+          if (structDefinitionBlock) {
+            membersOfGivenBlock.push(structDefinitionBlock);
+          }
+        } while (structDefinitionBlock)
+
+        if (typeof membersOfGivenBlock[0] != 'undefined') {
+          var membersOfGivenBlockPairs = [];
+          for (var i = 0; i < membersOfGivenBlock.length; i++)
+            membersOfGivenBlockPairs.push([membersOfGivenBlock[i].getFieldValue('MEMBER_NAME'),membersOfGivenBlock[i].getFieldValue('MEMBER_NAME')]);
+          structMembersList = membersOfGivenBlockPairs;
+        }
+      }
+
   }
 
   return structMembersList;
@@ -2916,8 +2953,10 @@ function dynamicPrimitiveAndStructTypesList () {
     structsNamePairsArray.push(typesList[j]);    
   var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_definition');
   if (typeof structVariablesArray[0] != 'undefined') {
-    for (var i = 0; i < structVariablesArray.length; i++)
-      structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
+    for (var i = 0; i < structVariablesArray.length; i++) {
+      var name = Blockly.Solidity.getVariableName(structVariablesArray[i])+'[STRUCT]';
+      structsNamePairsArray.push([name,name]);
+    }
   }
   structsList = structsNamePairsArray;
   return structsList;
@@ -2963,6 +3002,19 @@ Blockly.Blocks['array_variable_declare'] = {
     };
 
     Blockly.Extensions.apply('declare_typed_variable', this, false);
+
+
+    this.setOnChange(function(event) {
+      var scope = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract'})[0];
+      var typeCheck = this.getFieldValue('TYPE').toString().includes('[STRUCT]');
+      if (typeCheck == true) {
+        var varName = this.getFieldValue('VAR_NAME') + '[]';
+        var newVariable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, varName, 'struct_variable');
+        newVariable.group = Blockly.Solidity.LABEL_GROUP_STRUCT_VAR;
+        newVariable.scope = scope;
+      }
+    });
+ 
   },
 };
 

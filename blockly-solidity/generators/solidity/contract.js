@@ -12,8 +12,16 @@ goog.require('Blockly.Solidity');
     'TYPE_INT': 'int',
     'TYPE_UINT': 'uint',
     'TYPE_ADDRESS': 'address',
-    'TYPE_BYTES_ARRAY': 'bytes',
+    'TYPE_BYTES': 'bytes',
+    'TYPE_BYTES32': 'bytes32',
     'TYPE_STRING': 'string',
+    'TYPE_BOOL_ARRAY': 'bool[]',
+    'TYPE_INT_ARRAY': 'int[]',
+    'TYPE_UINT_ARRAY': 'uint[]',
+    'TYPE_ADDRESS_ARRAY': 'address[]',
+    'TYPE_BYTES_ARRAY': 'bytes[]',
+    'TYPE_BYTES32_ARRAY': 'bytes32[]',
+    'TYPE_STRING_ARRAY': 'string[]',
     'TYPE_STAR': '*'
   };
 
@@ -22,8 +30,16 @@ goog.require('Blockly.Solidity');
     'TYPE_INT': '0',
     'TYPE_UINT': '0',
     'TYPE_ADDRESS': '0x0000000000000000000000000000000000000000',
-    'TYPE_BYTES_ARRAY': '""',
+    'TYPE_BYTES': '""',
+    'TYPE_BYTES32': '""',
     'TYPE_STRING': '""',
+    'TYPE_BOOL_ARRAY': '[]',
+    'TYPE_INT_ARRAY': '[]',
+    'TYPE_UINT_ARRAY': '[]',
+    'TYPE_ADDRESS_ARRAY': '[]',
+    'TYPE_BYTES_ARRAY': '[]',
+    'TYPE_BYTES32_ARRAY': '[]',
+    'TYPE_STRING_ARRAY': '[]',
   };
 
 Blockly.Solidity['contract'] = function(block) {
@@ -193,11 +209,6 @@ Blockly.Solidity['event_definition'] = function(block) {
 Blockly.Solidity['event_argument'] = function(block) {
   var name = block.getFieldValue('NAME');
   var type = block.getFieldValue('TYPE');
-  var types = {
-    'TYPE_BOOL': 'bool',
-    'TYPE_INT': 'int',
-    'TYPE_UINT': 'uint',
-  };
   var indexedCheckbox;
   if (block.getFieldValue('INDEXED_CHECKBOX')=="TRUE") {indexedCheckbox = " indexed";}
     else {indexedCheckbox = "";}

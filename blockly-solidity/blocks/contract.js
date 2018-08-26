@@ -119,9 +119,29 @@ var typesList = [
             [ "int",  "TYPE_INT" ],
             [ "uint", "TYPE_UINT" ],
             [ "address", "TYPE_ADDRESS" ],
-            [ "bytes", "TYPE_BYTES_ARRAY" ],
+            [ "bytes32", "TYPE_BYTES32" ],
+            [ "bytes", "TYPE_BYTES" ],
             [ "string", "TYPE_STRING" ],
           ];
+
+// List of types for mappings
+var typesListForMap = [
+            [ "bool", "TYPE_BOOL" ],
+            [ "bool[]", "TYPE_BOOL_ARRAY" ],
+            [ "int",  "TYPE_INT" ],
+            [ "int[]",  "TYPE_INT_ARRAY" ],
+            [ "uint", "TYPE_UINT" ],
+            [ "uint[]", "TYPE_UINT_ARRAY" ],
+            [ "address", "TYPE_ADDRESS" ],
+            [ "address[]", "TYPE_ADDRESS_ARRAY" ],
+            [ "bytes32", "TYPE_BYTES32" ],
+            [ "bytes32[]", "TYPE_BYTES32_ARRAY" ],
+            [ "bytes", "TYPE_BYTES" ],
+            [ "bytes[]", "TYPE_BYTES_ARRAY" ],
+            [ "string", "TYPE_STRING" ],
+            [ "string[]", "TYPE_STRING_ARRAY" ],
+          ];
+
 
 // List of types + '*'
 var typesListWithStar = [
@@ -129,13 +149,27 @@ var typesListWithStar = [
             [ "int",  "TYPE_INT" ],
             [ "uint", "TYPE_UINT" ],
             [ "address", "TYPE_ADDRESS" ],
-            [ "bytes", "TYPE_BYTES_ARRAY" ],
+            [ "bytes32", "TYPE_BYTES32" ],
+            [ "bytes", "TYPE_BYTES" ],
             [ "string", "TYPE_STRING" ],
             [ "*", "TYPE_STAR" ]            
           ];
 
 // List of visibility classes for variables
 var varVisibilityList = [
+            [ "", "" ],
+            [ "internal", "internal" ],
+            [ "internal constant", "internal constant" ],
+            [ "private",  "private" ],
+            [ "private constant",  "private constant" ],
+            [ "public", "public" ],
+            [ "public constant", "public constant" ],
+            [ "memory (only inside functions)", "memory" ]
+          ];
+
+// List of visibility classes for mappings
+var mapVarVisibilityList = [
+            [ "", "" ],
             [ "internal", "internal" ],
             [ "private",  "private" ],
             [ "public", "public" ],
@@ -601,7 +635,7 @@ Blockly.defineBlocksWithJsonArray([
         "align": "RIGHT"
       }
     ],
-    "message3": "state variables, enums & structs %1",
+    "message3": "state variables %1",
     "args3": [
       {
         "type": "input_statement",
@@ -767,7 +801,7 @@ function dynamicAddresses () {
 
   //var addressVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('TYPE_ADDRESS');
 
-  var allAddressBlocks = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract_state' && b.getFieldValue('TYPE') == 'TYPE_ADDRESS' });
+  var allAddressBlocks = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return ((b.type == 'contract_state' && b.getFieldValue('TYPE') == 'TYPE_ADDRESS') || b.type == 'owner_var_declaration') });
   var addressNamePairsArray = [];
   addressNamePairsArray.push(['address(this)','address(this)']);
 
@@ -1759,6 +1793,7 @@ Blockly.Blocks['inherit'] = {
                 default:
                   break;
             }
+          }
 
             // Modifiers
             var modifiers = getFromBetween.get(sourceCode,"modifier ","() {");
@@ -1770,8 +1805,6 @@ Blockly.Blocks['inherit'] = {
                   newVariable.group = Blockly.Solidity.LABEL_GROUP_MODIFIER;
                   newVariable.scope = scope;
                 }
-
-          }
      }
 
 
@@ -2766,17 +2799,17 @@ Blockly.Blocks['mapping_definition'] = {
         {
           "type": "field_dropdown",
           "name": "TYPE1",
-          "options": typesList
+          "options": typesListForMap
         },
         {
           "type": "field_dropdown",
           "name": "TYPE2",
-          "options": typesList
+          "options": typesListForMap
         },
         {
           "type": "field_dropdown",
           "name": "VISIBILITY",
-          "options": varVisibilityList
+          "options": mapVarVisibilityList
         },
         {
           "type": "field_input",

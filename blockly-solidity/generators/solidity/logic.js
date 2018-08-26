@@ -52,6 +52,19 @@ Blockly.Solidity['controls_if'] = function(block) {
 
 Blockly.Solidity['controls_ifelse'] = Blockly.Solidity['controls_if'];
 
+
+Blockly.Solidity['controls_for'] = function(block) {
+  var variable = block.getFieldValue('NAME');
+  var from = Blockly.Solidity.valueToCode(block, 'FROM',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || 0;
+  var to = Blockly.Solidity.valueToCode(block, 'TO',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || 0;
+  var code = Blockly.Solidity.statementToCode(block, 'CODE');
+
+  return 'for (' + variable + '=' + from + '; '+ variable + '<' + to + '; '+ variable + '++) {\n  ' + code + '}\n\n\n';
+};
+
+
 Blockly.Solidity['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {

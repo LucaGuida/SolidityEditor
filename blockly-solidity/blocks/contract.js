@@ -2991,7 +2991,7 @@ Blockly.Blocks['array_variable_set'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
-    this.setTooltip('Set value for array element at specified index');
+    this.setTooltip('Set value for whole array or array element');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3024,7 +3024,7 @@ Blockly.Blocks['array_variable_element_get'] = {
       .appendField(" of array ");
     this.setOutput(true, null);
     this.setColour("#757575");
-    this.setTooltip('Get an array element given its index');
+    this.setTooltip('Get array element given its index');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3042,7 +3042,7 @@ Blockly.Blocks['array_variable_get'] = {
       );    
     this.setOutput(true, null);
     this.setColour("#757575");
-    this.setTooltip('Get an array element given its index');
+    this.setTooltip('Get whole array or array element');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3195,11 +3195,11 @@ Blockly.Blocks['controls_for'] = {
   init: function() {
     this.jsonInit(
       {
-        "message0": "%{BKY_CONTROLS_FOR_TITLE}",
+        "message0": "loop over variable %1 in range %2 < %3  ",
         "args0": [
           {
             "type": "field_input",
-            "name": "VAR",
+            "name": "NAME",
             "text": "i",
           },
           {
@@ -3213,32 +3213,32 @@ Blockly.Blocks['controls_for'] = {
             "name": "TO",
             "check": "Number",
             "align": "RIGHT"
-          },
-          {
-            "type": "input_value",
-            "name": "BY",
-            "check": "Number",
-            "align": "RIGHT"
           }
         ],
-        "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+        "message1": "do %1",
         "args1": [{
           "type": "input_statement",
-          "name": "DO"
+          "name": "CODE"
         }],
         "inputsInline": true,
         "previousStatement": null,
         "nextStatement": null,
-        "colour": "%{BKY_LOOPS_HUE}",
+        "colour": "%{BKY_LOGIC_HUE}",
         "helpUrl": "%{BKY_CONTROLS_FOR_HELPURL}",
       }
     );
 
-    this.getVariableNameField = function() { return this.getField('VAR'); };
-    this.getVariableType = function() { return 'TYPE_UINT'; };
+    this.getVariableNameField = function() { return this.getField('NAME'); };
+    this.getVariableType = function() { return 'controls_for' };
     this.getVariableGroup = function() { return Blockly.Solidity.LABEL_GROUP_VARIABLE };
-    this.getVariableScope = function() { return this };
+    this.getVariableScope = function() {
+      var scope = this.getParent();
+      while (!!scope && scope.type != 'contract') {
+        scope = scope.getParent();
+      }
+      return scope;
+    };
 
     Blockly.Extensions.apply('declare_typed_variable', this, false);
-  },
+    },
 };

@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly: Solidity</title>
+  <script src="../blockly/appengine/storage.js"></script>
   <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/blocks/variables.js"></script>
   <script src="../blockly/blocks/math.js"></script>
@@ -264,6 +265,28 @@
     </div>
   </div>
 
+
+  <div class="card">
+    <div class="header">
+      <h2>Export your <i>SolidityEditor</i> project - STEP 2</h2>
+    </div>
+
+    <div class="container">
+      <p><button type="button" onclick="exportXML2()" >EXPORT FILE</button></p>
+    </div>
+  </div>  
+
+  <div class="card">
+    <div class="header">
+      <h2>Import an existing <i>SolidityEditor</i> project - STEP 1</h2>
+    </div>
+
+    <div class="container">
+      <p><input type="file" id="file-input1" ></p>
+    </div>
+  </div>
+
+
   <div class="card">
     <div class="header">
       <h2>Import an existing <i>SolidityEditor</i> project</h2>
@@ -284,10 +307,35 @@
     </div>
   </div>
 
+<!-- 
+  <div class="card">
+    <div class="header">
+      <h2>Local storage</h2>
+    </div>
+
+    <div class="container">
+      <p><button type="button" onclick="saveToLocalStorage()" >SAVE</button></p>
+      <p><button type="button" onclick="restoreFromLocalStorage()" >RESTORE</button></p>
+    </div>
+  </div>
+-->
 
   <script src='./FileSaver.js'></script>
 
   <script>
+
+    function saveToLocalStorage(e) {
+      BlocklyStorage.backupBlocks_(workspace);
+    }
+
+    function restoreFromLocalStorage(e) {
+      var url = window.location.href.split('#')[0];
+      if ('localStorage' in window && window.localStorage[url]) {
+        Blockly.mainWorkspace.clear();
+        window.setTimeout(BlocklyStorage.restoreBlocks, 0);
+      }
+    }
+
 
     function exportXML(e) {
         var xml = Blockly.Xml.workspaceToDom(workspace);
@@ -296,6 +344,18 @@
         var filename = "Blockly_workspace"
         var blob = new Blob([content], {type: "text/xml;charset=utf-8"});
         saveAs(blob, filename+".xml");
+        console.log(workspace.getAllVariables());
+    }
+
+
+    function exportXML2(e) {
+        var xml = Blockly.Xml.variablesToDom(workspace.getAllVariables());
+        var xml_text = Blockly.Xml.domToPrettyText(xml);
+        var content = xml_text;
+        var filename = "Blockly_variables"
+        var blob = new Blob([content], {type: "text/xml;charset=utf-8"});
+        saveAs(blob, filename+".xml");
+        console.log(workspace.getAllVariables());
     }
 
 
@@ -323,18 +383,124 @@
               var xml = Blockly.Xml.textToDom(xml_text);
               Blockly.mainWorkspace.clear();
               Blockly.Xml.domToWorkspace(xml, workspace);
+              console.log(workspace.getAllVariables());
+              console.log(workspace.getAllBlocks().filter(function(b) { return b.type == 'contract' })[0]);
               return true;
           } catch (e) {
               alert("Invalid input file!");
               return false;
           }
     }
-     
+
+
+    function readSingleFile1(e) {
+      var file = e.target.files[0];
+      if (!file) {
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var contents = e.target.result;
+        restoreWorkspace1(contents);
+      };
+      reader.readAsText(file);
+    }
+
+
+//Helper for extracting substrings
+var getFromBetween = {
+    results:[],
+    string:"",
+    getFromBetween:function (sub1,sub2) {
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return false;
+        var SP = this.string.indexOf(sub1)+sub1.length;
+        var string1 = this.string.substr(0,SP);
+        var string2 = this.string.substr(SP);
+        var TP = string1.length + string2.indexOf(sub2);
+        return this.string.substring(SP,TP);
+    },
+    removeFromBetween:function (sub1,sub2) {
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return false;
+        var removal = sub1+this.getFromBetween(sub1,sub2)+sub2;
+        this.string = this.string.replace(removal,"");
+    },
+    getAllResults:function (sub1,sub2) {
+        // first check to see if we do have both substrings
+        if(this.string.indexOf(sub1) < 0 || this.string.indexOf(sub2) < 0) return;
+
+        // find one result
+        var result = this.getFromBetween(sub1,sub2);
+        // push it to the results array
+        this.results.push(result);
+        // remove the most recently found one from the string
+        this.removeFromBetween(sub1,sub2);
+
+        // if there's more substrings
+        if(this.string.indexOf(sub1) > -1 && this.string.indexOf(sub2) > -1) {
+            this.getAllResults(sub1,sub2);
+        }
+        else return;
+    },
+    get:function (string,sub1,sub2) {
+        this.results = [];
+        this.string = string;
+        this.getAllResults(sub1,sub2);
+        return this.results;
+    }
+};
+
+
+    function restoreWorkspace1(xml_text) {
+          if (typeof xml_text != "string" || xml_text.length < 5) {
+              alert("Invalid input file!");
+              return false;
+              return;
+          }
+
+          try {
+              var xml = Blockly.Xml.textToDom(xml_text);
+              Blockly.mainWorkspace.clear();
+              Blockly.Xml.domToVariables(xml, workspace);
+
+
+
+          // Per ogni variable nel workspace, assegnagli il relativo scope estratto dal nome della variabile
+
+          var allVars = workspace.getAllVariables();
+          if (typeof allVars!='undefined' && typeof allVars[0]!='undefined') {
+            for(i=0;i<allVars.length;i++) {
+              var fullVarName = allVars[i].name;
+              var scope = getFromBetween.get(fullVarName,'_scope(\"','\")_variableName');
+              allVars[i].scope = {};
+              allVars[i].scope.id = scope;
+              console.log(scope);
+            }
+          }
+
+          /*
+          var newVariable = Blockly.Variables.getOrCreateVariablePackage(this.workspace, null, ABI[i]['name'], 'event');
+          newVariable.group = Blockly.Solidity.LABEL_GROUP_EVENT;
+          newVariable.scope = scope;
+          */
+
+
+
+
+              console.log(workspace.getAllVariables());
+              console.log(workspace.getAllBlocks().filter(function(b) { return b.type == 'contract' })[0]);
+              return true;
+          } catch (e) {
+              alert("Invalid input file!");
+              return false;
+          }
+    }
+
+    document.getElementById('file-input1').addEventListener('change', readSingleFile1, false);
+
+
     document.getElementById('file-input').addEventListener('change', readSingleFile, false);
 
-
-
-
+    
     // workspace & toolbox JSON
     var workspace = Blockly.inject(
       'blocklyDiv',

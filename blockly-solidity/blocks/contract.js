@@ -1643,7 +1643,7 @@ Blockly.Blocks['return'] = {
       .appendField("return");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour("#5C81A6");
+    this.setColour("#FF5252");
     this.setTooltip('Return statement');
 
     this.getVariableNameSelectField = function() { return this.getField('VALUE'); };
@@ -2476,7 +2476,7 @@ Blockly.Blocks['enum_member_get'] = {
         "ENUM_MEMBER_NAME"
       );
     this.setOutput(true, null);
-    this.setColour("#FF5252");
+    this.setColour("#757575");
     this.setTooltip('Use a previously defined enum member in an enum variable assignment statement');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_MEMBER_NAME'); };
@@ -2497,7 +2497,7 @@ Blockly.Blocks['enum_get'] = {
         "ENUM_VARIABLE_NAME"
       );
     this.setOutput(true, null);
-    this.setColour("#FF5252");
+    this.setColour("#757575");
     this.setTooltip('Use a previously defined enum variable');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_VARIABLE_NAME'); };
@@ -3123,7 +3123,7 @@ Blockly.Blocks['NatSpec_contract'] = {
       .appendField(new Blockly.FieldTextInput(''), 'DEV');
     this.setPreviousStatement(true, null);
     this.setNextStatement(false, null);
-    this.setColour("#5C81A6");
+    this.setColour("#f4c741");
     this.setTooltip('Contract NatSpec documentation');
 
     this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
@@ -3178,7 +3178,7 @@ Blockly.Blocks['NatSpec_function'] = {
       ],
       "previousStatement": ["NatSpec_function", "contract_method", "contract_method_with_return", "contract_ctor"],
       "nextStatement": "NatSpec_function",
-      "colour": "#5C81A6",
+      "colour": "#f4c741",
       "tooltip": "Function NatSpec documentation",
       "helpUrl": ""
     });
@@ -3198,7 +3198,7 @@ Blockly.Blocks['NatSpec_function_parameter'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setOutput(false, null);
-    this.setColour("#5C81A6");
+    this.setColour("#f4c741");
     this.setTooltip('Function parameter NatSpec documentation');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM'); };

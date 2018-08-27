@@ -1748,7 +1748,7 @@ Blockly.Blocks['usingFor'] = {
       "nextStatement": null,
       "colour": "#FF5252",
       "tooltip": "Attach functions from a specified library to a type, or to any type (*)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#using-for"
     });
 
     this.getVariableNameSelectField = function() { return this.getField('LIB_NAME' + 'TYPE'); };

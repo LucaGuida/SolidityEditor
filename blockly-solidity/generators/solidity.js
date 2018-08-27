@@ -374,7 +374,7 @@ Blockly.Solidity.updateWorkspaceTypes = function(workspace, nameFieldName, value
           blocks[i].inputList[0].setCheck("Number");
           break;
         case 'TYPE_ADDRESS':
-          blocks[i].inputList[0].setCheck("String"); // CHECK IF IT IS AN ACTUAL ADDRESS...
+          blocks[i].inputList[0].setCheck("String"); 
           break;
         case 'TYPE_BYTES_ARRAY':
           blocks[i].inputList[0].setCheck("String");

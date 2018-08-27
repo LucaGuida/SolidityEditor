@@ -418,7 +418,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
-        variablesFirst = false;
+        variablesFirst = true;
       } else if (name == 'shadow') {
         goog.asserts.fail('Shadow block cannot be a top-level block.');
         variablesFirst = false;
@@ -430,7 +430,7 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
             'shadow tag elements in the workspace XML, but it was found in ' +
             'another location.');
         }
-        variablesFirst = false;
+        variablesFirst = true;
       }
     }
   } finally {

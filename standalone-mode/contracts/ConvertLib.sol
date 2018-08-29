@@ -1,10 +1,10 @@
 pragma solidity ^0.4.2;
 
 /**
-@title Some Other Library
-@author Gav Wouldn't
+@title Convert-o-matic 2000
+@author Joe Bloggs
 */
-library MyLib{
+library ConvertLib{
 	/**
 	@notice Converts given value to Ether value
 	@param amount Token amount

@@ -232,6 +232,8 @@ Blockly.Solidity['event_emission'] = function(block) {
     args = args.substring(0, args.length - 1);
   }
 
+  if (eventName == 'select event...')
+    return '';
   return 'emit ' + eventName + '(' + args + ');\n';
 };
 
@@ -285,6 +287,9 @@ Blockly.Solidity['modifier_usage'] = function(block) {
     args = args.trim();
     args = args.substring(0, args.length - 1);
   }
+
+  if (modifierName=='select modifier...')
+    return '';
 
   return modifierName + '(' + args + ') ';
 };
@@ -374,12 +379,18 @@ Blockly.Solidity['struct_variable_set'] = function(block) {
   var value = Blockly.Solidity.valueToCode(block, 'STRUCT_VARIABLE_VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
 
+  if (variableName=='select struct variable...')
+    return '';
+
   return variableName + ' = ' + value + ';\n';
 };
 
 
 Blockly.Solidity['struct_variable_get'] = function(block) {
   var varName = block.getFieldValue('STRUCT_VARIABLE_NAME');
+  if (variableName=='select struct variable...')
+    return '';
+
   return [varName, Blockly.Solidity.ORDER_ATOMIC];
 };
 
@@ -429,6 +440,9 @@ Blockly.Solidity['mapping_set'] = function(block) {
   var value = Blockly.Solidity.valueToCode(block, 'VALUE',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
 
+  if (variableName=='select mapping variable...')
+    return '';
+
   return variableName + '[' + arg + '] = ' + value + ';\n';
 };
 
@@ -437,6 +451,10 @@ Blockly.Solidity['mapping_get'] = function(block) {
   var variableName = block.getFieldValue('MAPPING_VARIABLE_NAME');
   var arg = Blockly.Solidity.valueToCode(block, 'ARG',
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
+
+  if (variableName=='select mapping variable...')
+    return '';
+
   return [variableName + '[' + arg + ']', Blockly.Solidity.ORDER_ATOMIC];
 };
 

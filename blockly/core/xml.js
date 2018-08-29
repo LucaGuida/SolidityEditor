@@ -443,8 +443,8 @@ Blockly.Xml.domToWorkspace = function(xml, workspace) {
   if (workspace.setResizesEnabled) {
     workspace.setResizesEnabled(true);
   }
-  console.log(workspace.getAllVariables(workspace));
-  console.log(workspace.getAllBlocks());
+  //console.log(workspace.getAllVariables(workspace));
+  //console.log(workspace.getAllBlocks());
   return newBlockIds;
 };
 

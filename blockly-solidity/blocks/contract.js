@@ -713,7 +713,8 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     "colour": "#5EA48C",
-    "tooltip": "Declares a new smart contract."
+    "tooltip": "Declares a new smart contract.",
+    "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html"
   }
 ]);
 
@@ -775,6 +776,7 @@ Blockly.Blocks['contract_state_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('State variable getter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/develop/contracts.html#getter-functions');
 
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -800,6 +802,7 @@ Blockly.Blocks['contract_state_set'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('State variable setter');
+    this.setHelpUrl('http://solidity.readthedocs.io/en/develop/contracts.html#visibility-and-getters');
 
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -849,6 +852,7 @@ Blockly.Blocks['address_balance_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Balance of an address variable');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/units-and-global-variables.html#address-related');
 
     this.getVariableNameSelectField = function() { return this.getField('ADDRESS_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ADDRESS };
@@ -870,6 +874,7 @@ Blockly.Blocks['address_transfer'] = {
     this.setNextStatement(true, null);
     this.setColour("#FF5252");
     this.setTooltip('Transfer ether to an address');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/units-and-global-variables.html#address-related');
 
     this.getVariableNameSelectField = function() { return this.getField('ADDRESS_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ADDRESS };
@@ -893,7 +898,7 @@ Blockly.Blocks['owner_var_declaration'] = {
     this.setNextStatement(true, 'contract_state');
     this.setColour("#1976D2");
     this.setTooltip('"Owner" state variable declaration');
-    this.setHelpUrl('http://solidity.readthedocs.io/en/develop/contracts.html#visibility-and-getters');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html');
 
     this._stateNameInitialized = false;
 
@@ -977,7 +982,8 @@ Blockly.Blocks['ctor_owner'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('State variable setter to msg.sender (typically used to set the owner variable)');
-
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html'); 
+    
     this.getVariableNameSelectField = function() { return this.getField('STATE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
   },
@@ -1190,6 +1196,7 @@ Blockly.Blocks['contract_method_parameter'] = {
     this.setNextStatement(true, 'contract_method_parameter');
     this.setColour("#1976D2");
     this.setTooltip('Parameter declaration');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#functions');
 
     this.getVariableNameField = function() { return nameField };
     this.getVariableType = function() { return this.getFieldValue('TYPE') };
@@ -1221,6 +1228,7 @@ Blockly.Blocks['contract_method_parameter_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Parameter getter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#functions');
 
     this.getVariableNameSelectField = function() { return this.getField('PARAM_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_PARAMETER };
@@ -1337,7 +1345,7 @@ Blockly.Blocks['changeOwner_method'] = {
       "nextStatement": "contract_method",
       "colour": "#1976D2",
       "tooltip": "changeOwner function definition (it allows to change the owner of the contract)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
     
     this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function.\nThe usage of modifier "onlyOwner" is recommended.');
@@ -1398,7 +1406,7 @@ Blockly.Blocks['destroy_method'] = {
       "nextStatement": "contract_method",
       "colour": "#1976D2",
       "tooltip": "Destroy function definition (it destroys the contract and transfers the contract balance to the owner of the contract)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
 
     this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function.\nThe usage of modifier "onlyOwner" is recommended.');
@@ -1460,7 +1468,7 @@ Blockly.Blocks['destroyAndSend_method'] = {
       "nextStatement": "contract_method",
       "colour": "#1976D2",
       "tooltip": "destroyAndSend function definition (it destroys the contract and transfers the contract balance to the account specified when calling the function)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
     
     this.setWarningText('The usage of modifier "onlyOwner" is recommended.');
@@ -1512,6 +1520,7 @@ Blockly.Blocks['contract_method_call'] = {
     this.setNextStatement(true, null);
     this.setColour("#FF5252");
     this.setTooltip('Call of a function which does not return a value');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#visibility-and-getters');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
@@ -1563,6 +1572,7 @@ Blockly.Blocks['contract_method_call_with_return_value'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Call of a function which returns a value');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#visibility-and-getters');
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_METHOD };
@@ -1670,7 +1680,7 @@ Blockly.Blocks['library_method_call'] = {
       "colour": "#FF5252",
       "mutator": "library_function_mutator",
       "tooltip": "Call of an external contract or library function which does not return a value",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#libraries"
     });
 
     this.getVariableNameSelectField = function() { return this.getField('METHOD_NAME'); };
@@ -1706,7 +1716,7 @@ Blockly.Blocks['library_method_call_with_return_value'] = {
       "colour": "#757575",
       "mutator": "library_function_mutator",
       "tooltip": "Call of an external contract or a library function which returns a value",
-      "helpUrl": "",
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#libraries",
       "output": null
     });
 
@@ -1829,12 +1839,9 @@ Blockly.Blocks['inherit'] = {
                   newVariable.scope = scope;
                 }
      }
-
-
     });
 
   //console.log(Blockly.getMainWorkspace().getAllVariables());
-
   },
 };
 
@@ -1938,7 +1945,7 @@ Blockly.Blocks['event_definition'] = {
       "nextStatement": "event_definition",
       "colour": "#1976D2",
       "tooltip": "Event definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events"
     });
 
     this.getVariableNameField = function() { return this.getField('NAME') };
@@ -1976,6 +1983,7 @@ Blockly.Blocks['event_argument'] = {
     this.setNextStatement(true, 'event_argument');
     this.setColour("#1976D2");
     this.setTooltip('Event argument declaration');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events');
 
     this._stateNameInitialized = false;
 
@@ -2027,6 +2035,7 @@ Blockly.Blocks['event_emission'] = {
     // this.setOutput(true, null);
     this.setColour("#FF5252");
     this.setTooltip('Emit an event');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/contracts.html#events');
 
     this.getVariableNameSelectField = function() { return this.getField('EVENT_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_EVENT };
@@ -2051,6 +2060,7 @@ Blockly.Blocks['msg_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Get current call property (calldata, address of the sender of the message call, number of wei sent with the message call)');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/units-and-global-variables.html#block-and-transaction-properties');
 
     this.getVariableNameSelectField = function() { return this.getField('MSG_TYPE'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ATOM };
@@ -2099,7 +2109,7 @@ Blockly.Blocks['modifier_definition'] = {
       "nextStatement": "modifier_definition",
       "colour": "#1976D2",
       "tooltip": "Modifier definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/contracts.html#function-modifiers"
     });
 
     this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
@@ -2135,7 +2145,7 @@ Blockly.Blocks['modifier_onlyBy'] = {
       "nextStatement": "modifier_definition",
       "colour": "#1976D2",
       "tooltip": "onlyBy modifier (only the account passed to the modifier can call the function featuring this modifier: if the specified account calls this function, the function is executed; otherwise, an exception is thrown)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
 
     this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
@@ -2171,7 +2181,7 @@ Blockly.Blocks['modifier_onlyOwner'] = {
       "nextStatement": "modifier_definition",
       "colour": "#1976D2",
       "tooltip": "onlyOwner modifier (only the contract owner can call the function featuring this modifier: if the owner calls this function, the function is executed; otherwise, an exception is thrown)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
 
     this.setWarningText('The "owner" variable must be defined in the contract state variables and initialized in the constructor function');
@@ -2209,7 +2219,7 @@ Blockly.Blocks['modifier_onlyAfter'] = {
       "nextStatement": "modifier_definition",
       "colour": "#1976D2",
       "tooltip": "onlyAfter modifier (the function featuring this modifier can be called only after the specified amount of time has passed, otherwise an exception is thrown)",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html"
     });
 
     this.getVariableNameField = function() { return this.getField('MODIFIER_NAME') };
@@ -2260,6 +2270,7 @@ Blockly.Blocks['modifier_usage'] = {
     // this.setOutput(true, null);
     this.setColour("#FF5252");
     this.setTooltip('Assign a previously defined modifier to the function');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/common-patterns.html');
 
     this.getVariableNameSelectField = function() { return this.getField('MODIFIER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MODIFIER };
@@ -2293,7 +2304,7 @@ Blockly.Blocks['enum_definition'] = {
       "nextStatement": null,
       "colour": "#1976D2",
       "tooltip": "Enum definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types"
     });
 
     this.getVariableNameField = function() { return this.getField('ENUM_NAME') };
@@ -2329,7 +2340,7 @@ Blockly.Blocks['enum_member'] = {
       "nextStatement": "enum_member",
       "colour": "#1976D2",
       "tooltip": "Enum member definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types"
     });
 
     this.getVariableNameField = function() { return this.getField('MEMBER_NAME') };
@@ -2382,6 +2393,7 @@ Blockly.Blocks['enum_variable_create'] = {
     this.setTooltip('Declare an enum variable');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types');
 
     this.getVariableNameField = function() { return this.getField('ENUM_VAR_NAME') };
     this.getVariableType = function() { return 'enum_variable' };
@@ -2429,6 +2441,7 @@ Blockly.Blocks['enum_variable_set'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('Enum variable setter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_VARIABLE_VALUE'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
@@ -2478,6 +2491,7 @@ Blockly.Blocks['enum_member_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Use a previously defined enum member in an enum variable assignment statement');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_MEMBER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
@@ -2499,6 +2513,7 @@ Blockly.Blocks['enum_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Use a previously defined enum variable');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?highlight=enum#enum-types');
 
     this.getVariableNameSelectField = function() { return this.getField('ENUM_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
@@ -2532,7 +2547,7 @@ Blockly.Blocks['struct_definition'] = {
       "nextStatement": null,
       "colour": "#1976D2",
       "tooltip": "Struct definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types"
     });
 
     this.getVariableNameField = function() { return this.getField('STRUCT_NAME') };
@@ -2573,7 +2588,7 @@ Blockly.Blocks['struct_member'] = {
       "nextStatement": "struct_member",
       "colour": "#1976D2",
       "tooltip": "Struct member definition",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types"
     });
 
     this.getVariableNameField = function() { return this.getField('MEMBER_NAME') };
@@ -2626,6 +2641,7 @@ Blockly.Blocks['struct_variable_create'] = {
     this.setTooltip('Declare a struct variable');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types');
 
     this.getVariableNameField = function() { return this.getField('STRUCT_VAR_NAME') };
     this.getVariableType = function() { return 'struct_variable' };
@@ -2674,6 +2690,7 @@ Blockly.Blocks['struct_variable_set'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('Struct variable setter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types');
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
@@ -2694,6 +2711,7 @@ Blockly.Blocks['struct_variable_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Use a previously defined struct variable');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types');
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STRUCT };
@@ -2776,7 +2794,7 @@ Blockly.Blocks['struct_member_set'] = {
       "colour": "#1976D2",
       "mutator": "struct_member_mutator",
       "tooltip": "Set struct variable member",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types"
     });
 
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME'+'STRUCT_MEMBER_NAME'); };
@@ -2812,7 +2830,7 @@ Blockly.Blocks['struct_member_get'] = {
       "colour": "#757575",
       "mutator": "struct_member_mutator",
       "tooltip": "Use a previously defined struct variable member",
-      "helpUrl": "",
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/structure-of-a-contract.html?#struct-types",
       "output": null
     });
 
@@ -2866,7 +2884,7 @@ Blockly.Blocks['mapping_definition'] = {
       "nextStatement": null,
       "colour": "#1976D2",
       "tooltip": "Mapping variable declaration",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/types.html#mappings"
     });
 
     this.getVariableNameField = function() { return this.getField('NAME') };
@@ -2917,6 +2935,7 @@ Blockly.Blocks['mapping_set'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('Mapping variable setter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#mappings');
 
     this.getVariableNameSelectField = function() { return this.getField('MAPPING_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MAPPING };
@@ -2937,6 +2956,7 @@ Blockly.Blocks['mapping_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Mapping variable getter');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#mappings');
 
     this.getVariableNameSelectField = function() { return this.getField('MAPPING_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_MAPPING };
@@ -2987,7 +3007,7 @@ Blockly.Blocks['array_variable_declare'] = {
       "nextStatement": null,
       "colour": "#1976D2",
       "tooltip": "Declare an array variable",
-      "helpUrl": ""
+      "helpUrl": "https://solidity.readthedocs.io/en/v0.4.24/types.html#fixed-size-byte-arrays"
     });
 
     this.getVariableNameField = function() { return this.getField('VAR_NAME') };
@@ -3044,6 +3064,7 @@ Blockly.Blocks['array_variable_set'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('Set value for whole array or array element');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#fixed-size-byte-arrays');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3061,6 +3082,7 @@ Blockly.Blocks['array_variable_push'] = {
     this.setNextStatement(true, null);
     this.setColour("#1976D2");
     this.setTooltip('Push new element to array variable');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#fixed-size-byte-arrays');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3077,6 +3099,7 @@ Blockly.Blocks['array_variable_element_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Get array element given its index');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#fixed-size-byte-arrays');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3095,6 +3118,7 @@ Blockly.Blocks['array_variable_get'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Get whole array or array element');
+    this.setHelpUrl('https://solidity.readthedocs.io/en/v0.4.24/types.html#fixed-size-byte-arrays');
 
     this.getVariableNameSelectField = function() { return this.getField('ARRAY_VARIABLE_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_STATE };
@@ -3125,6 +3149,7 @@ Blockly.Blocks['NatSpec_contract'] = {
     this.setNextStatement(false, null);
     this.setColour("#f4c741");
     this.setTooltip('Contract NatSpec documentation');
+    this.setHelpUrl('https://github.com/ethereum/wiki/wiki/Ethereum-Natural-Specification-Format');
 
     this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_NATSPEC };
@@ -3180,7 +3205,7 @@ Blockly.Blocks['NatSpec_function'] = {
       "nextStatement": "NatSpec_function",
       "colour": "#f4c741",
       "tooltip": "Function NatSpec documentation",
-      "helpUrl": ""
+      "helpUrl": "https://github.com/ethereum/wiki/wiki/Ethereum-Natural-Specification-Format"
     });
 
     this.getVariableNameSelectField = function() { return this.getField('TITLE'); };
@@ -3200,7 +3225,8 @@ Blockly.Blocks['NatSpec_function_parameter'] = {
     this.setOutput(false, null);
     this.setColour("#f4c741");
     this.setTooltip('Function parameter NatSpec documentation');
-
+    this.setHelpUrl('https://github.com/ethereum/wiki/wiki/Ethereum-Natural-Specification-Format');
+    
     this.getVariableNameSelectField = function() { return this.getField('PARAM'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_NATSPEC };
   },

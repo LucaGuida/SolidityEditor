@@ -3,7 +3,7 @@
 
 ## Configuration instructions
 
-- Manually enter "Library explorer" URL in blockly-solidity/index.html (https://lucaguida.github.io/SolidityExplorer)
+- Manually enter "Library explorer" URL in blockly-solidity/index.html (https://lucaguida.github.io/SolidityRegistry/)
 
 - Manually set var API_mode = true; in blockly-solidity/blocks/contract.js if you want to perform the retrieval of external contracts and libraries list  from Registry REST API; on the other hand, if you want the retrieval to happen from local JSON files, set the variable to false.  
 - Manually enter libraries list JSON file path in blockly-solidity/blocks/contract.js for autonomous (no Registry API) mode 

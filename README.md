@@ -1,4 +1,4 @@
-# SoliditySOA
+# SolidityRegistry
 
 
 ## Configuration instructions
@@ -26,7 +26,7 @@ cd ~/GitHub
 python -m http.server
 ```
 
-The editor will be available at this link: http://0.0.0.0:8000/SoliditySOA/blockly-solidity/
+The editor will be available at this link: http://0.0.0.0:8000/SolidityRegistry/blockly-solidity/
 
 
 
@@ -37,7 +37,7 @@ Set var API_mode = false in blockly-solidity/blocks/contract.js
 #### To update the local smart contract descriptors DB
 
 ```
-cd ~/GitHub/SoliditySOA/standalone-mode
+cd ~/GitHub/SolidityRegistry/standalone-mode
 python smartContractDescriptorsParser.py
 ```
 

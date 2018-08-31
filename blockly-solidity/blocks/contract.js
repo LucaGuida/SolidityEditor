@@ -266,7 +266,7 @@ if (API_mode == false) { // standalone mode
   // Read JSON external contracts and libraries list 
   var jsonObjFull;
   var requestFull = new XMLHttpRequest();
-  requestFull.open('GET', '/SoliditySOA/standalone-mode/smartContractDescriptorsDB.json', false);  // `false` makes the requestFull synchronous
+  requestFull.open('GET', '/SolidityRegistry/standalone-mode/smartContractDescriptorsDB.json', false);  // `false` makes the requestFull synchronous
   requestFull.send(null);
   if (requestFull.status === 200) {
     jsonObjFull = JSON.parse(requestFull.responseText);

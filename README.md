@@ -15,7 +15,7 @@
 ### To start the underlying Registry REST API
 Assuming var API_mode = true in blockly-solidity/blocks/contract.js
 ```
-cd ~/GitHub/SoliditySmartContractRegistry/REST_API
+cd ~/GitHub/SolidityRegistry/REST_API
 json-server --watch smartContractDescriptorsAPI-DB.json
 ```
 

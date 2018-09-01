@@ -2662,17 +2662,22 @@ Blockly.Blocks['struct_variable_create'] = {
 
 /* ********************** STRUCT_VARIABLE_SET BLOCK ********************** */
 
-function dynamicStructVariablesList () {
+function dynamicStructVariablesList (includeArrays) {
   var structsList = [[ "select struct variable...", "select struct variable..." ]];
 
   var structVariablesArray = Blockly.getMainWorkspace().getVariablesOfType('struct_variable');
+  var structArrayBlockList = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return (b.type == 'array_variable_declare' && b.getFieldValue('TYPE').toString().includes('[STRUCT]')) });
+  var structsNamePairsArray = structsList;
   if (typeof structVariablesArray[0] != 'undefined') {
-    var structsNamePairsArray = structsList;
     for (var i = 0; i < structVariablesArray.length; i++)
       structsNamePairsArray.push([Blockly.Solidity.getVariableName(structVariablesArray[i]),Blockly.Solidity.getVariableName(structVariablesArray[i])]);
-    structsList = structsNamePairsArray;
   }
-
+  if (typeof structArrayBlockList[0] != 'undefined' && includeArrays==true)
+    for (var j = 0; j < structArrayBlockList.length; j++) {
+      var newName = structArrayBlockList[j].getFieldValue('VAR_NAME') + '[]';
+      structsNamePairsArray.push([newName,newName]);    
+    }
+  structsList = structsNamePairsArray;
   return structsList;
 }
 
@@ -2682,7 +2687,7 @@ Blockly.Blocks['struct_variable_set'] = {
     this.appendValueInput('STRUCT_VARIABLE_VALUE')
       .appendField('set struct variable ')
       .appendField(
-        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        new Blockly.FieldDropdown(dynamicStructVariablesList(false)),
         "STRUCT_VARIABLE_NAME"
       )
       .appendField("to");
@@ -2705,7 +2710,7 @@ Blockly.Blocks['struct_variable_get'] = {
     this.appendDummyInput()
       .appendField('struct variable ')
       .appendField(
-        new Blockly.FieldDropdown(dynamicStructVariablesList),
+        new Blockly.FieldDropdown(dynamicStructVariablesList(false)),
         "STRUCT_VARIABLE_NAME"
       );
     this.setOutput(true, null);
@@ -2786,7 +2791,7 @@ Blockly.Blocks['struct_member_set'] = {
         {
           "type": "field_dropdown",
           "name": "STRUCT_VARIABLE_NAME",
-          "options": dynamicStructVariablesList
+          "options": dynamicStructVariablesList(true)
         },
       ],
       "previousStatement": null,
@@ -2805,9 +2810,9 @@ Blockly.Blocks['struct_member_set'] = {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
 
         this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
-        this.setWarningText(null);
+        //this.setWarningText(null);
       } else {
-        this.setWarningText('Select a variable from the list');
+        //this.setWarningText('Select a variable from the list');
         this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
       }
     });
@@ -3023,7 +3028,7 @@ Blockly.Blocks['array_variable_declare'] = {
 
     Blockly.Extensions.apply('declare_typed_variable', this, false);
 
-
+/*
     this.setOnChange(function(event) {
       var scope = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return b.type == 'contract'})[0];
       var typeCheck = this.getFieldValue('TYPE').toString().includes('[STRUCT]');
@@ -3034,7 +3039,7 @@ Blockly.Blocks['array_variable_declare'] = {
         newVariable.scope = scope;
       }
     });
- 
+ */
   },
 };
 

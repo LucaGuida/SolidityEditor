@@ -91,7 +91,19 @@ Blockly.Solidity['contract'] = function(block) {
     inheritedContracts = ' is ' + inheritedContracts + ' ';
 
 
+  var oraclizeQueryBlock = Blockly.getMainWorkspace().getAllBlocks().filter(function(b) { return (b.type == 'oraclize_query' || b.type == 'oraclize_scheduled_query')});
+
+  var callbackFunction = '';
+
+  if (typeof oraclizeQueryBlock[0] != 'undefined' ) {
+    var callback = Blockly.Solidity.statementToCode(oraclizeQueryBlock[0], 'CALLBACK');
+    callbackFunction = 'function __callback(bytes32 queryId, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '\n  emit LogAPIUpdated(usingOraclize.strConcat("Oraclize query response received: ", result, "", "", ""));\n}\n';
+  }
+
+
+
   var contract_docs = Blockly.Solidity.statementToCode(block, 'DOCS');
+  var inheritAndUsing = Blockly.Solidity.statementToCode(block, 'INHERIT');
   var states = Blockly.Solidity.statementToCode(block, 'STATES');
   if (states.length > 0) {states += '\n'};
   var modifiers = Blockly.Solidity.statementToCode(block, 'MODIFIERS');
@@ -99,8 +111,6 @@ Blockly.Solidity['contract'] = function(block) {
   var ctor = Blockly.Solidity.statementToCode(block, 'CTOR');
   var methods = Blockly.Solidity.statementToCode(block, 'METHODS');
   var methodsWithReturn = Blockly.Solidity.statementToCode(block, 'METHODS_WITH_RETURN');
-
-
 
 
 
@@ -115,12 +125,14 @@ Blockly.Solidity['contract'] = function(block) {
     + imports
     + contract_docs.replace(new RegExp('  ///', 'g'), '///')
     + 'contract ' + block.getFieldValue('NAME') + inheritedContracts + ' {\n\n'
+    + inheritAndUsing
     + states
     + modifiers
     + events
     + ctor.replace(new RegExp('    ///', 'g'), '  ///')
     + methods.replace(new RegExp('    ///', 'g'), '  ///')
     + methodsWithReturn.replace(new RegExp('    ///', 'g'), '  ///')
+    + callbackFunction 
     + '\n}\n';
 
   return code;
@@ -190,8 +202,10 @@ Blockly.Solidity['address_balance_get'] = function(block) {
 
 
 Blockly.Solidity['address_transfer'] = function(block) {
-  var addressVariable = block.getFieldValue('ADDRESS_VARIABLE_NAME');
-  var defaultVal = '0';
+  var defaultValAddr = '0x0000000000000000000000000000000000000000';
+  var addressVariable = Blockly.Solidity.valueToCode(block, 'ADDRESS_VARIABLE_NAME',
+      Blockly.Solidity.ORDER_ASSIGNMENT) || defaultValAddr;
+  var defaultVal = 0;
   var amount = Blockly.Solidity.valueToCode(block, 'AMOUNT',
       Blockly.Solidity.ORDER_ASSIGNMENT) || defaultVal;
   return addressVariable + '.transfer(' + amount + ');\n\n';
@@ -466,12 +480,15 @@ Blockly.Solidity['mapping_get'] = function(block) {
 
 Blockly.Solidity['array_variable_declare'] = function(block) {
   var arrayType = block.getFieldValue('TYPE');
+  var type = types[arrayType];
+  if (typeof type == 'undefined')
+    type = arrayType.replace('[STRUCT]','');
   var visibility = block.getFieldValue('VISIBILITY');
   var varName = block.getFieldValue('VAR_NAME');
   if (arrayType == 'select type...') 
     return '';
 
-  return types[arrayType] + '[] ' + visibility + ' ' + varName + ';\n';
+  return type + '[] ' + visibility + ' ' + varName + ';\n';
 };
 
 
@@ -535,26 +552,29 @@ Blockly.Solidity['inherit'] = function(block) {
 
 
 Blockly.Solidity['oraclize_query'] = function(block) {
-  var URL = block.getFieldValue('URL');
-  var callback = Blockly.Solidity.statementToCode(block, 'CALLBACK');
-  if (URL == 'URL to query')
-    return '';
-  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '\n  emit LogAPIUpdated(usingOraclize.strConcat("Oraclize query response received: ", result, "", "", ""));\n}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query("URL", "' + URL + '");\n}' + '\n\n\n';
+  var URL = Blockly.Solidity.valueToCode(block, 'URL',
+      Blockly.Solidity.ORDER_ASSIGNMENT);
+  return 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query("URL", ' + URL + ');\n}' + '\n\n\n';
 };
 
 
 Blockly.Solidity['oraclize_scheduled_query'] = function(block) {
-  var URL = block.getFieldValue('URL');
-  var time = block.getFieldValue('TIME');
-  var callback = Blockly.Solidity.statementToCode(block, 'CALLBACK');
-  if (URL == 'URL to query')
-    return '';
-  return 'function __callback(bytes32 myid, string result) {\n  require(msg.sender == oraclize_cbAddress());\n' + callback + '\n  emit LogAPIUpdated(usingOraclize.strConcat("Oraclize query response received: ", result, "", "", ""));\n}\n\n\n' + 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query(' + time + ', "URL", "' + URL + '");\n}' + '\n\n\n';
+  var URL = Blockly.Solidity.valueToCode(block, 'URL',
+      Blockly.Solidity.ORDER_ASSIGNMENT);
+  var time = Blockly.Solidity.valueToCode(block, 'TIME',
+      Blockly.Solidity.ORDER_ASSIGNMENT);
+  
+  return 'if (oraclize_getPrice("URL") > this.balance) {\n  emit LogNewOraclizeQuery("Oraclize query was NOT sent, please add some ETH to cover for the query fee");\n} else {\n  emit LogNewOraclizeQuery("Oraclize query was sent, standing by for the answer..");\n  bytes32 queryId = oraclize_query(' + time + ', "URL", ' + URL + ');\n}' + '\n\n\n';
 };
 
 
 Blockly.Solidity['oraclize_result'] = function(block) {
   return ['result', Blockly.Solidity.ORDER_ATOMIC];
+};
+
+
+Blockly.Solidity['oraclize_queryId'] = function(block) {
+  return ['queryId', Blockly.Solidity.ORDER_ATOMIC];
 };
 
 

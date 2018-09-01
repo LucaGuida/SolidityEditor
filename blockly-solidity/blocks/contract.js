@@ -861,14 +861,10 @@ Blockly.Blocks['address_balance_get'] = {
 
 Blockly.Blocks['address_transfer'] = {
   init: function() {
-    this.appendDummyInput()
-      .appendField(
-        new Blockly.FieldDropdown(dynamicAddresses),
-        "ADDRESS_VARIABLE_NAME"
-      )
-      .appendField(".transfer");
     this.appendValueInput('AMOUNT').setCheck('Number')
-      .appendField('amount');
+      .appendField('transfer amount');
+    this.appendValueInput('ADDRESS_VARIABLE_NAME')
+      .appendField('to ');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour("#FF5252");
@@ -1643,7 +1639,7 @@ Blockly.Blocks['return'] = {
 };
 
 
-/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE USING...FOR..., INHERIT, ORACLIZE_QUERY, ORACLIZE_SCHEDULED_QUERY & ORACLIZE_RESULT BLOCKS ********************** */
+/* ********************** LIBRARY_METHOD_CALL, LIBRARY_METHOD_CALL_WITH_RETURN_VALUE USING...FOR..., INHERIT, ORACLIZE_QUERY, ORACLIZE_SCHEDULED_QUERY, ORACLIZE_QUERYID, & ORACLIZE_RESULT BLOCKS ********************** */
 
 Blockly.Blocks['library_method_call'] = {
   init: function() {
@@ -1830,15 +1826,14 @@ Blockly.Blocks['inherit'] = {
 Blockly.Blocks['oraclize_query'] = {
   init: function() {
     this.jsonInit({
-      "message0": "Oraclize query %1",
+      "message0": "Oraclize query to URL %1",
       "args0": [
         {
-          "type": "field_input",
-          "name": "URL",
-          "text": "URL to query"
+          "type": "input_value",
+          "name": "URL"
         },
       ],
-      "message1": "operations to perform after receiving a response from Oraclize %1",
+      "message1": "operations to perform after response (callback) %1",
       "args1": [
         {
           "type": "input_statement",
@@ -1858,21 +1853,19 @@ Blockly.Blocks['oraclize_query'] = {
 Blockly.Blocks['oraclize_scheduled_query'] = {
   init: function() {
     this.jsonInit({
-      "message0": "Oraclize scheduled query %1  %2",
+      "message0": "Oraclize scheduled query to URL %1  with delay (in seconds or UTC timestamp) %2",
       "args0": [
         {
-          "type": "field_input",
-          "name": "URL",
-          "text": "URL to query"
+          "type": "input_value",
+          "name": "URL"
         },
         {
-          "type": "field_input",
-          "check": "Number",
+          "type": "input_value",
           "name": "TIME",
-          "text": "delay in seconds or UTC timestamp"
+          "check": "Number",
         },
       ],
-      "message1": "operations to perform after receiving a response from Oraclize %1",
+      "message1": "operations to perform after response (callback) %1",
       "args1": [
         {
           "type": "input_statement",
@@ -1896,6 +1889,17 @@ Blockly.Blocks['oraclize_result'] = {
     this.setOutput(true, null);
     this.setColour("#757575");
     this.setTooltip('Result of the Oraclize query');
+    this.setHelpUrl("http://docs.oraclize.it/#ethereum");
+  }
+};
+
+Blockly.Blocks['oraclize_queryId'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('Oraclize query ID');
+    this.setOutput(true, null);
+    this.setColour("#757575");
+    this.setTooltip('ID of the Oraclize query');
     this.setHelpUrl("http://docs.oraclize.it/#ethereum");
   }
 };
@@ -2798,7 +2802,7 @@ Blockly.Blocks['struct_member_get'] = {
         {
           "type": "field_dropdown",
           "name": "STRUCT_VARIABLE_NAME",
-          "options": dynamicStructVariablesList
+          "options": dynamicStructVariablesList(true)
         },
       ],
       "colour": "#757575",
@@ -2811,7 +2815,6 @@ Blockly.Blocks['struct_member_get'] = {
     this.getVariableNameSelectField = function() { return this.getField('STRUCT_VARIABLE_NAME' + 'STRUCT_MEMBER_NAME'); };
     this.getVariableLabelGroup = function() { return Blockly.Solidity.LABEL_GROUP_ENUM };
 
-
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
         this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
@@ -2821,7 +2824,6 @@ Blockly.Blocks['struct_member_get'] = {
         this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
       }
     });
-
   },
 };
 

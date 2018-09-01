@@ -1020,14 +1020,6 @@ Blockly.Blocks['contract_method'] = {
           "check": ["NatSpec_function"]
         },
       ],
-    "message3": "visibility %1",
-    "args3": [
-      {
-        "type": "field_dropdown",
-        "name": "VISIBILITY",
-        "options": funcVisibilityList
-      },
-    ],
       "message2": "parameters %1",
       "args2": [
         {
@@ -1036,24 +1028,26 @@ Blockly.Blocks['contract_method'] = {
           "check": ["contract_method_parameter"]
         },
       ],
-      "message4": "function type %1",
-      "args4": [
+      "message3": "visibility %1   function type %2   modifiers %3",
+      "args3": [
+        {
+          "type": "field_dropdown",
+          "name": "VISIBILITY",
+          "options": funcVisibilityList
+        },
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
-        }      
-      ],
-      "message5": "modifiers %1",
-      "args5": [
+        },
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
-        }
+        },
       ],
-      "message6": "code %1",
-      "args6": [
+      "message4": "code %1",
+      "args4": [
         {
           "type": "input_statement",
           "name": "STACK"        
@@ -1111,50 +1105,41 @@ Blockly.Blocks['contract_method_with_return'] = {
           "check": ["contract_method_parameter"]
         }
       ],
-      "message3": "visibility %1",
+      "message3": "visibility %1   function type %2   modifiers %3",
       "args3": [
         {
           "type": "field_dropdown",
           "name": "VISIBILITY",
           "options": funcVisibilityList
         },
-      ],
-      "message4": "function type %1",
-      "args4": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
-        }      
-      ],
-      "message5": "modifiers %1",
-      "args5": [
+        },
         {
           "type": "input_statement",
           "name": "MODIF",
           "check": ["modifier_usage"]
-        }
+        },
       ],
-      "message6": "returning value of type %1",
-      "args6": [
+      "message5": "returning value %1   of type %2",
+      "args5": [
+        {
+          "type": "input_value",
+          "name": "RETURN_VALUE"
+        },
         {
           "type": "field_dropdown",
           "name": "RETURN_TYPE",
           "options": typesList
         }
       ],  
-      "message7": "code %1",
-      "args7": [
+      "message4": "code %1",
+      "args4": [
         {
           "type": "input_statement",
           "name": "STACK"
-        }
-      ],
-      "message8": "return value %1",
-      "args8": [
-        {
-          "type": "input_value",
-          "name": "RETURN_VALUE"
         }
       ],
       "previousStatement": ["contract_method", "contract_method_with_return"],
@@ -1258,24 +1243,21 @@ Blockly.Blocks['fallback'] = {
           "check": ["NatSpec_function"]
         },
       ],
-    "message2": "visibility %1",
+    "message2": "visibility %1   function type %2",
     "args2": [
       {
         "type": "field_dropdown",
         "name": "VISIBILITY",
         "options": funcVisibilityList
       },
-    ],
-      "message3": "function type %1",
-      "args3": [
         {
           "type": "field_dropdown",
           "name": "FUNCTION_TYPE",
           "options": functionTypesList
         }      
-      ],
-      "message4": "code %1",
-      "args4": [
+    ],
+      "message3": "code %1",
+      "args3": [
         {
           "type": "input_statement",
           "name": "STACK"        
@@ -1925,16 +1907,13 @@ Blockly.Blocks['oraclize_result'] = {
 Blockly.Blocks['event_definition'] = {
   init: function() {
     this.jsonInit({
-      "message0": "event %1",
+      "message0": "event %1   arguments %2",
       "args0": [
         {
           "type": "field_input",
           "name": "NAME",
           "text": "EventName"
         },
-      ],
-      "message1": "arguments %1",
-      "args1": [
         {
           "type": "input_statement",
           "name": "ARGS",
@@ -1976,8 +1955,7 @@ Blockly.Blocks['event_argument'] = {
           'TYPE'
         )
         .appendField('indexed')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'INDEXED');
-    this.appendDummyInput()
+        .appendField(new Blockly.FieldCheckbox('TRUE'), 'INDEXED')
         .appendField(nameField, 'NAME');
     this.setPreviousStatement(true, 'event_argument');
     this.setNextStatement(true, 'event_argument');
@@ -2022,13 +2000,11 @@ function dynamicEventsList () {
 
 Blockly.Blocks['event_emission'] = {
   init: function() {
-    this.appendDummyInput()
+    this.appendStatementInput('ARGS')
       .appendField('emit event')
       .appendField(
         new Blockly.FieldDropdown(dynamicEventsList),
-        "EVENT_NAME"
-      );
-    this.appendStatementInput('ARGS')
+        "EVENT_NAME")
       .appendField("arguments").setCheck('argument_container');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -2073,32 +2049,29 @@ Blockly.Blocks['msg_get'] = {
 Blockly.Blocks['modifier_definition'] = {
   init: function() {
     this.jsonInit({
-      "message0": "modifier %1",
+      "message0": "modifier %1   parameters %2",
       "args0": [
         {
           "type": "field_input",
           "name": "MODIFIER_NAME",
           "text": "modifierName"
         },
-      ],
-      "message1": "parameters %1",
-      "args1": [
         {
           "type": "input_statement",
           "name": "PARAMS",
           "check": ["contract_method_parameter"]
         },
       ],
-      "message2": "condition %1",
-      "args2": [
+      "message1": "condition %1",
+      "args1": [
         {
           "type": "input_value",
           "name": "CONDITION",
           //"check": ["contract_method_parameter"]
         },
       ],
-      "message3": "error message %1",
-      "args3": [
+      "message2": "error message %1",
+      "args2": [
         {
           "type": "field_input",
           "name": "MESSAGE",
@@ -2527,16 +2500,13 @@ Blockly.Blocks['enum_get'] = {
 Blockly.Blocks['struct_definition'] = {
   init: function() {
     this.jsonInit({
-      "message0": "struct %1",
+      "message0": "struct %1  members %2",
       "args0": [
         {
           "type": "field_input",
           "name": "STRUCT_NAME",
           "text": "structName"
         },
-      ],
-      "message1": "members %1",
-      "args1": [
         {
           "type": "input_statement",
           "name": "MEMBERS",
@@ -2926,13 +2896,12 @@ function dynamicMappingVariablesList () {
 
 Blockly.Blocks['mapping_set'] = {
   init: function() {
-    this.appendDummyInput()   
+    this.appendValueInput('ARG')
       .appendField("set")
       .appendField(
         new Blockly.FieldDropdown(dynamicMappingVariablesList),
         "MAPPING_VARIABLE_NAME"
-      ); 
-    this.appendValueInput('ARG')
+      )
       .appendField("argument");    
     this.appendValueInput('VALUE')
       .appendField("to");    

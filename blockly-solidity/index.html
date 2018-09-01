@@ -74,7 +74,7 @@
 </head>
 <body>
 
-  <div id="blocklyDiv" style="height: 600px; width: 100%;"></div>
+  <div id="blocklyDiv" style="height: 10000px; width: 100%;"></div>
 
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
     <category name="State variables: basic types" colour="#5ba580">
@@ -169,7 +169,7 @@
     <category name="External contracts, libraries and oracles" colour="#5ba580">
       <sep gap="50"></sep>
       <label text="Explore external contracts and libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
-      <button text="Access the Solidity smart contract Registry" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
+      <button text="Access SolidityRegistry" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
       <sep gap="150"></sep>
       <label text=" " web-class="myLabelStyle"></label>
       <sep gap="100"></sep>
@@ -421,7 +421,7 @@
       
 
       workspace.registerButtonCallback('libraryExplorerButtonPressed', function() {
-        window.open('https://lucaguida.github.io/SolidityExplorer/');
+        window.open('https://lucaguida.github.io/SolidityRegistry/');
       });
 
 

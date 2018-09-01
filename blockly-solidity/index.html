@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Blockly: Solidity</title>
+  <title>SolidityEditor</title>
   <script src="../blockly/blockly_uncompressed.js"></script>
   <script src="../blockly/blocks/variables.js"></script>
   <script src="../blockly/blocks/math.js"></script>
@@ -74,7 +74,7 @@
 </head>
 <body>
 
-  <div id="blocklyDiv" style="height: 10000px; width: 100%;"></div>
+  <div id="blocklyDiv" style="height: 720px; width: 100%;"></div>
 
   <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none">
     <category name="State variables: basic types" colour="#5ba580">
@@ -168,10 +168,9 @@
 
     <category name="External contracts, libraries and oracles" colour="#5ba580">
       <sep gap="50"></sep>
-      <label text="Explore external contracts and libraries and navigate through their docs:" web-class="myLabelStyle2"></label>
+      <label text="Explore external contracts and libraries:" web-class="myLabelStyle2"></label>
       <button text="Access SolidityRegistry" callbackKey="libraryExplorerButtonPressed" web-class="myButtonStyle"></button>      
-      <sep gap="150"></sep>
-      <label text=" " web-class="myLabelStyle"></label>
+      <sep gap="100"></sep>
       <sep gap="100"></sep>
       <label text="EXTERNAL CONTRACT OR LIBRARY FUNCTION CALLS" web-class="myLabelStyle"></label>
       <block type="library_method_call"></block>

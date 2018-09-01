@@ -551,25 +551,24 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
 
       else { 
         if (event.name=="STRUCT_VARIABLE_NAME") {
-
+/*
           this.removeInput('STRUCT_MEMBER_SELECTOR');
 
           if (this.type == "struct_member_set") {
             this.removeInput('STRUCT_VARIABLE_VALUE');
           }
-
+*/
           do {
             this.removeInput('ARRAY_INDEX', true);
           } 
           while (varName.substring(varName.length-2, varName.length) != "[]" && this.getInput('ARRAY_INDEX')!=null);
-
 
           if (varName.substring(varName.length-2, varName.length) == "[]" && this.getInput('ARRAY_INDEX')==null) {
               this.appendValueInput('ARRAY_INDEX')
                 .appendField("at array index ");
           }
 
-
+/*
           this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
             .appendField('member  ')
             .appendField(
@@ -581,7 +580,7 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
             this.appendValueInput('STRUCT_VARIABLE_VALUE')
               .appendField("to");
           }
-
+*/
 
           // Force UI update
           Blockly.Events.fire(new Blockly.Events.Ui(this,null, null, null));
@@ -2816,9 +2815,9 @@ Blockly.Blocks['struct_member_get'] = {
     this.setOnChange(function(event) {
       if (this.getFieldValue('STRUCT_VARIABLE_NAME')!='select struct variable...') {
         this.updateShape_(true, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
-        this.setWarningText(null);
+        //this.setWarningText(null);
       } else {
-        this.setWarningText('Select a variable from the list');
+        //this.setWarningText('Select a variable from the list');
         this.updateShape_(false, this.getFieldValue('STRUCT_VARIABLE_NAME'), event);
       }
     });

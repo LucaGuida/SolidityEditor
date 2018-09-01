@@ -388,7 +388,7 @@ Blockly.Solidity['struct_variable_set'] = function(block) {
 
 Blockly.Solidity['struct_variable_get'] = function(block) {
   var varName = block.getFieldValue('STRUCT_VARIABLE_NAME');
-  if (variableName=='select struct variable...')
+  if (varName=='select struct variable...')
     return '';
 
   return [varName, Blockly.Solidity.ORDER_ATOMIC];
@@ -402,6 +402,8 @@ Blockly.Solidity['struct_member_set'] = function(block) {
       Blockly.Solidity.ORDER_ASSIGNMENT) || ' ';
   var index = Blockly.Solidity.valueToCode(block, 'ARRAY_INDEX',
       Blockly.Solidity.ORDER_ASSIGNMENT);
+  if (variableName == 'select struct variable...')
+    return '';
 
   if (typeof index != 'undefined' && variableName.substring(variableName.length-2, variableName.length)=='[]')
     return variableName.substring(0, variableName.length-2) + '[' + index + '].' + memberName + ' = ' + value + ';\n';
@@ -415,6 +417,9 @@ Blockly.Solidity['struct_member_get'] = function(block) {
   var memberName = block.getFieldValue('STRUCT_MEMBER_NAME');
   var index = Blockly.Solidity.valueToCode(block, 'ARRAY_INDEX',
       Blockly.Solidity.ORDER_ASSIGNMENT);
+  if (variableName == 'select struct variable...')
+    return '';
+
   if (typeof index != 'undefined' && variableName.substring(variableName.length-2, variableName.length)=='[]')
     return [variableName.substring(0, variableName.length-2) + '[' + index + '].' + memberName, Blockly.Solidity.ORDER_ATOMIC];
   else 

@@ -44,4 +44,17 @@ python smartContractDescriptorsParser.py
 
 
 
-Note: If you keep getting the "Language Solidity does not know how to generate code for block type ..." error, in Safari click on "Sviluppo" > "Svuota la cache", and re-open the tab.
+# SolidityEditor2RemixChromeExtension
+
+
+## Installation instructions
+
+The extension can be loaded into Google Chrome by following the following steps:
+1) Open Google Chrome
+2) Visit chrome://extensions
+3) Enable Developer mode by clicking the toggle in the upper-right corner
+4) Click on the "Load unpacked extension..." button
+5) Select the "Chrome extension" folder inside the SolidityEditor2Remix directory, then click "Select".
+
+
+

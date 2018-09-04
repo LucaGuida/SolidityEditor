@@ -1,0 +1,15 @@
+{
+"manifest_version": 2,
+"name": "SolidityEditor2RemixChromeExtension",
+"description": "Ethereum Remix IDE integration",
+"version": "1.0",
+"permissions": ["tabs", "<all_urls>","activeTab","storage"],
+"browser_action": {
+  "default_popup": "popup.html",
+  "default_icon": "images/icon.png"
+},
+"background": {
+  "scripts": ["background.js"],
+  "persistent": false
+}
+}

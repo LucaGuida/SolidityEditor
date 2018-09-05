@@ -1,15 +1,6 @@
 # SolidityEditor
 
 
-## Configuration instructions
-
-- Manually enter "Library explorer" URL in blockly-solidity/index.html (https://lucaguida.github.io/SolidityRegistry/)
-
-- Manually set var API_mode = true; in blockly-solidity/blocks/contract.js if you want to perform the retrieval of external contracts and libraries list  from Registry REST API; on the other hand, if you want the retrieval to happen from local JSON files, set the variable to false.  
-- Manually enter libraries list JSON file path in blockly-solidity/blocks/contract.js for autonomous (no Registry API) mode 
-
-
-
 ## Usage instructions
 
 ### To start the underlying Registry REST API
@@ -42,9 +33,20 @@ python smartContractDescriptorsParser.py
 ```
 
 
+## Configuration instructions
+
+- Enter a "SolidityRegistry" URL in blockly-solidity/index.html (https://lucaguida.github.io/SolidityRegistry/)
+- Enter local DB JSON file path in blockly-solidity/blocks/contract.js for standalone mode 
 
 
-# SolidityEditor2RemixChromeExtension
+
+This project was implemented starting from some pre-existing modules:
+* Google Blockly (https://github.com/google/blockly - Apache License 2.0)
+* Solidity for Blockly (https://github.com/rekmarks/blockly-solidity - MIT License)
+
+
+
+# SolidityEditor2Remix Chrome Extension
 
 
 ## Installation instructions
@@ -54,7 +56,11 @@ The extension can be loaded into Google Chrome by following the following steps:
 2) Visit chrome://extensions
 3) Enable Developer mode by clicking the toggle in the upper-right corner
 4) Click on the "Load unpacked extension..." button
-5) Select the "Chrome extension" folder inside the SolidityEditor2Remix directory, then click "Select".
+5) Select the "SolidityEditor2Remix Chrome Extension" directory, then click "Select".
+
+
+
+
 
 
 

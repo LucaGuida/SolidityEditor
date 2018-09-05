@@ -1,6 +1,6 @@
 {
 "manifest_version": 2,
-"name": "SolidityEditor2RemixChromeExtension",
+"name": "SolidityEditor2Remix Chrome Extension",
 "description": "Ethereum Remix IDE integration",
 "version": "1.0",
 "permissions": ["tabs", "<all_urls>","activeTab","storage"],

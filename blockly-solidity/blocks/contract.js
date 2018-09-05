@@ -440,7 +440,7 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
 
       else { // selectedLibrary, functionSelectorBeingDisplayed + library AND/OR function was changed
         if (event.name=="LIB_NAME") {// library was changed
-
+/*
           this.removeInput('LIBRARY_FUNCTION_SELECTOR');
           this.removeInput('ARGS');
 
@@ -453,6 +453,7 @@ Blockly.Solidity.LIBRARY_FUNCTION_MUTATOR_MIXIN = {
           this.appendStatementInput('ARGS')
             .appendField("arguments").setCheck('argument_container');
 
+*/
           // Force UI update
           Blockly.Events.fire(new Blockly.Events.Ui(this,null, null, null));
 
@@ -557,7 +558,7 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
           if (this.type == "struct_member_set") {
             this.removeInput('STRUCT_VARIABLE_VALUE');
           }
-*/
+
           do {
             this.removeInput('ARRAY_INDEX', true);
           } 
@@ -568,7 +569,6 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
                 .appendField("at array index ");
           }
 
-/*
           this.appendDummyInput('STRUCT_MEMBER_SELECTOR')  
             .appendField('member  ')
             .appendField(
@@ -588,9 +588,6 @@ Blockly.Solidity.STRUCT_MEMBER_MUTATOR_MIXIN = {
         }
         else if (event.name=="STRUCT_MEMBER_NAME") { } 
       }
-
-
-
 
     } else if (memberSelectorBeingDisplayed) {
       this.removeInput('STRUCT_MEMBER_SELECTOR');

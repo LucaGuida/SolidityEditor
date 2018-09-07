@@ -85,6 +85,7 @@ localStorage.clear();
 
 			var importsArray = [];
 			var tempNestedImportsArray = [];
+			var addressesToBeLinked = [];
 
 			if (typeof jsonObjFull != 'undefined') {
 
@@ -104,6 +105,8 @@ localStorage.clear();
 					for(var j = 0; j < importsArray.length; j++)
 						if (jsonObjFull[i]['JSON']['contract']['descriptor']['name'] == importsArray[j]) {
 							localStorage.setItem('sol:' + importsArray[j] + '.sol', jsonObjFull[i]['code']);
+							if (typeof jsonObjFull[i]['JSON']['contract']['endpoint']['address']!='undefined')
+								addressesToBeLinked.push(jsonObjFull[i]['JSON']['contract']['endpoint']['address']);
 						}
 			}
 
@@ -114,6 +117,12 @@ localStorage.clear();
 
 		document.getElementsByClassName("ace_text-input")[0].value = result.key;
 	    document.getElementsByClassName("ace_text-input")[0].dispatchEvent(new Event('input'));
+/*
+	    if (typeof addressesToBeLinked[0]!='undefined') {
+			document.getElementsByClassName("options_33gn4o runView")[0].click();
+			document.getElementsByClassName("input_3B8jEE ataddressinput")[0].value = addressesToBeLinked[0];
+		}*/
+
     });
 
 }

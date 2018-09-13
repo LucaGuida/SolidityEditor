@@ -1772,6 +1772,9 @@ Blockly.Blocks['inherit'] = {
         var ABI;
         var sourceCode;
 
+		if (API_mode == false)
+			jsonObjContracts = jsonObjFull;
+
           if (typeof jsonObjContracts != 'undefined') {
             for(var i = 0; i < jsonObjContracts.length; i++) 
               if (jsonObjContracts[i]['JSON']['contract']['descriptor']['name'] == this.getFieldValue('LIB_NAME')) {
